@@ -9,14 +9,30 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
 
-    [SerializeField] private int moveSpeed;
-    [SerializeField] private int jumpForce;
+    public EnvironmentManager environmentManager;
+
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float gravityDefault;
 
     private bool isJumping = false;
+    private bool isHeavy = false;
+
+    void Awake()
+    {
+        moveSpeed = environmentManager.moveSpeed;
+        jumpForce = environmentManager.jumpForce;
+        gravityDefault = environmentManager.gravityDefault;
+    }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            ChangeGravity();
+        }
+
         if (Input.GetKeyDown(KeyCode.Space) && !isJumping && !(rb.velocity.y < -0.5f))
         {
             Jump();
@@ -37,6 +53,20 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("Stage"))
         {
             isJumping = false;
+        }
+    }
+
+    void ChangeGravity()
+    {
+        if (isHeavy)
+        {
+            isHeavy = false;
+            rb.gravityScale = gravityDefault;
+        }
+        else if (!isHeavy)
+        {
+            isHeavy = true;
+            rb.gravityScale = gravityDefault * 2;
         }
     }
 }
