@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float gravityDefault;
 
     private bool isJumping = false;
+    private bool inField= false;
     private int jumpDirection = 1;
     private int gScale = 2;
 
@@ -51,7 +52,15 @@ public class PlayerController : MonoBehaviour
         
         //プレイヤーの移動
         rb.velocity = new Vector2(Input.GetAxis("Horizontal") * moveSpeed, rb.velocity.y);
+
+        if (inField)
+        {
+            rb.gravityScale = gravityDefault * 0.5f;
+            moveSpeed = environmentManager.moveSpeed * 0.7f;
+        }
     }
+
+
 
     void Jump()
     {
@@ -65,6 +74,21 @@ public class PlayerController : MonoBehaviour
         {
             isJumping = false;
         }
+
+        if (collision.CompareTag("GravityField"))
+        {
+            inField = true;
+        }
+
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("GravityField"))
+        {
+            inField = false;
+            Debug.Log("すり抜け終えた")
+        }
+        
     }
 
     void ChangeGravity()
