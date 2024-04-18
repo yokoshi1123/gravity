@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float gravityDefault;
 
     private bool isJumping = false;
+    private int jumpDirection = 1;
     private int gScale = 2;
 
     void Awake()
@@ -42,7 +43,7 @@ public class PlayerController : MonoBehaviour
             ChangeGravity();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && !isJumping && !(rb.velocity.y < -0.5f))
+        if (Input.GetKeyDown(KeyCode.Space) && !isJumping && !(Mathf.Abs(rb.velocity.y) > 0.5f))
         {
             Jump();
         }
@@ -53,8 +54,7 @@ public class PlayerController : MonoBehaviour
     void Jump()
     {
         isJumping = true;
-
-        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        rb.AddForce(Vector2.up * jumpForce * jumpDirection, ForceMode2D.Impulse);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -68,6 +68,7 @@ public class PlayerController : MonoBehaviour
     void ChangeGravity()
     {
         // Debug.Log("gscale: " + gScale);
+        jumpDirection = (gScale == 0) ? -1 : 1;
         switch (gScale)
         {
             case 0: // x(-1.0)
@@ -77,7 +78,7 @@ public class PlayerController : MonoBehaviour
                 break;
             case 1: // x0.5
                 rb.gravityScale = gravityDefault * 0.5f;
-                moveSpeed = environmentManager.moveSpeed * 2.0f;
+                moveSpeed = environmentManager.moveSpeed * 0.7f;
                 gravityText.text = "Gravity * 0.5";
                 break;
             case 2: // x1.0
