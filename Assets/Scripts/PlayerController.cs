@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("GravityField"))
         {
             inField = false;
-            Debug.Log("‚·‚è”²‚¯I‚¦‚½")
+            Debug.Log("‚·‚è”²‚¯I‚¦‚½");
         }
         
     }
