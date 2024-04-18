@@ -53,11 +53,16 @@ public class PlayerController : MonoBehaviour
         //プレイヤーの移動
         rb.velocity = new Vector2(Input.GetAxis("Horizontal") * moveSpeed, rb.velocity.y);
 
-        if (inField)
+        /*if (inField)
         {
             rb.gravityScale = gravityDefault * 0.5f;
             moveSpeed = environmentManager.moveSpeed * 0.7f;
         }
+        else if (!inField)
+        {
+            rb.gravityScale = gravityDefault ;
+            moveSpeed = environmentManager.moveSpeed ;
+        }*/
     }
 
 
@@ -80,13 +85,15 @@ public class PlayerController : MonoBehaviour
             inField = true;
         }
 
+
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
+        
         if (collision.CompareTag("GravityField"))
         {
             inField = false;
-            Debug.Log("すり抜け終えた");
+            //Debug.Log("すり抜け終えた");
         }
         
     }
@@ -95,6 +102,7 @@ public class PlayerController : MonoBehaviour
     {
         // Debug.Log("gscale: " + gScale);
         jumpDirection = (gScale == 0) ? -1 : 1;
+        
         switch (gScale)
         {
             case 0: // x(-1.0)
@@ -121,6 +129,7 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("ChangeGravityでエラー");
                 break;
         }
+        
 
     }
 }
