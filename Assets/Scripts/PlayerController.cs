@@ -42,11 +42,13 @@ public class PlayerController : MonoBehaviour
             ChangeGravity();
         }
 
+        //ジャンプ
         if (Input.GetKeyDown(KeyCode.Space) && !isJumping && !(rb.velocity.y < -0.5f))
         {
             Jump();
         }
         
+        //プレイヤーの移動
         rb.velocity = new Vector2(Input.GetAxis("Horizontal") * moveSpeed, rb.velocity.y);
     }
 
@@ -94,5 +96,6 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("ChangeGravityでエラー");
                 break;
         }
+
     }
 }
