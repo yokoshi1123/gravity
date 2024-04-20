@@ -55,8 +55,8 @@ public class PlayerController : MonoBehaviour
 
         /*if (inField)
         {
-            rb.gravityScale = gravityDefault * 0.5f;
-            moveSpeed = environmentManager.moveSpeed * 0.7f;
+            rb.gravityScale = gravityDefault * (-1.0f);
+            // moveSpeed = environmentManager.moveSpeed * 0.7f;
         }
         else if (!inField)
         {
