@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UIElements;
+// using TMPro;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CircleCollider2D))]
@@ -10,30 +11,33 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
 
-    public EnvironmentManager environmentManager;
-    public TextMeshProUGUI gravityText;
+    // public EnvironmentManager environmentManager;
+    public GravityManager gravityManager; // EnvironmentManagerを廃止
+    // public TextMeshProUGUI gravityText;
 
     [SerializeField] private float moveSpeed;
-    [SerializeField] private float jumpForce;
-    [SerializeField] private float gravityDefault;
+    // [SerializeField] private float gravityScale;
+    [SerializeField] private float jumpForce = 20.0f;
 
     private bool isJumping = false;
-    private bool inField= false;
+    // private bool inField= false;
     private int jumpDirection = 1;
-    private int gScale = 2;
+    // private int gScale = 2;
 
     void Awake()
     {
-        moveSpeed = environmentManager.moveSpeed;
+        /* moveSpeed = environmentManager.moveSpeed;
         jumpForce = environmentManager.jumpForce;
-        gravityDefault = environmentManager.gravityDefault;
-        gravityText.text = "Gravity * 1.0";
+        gravityDefault = environmentManager.gravityDefault; */
+        moveSpeed = gravityManager.M_SPEED;
+        rb.gravityScale = gravityManager.G_SCALE;
+        // gravityText.text = "Gravity * 1.0";
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        /*if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             gScale = (gScale + 399999) % 4;
             ChangeGravity();
@@ -42,7 +46,7 @@ public class PlayerController : MonoBehaviour
         {
             gScale = (gScale + 400001) % 4;
             ChangeGravity();
-        }
+        }*/
 
         //ジャンプ
         if (Input.GetKeyDown(KeyCode.Space) && !isJumping && !(rb.velocity.y < -0.5f))
@@ -53,7 +57,7 @@ public class PlayerController : MonoBehaviour
         //プレイヤーの移動
         rb.velocity = new Vector2(Input.GetAxis("Horizontal") * moveSpeed, rb.velocity.y);
 
-        /*if (inField)
+        /* if (inField)
         {
             rb.gravityScale = gravityDefault * (-1.0f);
             // moveSpeed = environmentManager.moveSpeed * 0.7f;
@@ -61,8 +65,8 @@ public class PlayerController : MonoBehaviour
         else if (!inField)
         {
             rb.gravityScale = gravityDefault ;
-            moveSpeed = environmentManager.moveSpeed ;
-        }*/
+            // moveSpeed = environmentManager.moveSpeed ;
+        } */
     }
 
 
@@ -70,6 +74,7 @@ public class PlayerController : MonoBehaviour
     void Jump()
     {
         isJumping = true;
+        jumpDirection = (rb.gravityScale == gravityManager.G_SCALE * (-1.0f)) ? -1 : 1; 
         rb.AddForce(Vector2.up * jumpForce * jumpDirection, ForceMode2D.Impulse);
     }
 
@@ -80,28 +85,39 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
         }
 
-        if (collision.CompareTag("GravityField"))
+        /* if (collision.CompareTag("GravityField"))
         {
-            inField = true;
-        }
-
-
+            // inField = true;
+            moveSpeed = gravityManager.moveSpeed;
+            gravityScale = gravityManager.gravityScale;
+        } */
     }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("GravityField")) // 重力場中にあるとき、gravityManagerでの変更を読み込む
+        {
+            moveSpeed = gravityManager.moveSpeed;
+            rb.gravityScale = gravityManager.gravityScale;
+            // Debug.Log("In the gravity field: " + rb.gravityScale);
+        }
+    }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
-        
-        if (collision.CompareTag("GravityField"))
+        if (collision.CompareTag("GravityField")) // 重力場から出たとき、デフォルトに戻す
         {
-            inField = false;
+            // inField = false;
             //Debug.Log("すり抜け終えた");
+            moveSpeed = gravityManager.M_SPEED;
+            rb.gravityScale = gravityManager.G_SCALE;
         }
         
     }
 
-    void ChangeGravity()
+    /* void ChangeGravity()
     {
         // Debug.Log("gscale: " + gScale);
-        jumpDirection = (gScale == 0) ? -1 : 1;
+        // jumpDirection = (gScale == 0) ? -1 : 1;
         
         switch (gScale)
         {
@@ -131,5 +147,5 @@ public class PlayerController : MonoBehaviour
         }
         
 
-    }
+    }*/
 }
