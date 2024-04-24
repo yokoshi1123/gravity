@@ -53,6 +53,12 @@ public class GravityManager : MonoBehaviour
                 (startMPosition, endMPosition) = (endMPosition, startMPosition);
                 // Debug.Log(startMPosition + ", " + endMPosition);
             }
+            if (startMPosition.y > endMPosition.y) // startMPosition.y > endMPosition.y なら値を入れ替え
+            {
+                // Debug.Log(startMPosition + ", " + endMPosition);
+                (startMPosition.y, endMPosition.y) = (endMPosition.y, startMPosition.y);
+                // Debug.Log(startMPosition + ", " + endMPosition);
+            }
 
             // 既にGravityFieldのクローンがあれば削除
             destroyGF = GameObject.FindWithTag("GravityField");
@@ -63,7 +69,7 @@ public class GravityManager : MonoBehaviour
             // GravityFieldのクローンを作成
             GameObject gField = (GameObject)Instantiate(gravityField, (startMPosition + endMPosition) / 2, Quaternion.identity);
             // 横幅をドラッグした幅に変更
-            gField.transform.localScale = new Vector2(Mathf.Abs(endMPosition.x - startMPosition.x), GFIELDHEIGHT);
+            gField.transform.localScale = new Vector2(Mathf.Abs(endMPosition.x - startMPosition.x), Mathf.Abs(endMPosition.y - startMPosition.y));
 
         }
 
