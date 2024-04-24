@@ -630,8 +630,8 @@ GameObject:
   - component: {fileID: 1037389807}
   - component: {fileID: 1037389806}
   - component: {fileID: 1037389809}
-  - component: {fileID: 1037389808}
   - component: {fileID: 1037389810}
+  - component: {fileID: 1037389813}
   - component: {fileID: 1037389811}
   - component: {fileID: 1037389812}
   m_Layer: 0
@@ -709,22 +709,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &1037389808
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1037389805}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: c2364c91e60bd874abcae4291132ca23, type: 2}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!50 &1037389809
 Rigidbody2D:
   serializedVersion: 4
@@ -800,6 +784,32 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!61 &1037389813
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1037389805}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: c2364c91e60bd874abcae4291132ca23, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.07, y: 1.8299999}
+  m_SpriteTilingProperty:
+    border: {x: 0.9375, y: 0, z: 1.0546875, w: 0.1171875}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 3.75, y: 3.75}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.76, y: 3.6}
+  m_EdgeRadius: 0
 --- !u!1 &1082879042
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,7 +928,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &1289126120
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1290,6 +1300,7 @@ MonoBehaviour:
   G_SCALE: 5
   moveSpeed: 10
   gravityScale: 0
+  isReverse: 0
   gravityText: {fileID: 792410578}
 --- !u!4 &1454888817
 Transform:
