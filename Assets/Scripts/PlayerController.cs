@@ -24,7 +24,6 @@ public class PlayerController : MonoBehaviour
     private bool isMoving = false;
     private bool isJumping = false;
     private bool isReverse = false;
-    private bool isUpsideDown = false;
     // private bool inField= false;
     private int jumpDirection = 1;
     // private int gScale = 2;
@@ -49,9 +48,9 @@ public class PlayerController : MonoBehaviour
         // Debug.Log(horizontal);
         isMoving = horizontal != 0;
 
+        Vector3 scale = gameObject.transform.localScale;
         if (isMoving)
         {
-            Vector3 scale = gameObject.transform.localScale;
             if (horizontal < 0 && scale.x > 0 || horizontal > 0 && scale.x < 0)
             {
                 scale.x *= -1;
@@ -59,13 +58,11 @@ public class PlayerController : MonoBehaviour
             gameObject.transform.localScale = scale;
         }
 
-        if (isReverse && !isUpsideDown)
+        if (!isReverse && scale.y == -1)
         {
-            Vector3 scale = gameObject.transform.localScale;
-            Debug.Log(scale.y);
-            scale.y *= -1;
+            // Debug.Log(scale.y);
+            scale.y = 1;
             gameObject.transform.localScale = scale;
-            isUpsideDown = true;
         }
 
         /*if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -135,6 +132,12 @@ public class PlayerController : MonoBehaviour
             moveSpeed = gravityManager.moveSpeed;
             rb.gravityScale = gravityManager.gravityScale;
             isReverse = gravityManager.isReverse;
+            Vector3 scale = gameObject.transform.localScale;
+            if (isReverse && scale.y == 1)
+            {
+                scale.y = -1;
+                gameObject.transform.localScale = scale;
+            }
             // Debug.Log("In the gravity field: " + rb.gravityScale);
         }
     }
@@ -148,7 +151,6 @@ public class PlayerController : MonoBehaviour
             moveSpeed = gravityManager.M_SPEED;
             rb.gravityScale = gravityManager.G_SCALE;
             isReverse = false;
-            isUpsideDown = false;
         }
 
         if (collision.CompareTag("Stage"))//‹ó’†‚É‚¢‚é‚Æ‚«‚ÍisJumping‚ðtrue
