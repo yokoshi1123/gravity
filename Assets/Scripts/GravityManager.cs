@@ -9,11 +9,11 @@ public class GravityManager : MonoBehaviour
     public float G_SCALE = 5.0f;
     public float moveSpeed;
     public float gravityScale;
+    public bool isReverse = false;
 
     private Vector2 startMPosition = Vector2.zero;
     private Vector2 endMPosition = Vector2.zero;
     private float CAMERAZPOSITION = -20f;
-    private float GFIELDHEIGHT = 16f; // èdóÕèÍÇÃècïù
     private GameObject destroyGF;
 
     private int gScale = 2;
@@ -92,27 +92,28 @@ public class GravityManager : MonoBehaviour
         // Debug.Log("gscale: " + gScale);
         // jumpDirection = (gScale == 0) ? -1 : 1;
 
+        isReverse = (gScale == 0) ? true : false;
         switch (gScale)
         {
             case 0: // x(-1.0)
                 gravityScale = G_SCALE * (-1.0f);
                 moveSpeed = M_SPEED;
-                gravityText.text = "Gravity * (-1.0)";
+                gravityText.text = "GRAVITY : -1.0";
                 break;
             case 1: // x0.5
                 gravityScale = G_SCALE * 0.5f;
                 moveSpeed = M_SPEED * 1.3f;
-                gravityText.text = "Gravity * 0.5";
+                gravityText.text = "GRAVITY : 0.5";
                 break;
             case 2: // x1.0
                 gravityScale = G_SCALE;
                 moveSpeed = M_SPEED;
-                gravityText.text = "Gravity * 1.0";
+                gravityText.text = "GRAVITY : 1.0";
                 break;
             case 3: // x2.0
                 gravityScale = G_SCALE * 2.0f;
                 moveSpeed = M_SPEED * 0.7f;
-                gravityText.text = "Gravity * 2.0";
+                gravityText.text = "GRAVITY : 2.0";
                 break;
             default:
                 Debug.Log("ChangeGravityÇ≈ÉGÉâÅ[");

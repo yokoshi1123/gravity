@@ -5,11 +5,13 @@ using UnityEngine.UIElements;
 // using TMPro;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(CircleCollider2D))]
+[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(Animator))]
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Animator animator;
 
     // public EnvironmentManager environmentManager;
     public GravityManager gravityManager; // EnvironmentManager‚ð”pŽ~
@@ -19,7 +21,10 @@ public class PlayerController : MonoBehaviour
     // [SerializeField] private float gravityScale;
     [SerializeField] private float jumpForce = 20.0f;
 
+    private bool isMoving = false;
     private bool isJumping = false;
+    private bool isReverse = false;
+    private bool isUpsideDown = false;
     // private bool inField= false;
     private int jumpDirection = 1;
     // private int gScale = 2;
@@ -31,12 +36,38 @@ public class PlayerController : MonoBehaviour
         gravityDefault = environmentManager.gravityDefault; */
         moveSpeed = gravityManager.M_SPEED;
         rb.gravityScale = gravityManager.G_SCALE;
+        isReverse = gravityManager.isReverse;
         // gravityText.text = "Gravity * 1.0";
+        animator = GetComponent<Animator>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        float horizontal = Input.GetAxis("Horizontal");
+        // Debug.Log(horizontal);
+        isMoving = horizontal != 0;
+
+        if (isMoving)
+        {
+            Vector3 scale = gameObject.transform.localScale;
+            if (horizontal < 0 && scale.x > 0 || horizontal > 0 && scale.x < 0)
+            {
+                scale.x *= -1;
+            }
+            gameObject.transform.localScale = scale;
+        }
+
+        if (isReverse && !isUpsideDown)
+        {
+            Vector3 scale = gameObject.transform.localScale;
+            Debug.Log(scale.y);
+            scale.y *= -1;
+            gameObject.transform.localScale = scale;
+            isUpsideDown = true;
+        }
+
         /*if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             gScale = (gScale + 399999) % 4;
@@ -55,7 +86,10 @@ public class PlayerController : MonoBehaviour
         }
         
         //ƒvƒŒƒCƒ„[‚ÌˆÚ“®
-        rb.velocity = new Vector2(Input.GetAxis("Horizontal") * moveSpeed, rb.velocity.y);
+        rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);
+
+        animator.SetBool("isMoving", isMoving);
+        animator.SetBool("isJumping", isJumping);
 
         /* if (inField)
         {
@@ -74,6 +108,7 @@ public class PlayerController : MonoBehaviour
     void Jump()
     {
         isJumping = true;
+        // Debug.Log("Jumping");
         jumpDirection = (rb.gravityScale == gravityManager.G_SCALE * (-1.0f)) ? -1 : 1; 
         rb.AddForce(Vector2.up * jumpForce * jumpDirection, ForceMode2D.Impulse);
     }
@@ -83,6 +118,7 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("Stage"))
         {
             isJumping = false;
+            // Debug.Log("On the ground");
         }
 
         /* if (collision.CompareTag("GravityField"))
@@ -98,6 +134,7 @@ public class PlayerController : MonoBehaviour
         {
             moveSpeed = gravityManager.moveSpeed;
             rb.gravityScale = gravityManager.gravityScale;
+            isReverse = gravityManager.isReverse;
             // Debug.Log("In the gravity field: " + rb.gravityScale);
         }
     }
@@ -110,11 +147,14 @@ public class PlayerController : MonoBehaviour
             //Debug.Log("‚·‚è”²‚¯I‚¦‚½");
             moveSpeed = gravityManager.M_SPEED;
             rb.gravityScale = gravityManager.G_SCALE;
+            isReverse = false;
+            isUpsideDown = false;
         }
 
         if (collision.CompareTag("Stage"))//‹ó’†‚É‚¢‚é‚Æ‚«‚ÍisJumping‚ðtrue
         {
             isJumping = true;
+            // Debug.Log("In the air");
         }
 
     }
