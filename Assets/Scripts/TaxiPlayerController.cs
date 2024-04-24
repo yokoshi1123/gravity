@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CircleCollider2D))]
 
-public class PlayerController : MonoBehaviour
+public class TaxiPlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
 
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
-        
+
         //プレイヤーの移動
         rb.velocity = new Vector2(Input.GetAxis("Horizontal") * moveSpeed, rb.velocity.y);
 
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
     void Jump()
     {
         isJumping = true;
-        jumpDirection = (rb.gravityScale == gravityManager.G_SCALE * (-1.0f)) ? -1 : 1; 
+        jumpDirection = (rb.gravityScale == gravityManager.G_SCALE * (-1.0f)) ? -1 : 1;
         rb.AddForce(Vector2.up * jumpForce * jumpDirection, ForceMode2D.Impulse);
     }
 
@@ -85,13 +85,14 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
         }
 
-        /* if (collision.CompareTag("GravityField"))
+         /*if (collision.CompareTag("GravityField"))
         {
             // inField = true;
             moveSpeed = gravityManager.moveSpeed;
             gravityScale = gravityManager.gravityScale;
         } */
     }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("GravityField")) // 重力場中にあるとき、gravityManagerでの変更を読み込む
@@ -112,7 +113,7 @@ public class PlayerController : MonoBehaviour
             rb.gravityScale = gravityManager.G_SCALE;
         }
 
-        if (collision.CompareTag("Stage"))//空中にいるときはisJumpingをtrue
+        if (collision.CompareTag("Stage"))
         {
             isJumping = true;
         }
