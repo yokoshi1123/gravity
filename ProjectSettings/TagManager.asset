@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Stage
   - GravityField
+  - Movable
   layers:
   - Default
   - TransparentFX

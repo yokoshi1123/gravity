@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AstroWalk2
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 8
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 1ad8a36473fcab84bafb092b1c5fd947, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: acac5472452316e4ab9a30ec9f20deb1, type: 3}
+  - {fileID: 21300000, guid: 1d634f925f15ca7459f8b20d72690684, type: 3}
+  - {fileID: 21300000, guid: 2d38f443650b80944ba5432866718fbb, type: 3}
+  - {fileID: 21300000, guid: 0f6dbc3664b9fd94690ec884569fa628, type: 3}
+  - {fileID: 21300000, guid: e30815e8ec295b048b8740fe1c2137b2, type: 3}
+  - {fileID: 21300000, guid: 0b9dac497511d5941a6a507b3412fcda, type: 3}
+  - {fileID: 21300000, guid: 1b5c557ab3c5b934095f62a3ed5fd87c, type: 3}
+  - {fileID: 21300000, guid: 9c48acbe63c6c984794d587912b4f2a3, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - AstroWalk2_5
+  - AstroWalk2_1
+  - AstroWalk2_3
+  - AstroWalk2_7
+  - AstroWalk2_4
+  - AstroWalk2_2
+  - AstroWalk2_0
+  - AstroWalk2_6
+  m_RenderDataMap: {}
+  m_Tag: AstroWalk2
+  m_IsVariant: 0
