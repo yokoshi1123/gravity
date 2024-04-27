@@ -14,6 +14,7 @@ public class GravityObserver : MonoBehaviour
 
     void Awake()
     {
+        rb.gravityScale = gravityManager.G_SCALE;
         rb.mass = OBJ_WEIGHT;
     }
 

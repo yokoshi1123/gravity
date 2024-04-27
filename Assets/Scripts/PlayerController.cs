@@ -25,16 +25,21 @@ public class PlayerController : MonoBehaviour
     private bool isReverse = false;
     private int jumpDirection = 1;
 
+    private Vector3 scale;
+
     private float rayDistance = 0.2f;
     private GameObject grabObj;
     private float objWeight = 0.0f;
     private RaycastHit2D hit;
+    private float grabWidth;
+    private Vector3 grabPos;
+
 
     void Awake()
     {
         moveSpeed = gravityManager.M_SPEED;
         rb.gravityScale = gravityManager.G_SCALE;
-        isReverse = gravityManager.isReverse;       
+        isReverse = gravityManager.isReverse; 
     }
 
     void Update()
@@ -43,7 +48,7 @@ public class PlayerController : MonoBehaviour
         // Debug.Log(horizontal);
         isWalking = horizontal != 0;
 
-        Vector3 scale = gameObject.transform.localScale;
+        scale = gameObject.transform.localScale;
         if (isWalking && !isGrabbing)
         {
             if (horizontal < 0 && scale.x > 0 || horizontal > 0 && scale.x < 0)
@@ -68,9 +73,12 @@ public class PlayerController : MonoBehaviour
         
         //ƒvƒŒƒCƒ„[‚ÌˆÚ“®
         rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed - objWeight), rb.velocity.y);
-        // Debug.Log(rb.velocity);
+        if (isGrabbing)
+        {
+            // Debug.Log(rb.velocity);
+        }
 
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G) && !isJumping)
         {
             Grab();
         }       
@@ -85,7 +93,7 @@ public class PlayerController : MonoBehaviour
     {
         isJumping = true;
         // Debug.Log("Jumping");
-        jumpDirection = (rb.gravityScale == gravityManager.G_SCALE * (-1.0f)) ? -1 : 1; 
+        jumpDirection = (isReverse) ? -1 : 1; 
         rb.AddForce(Vector2.up * jumpForce * jumpDirection, ForceMode2D.Impulse);
     }
 
@@ -98,9 +106,16 @@ public class PlayerController : MonoBehaviour
             {
                 grabObj = hit.collider.gameObject;
                 grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
+
+                grabWidth = grabObj.GetComponent<Collider2D>().bounds.extents.x / grabObj.transform.localScale.x;
+                grabPos = grabObj.transform.position;
+                //Debug.Log(grabPos);
+                //grabPos.x += grabWidth * scale.x ;
+                //grabObj.transform.position = grabPos;
+                Debug.Log(grabPos);
                 grabObj.transform.SetParent(transform);
-                objWeight = grabObj.GetComponent<Rigidbody2D>().mass / 10;
-                Debug.Log("Mass:" + objWeight);
+                objWeight = grabObj.GetComponent<Rigidbody2D>().mass / 5.0f;
+                //Debug.Log("Mass:" + objWeight);
                 isGrabbing = true;
             }
         }
@@ -113,11 +128,13 @@ public class PlayerController : MonoBehaviour
             isGrabbing = false;
         }
 
+        Debug.Log(grabObj);
         animator.SetBool("isGrabbing", isGrabbing);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        isJumping = false;
         if (collision.CompareTag("Stage"))
         {
             isJumping = false;
@@ -131,7 +148,7 @@ public class PlayerController : MonoBehaviour
             moveSpeed = gravityManager.moveSpeed;
             rb.gravityScale = gravityManager.gravityScale;
             isReverse = gravityManager.isReverse;
-            Vector3 scale = gameObject.transform.localScale;
+            scale = gameObject.transform.localScale;
             if (isReverse && scale.y == 1)
             {
                 scale.y = -1;
