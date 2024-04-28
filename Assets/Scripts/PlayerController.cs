@@ -110,8 +110,8 @@ public class PlayerController : MonoBehaviour
                 grabWidth = grabObj.GetComponent<Collider2D>().bounds.extents.x / grabObj.transform.localScale.x;
                 grabPos = grabObj.transform.position;
                 //Debug.Log(grabPos);
-                //grabPos.x += grabWidth * scale.x ;
-                //grabObj.transform.position = grabPos;
+                grabPos.x += 0.1f * scale.x; // grabWidth * scale.x;
+                grabObj.transform.position = grabPos;
                 Debug.Log(grabPos);
                 grabObj.transform.SetParent(transform);
                 objWeight = grabObj.GetComponent<Rigidbody2D>().mass / 5.0f;
