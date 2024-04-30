@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D hit;
     private float grabWidth;
     private Vector3 grabPos;
+    private Vector3 grabScale;
 
 
     void Awake()
@@ -73,10 +74,11 @@ public class PlayerController : MonoBehaviour
         
         //プレイヤーの移動
         rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed - objWeight), rb.velocity.y);
-        if (isGrabbing)
+        /*if (isGrabbing)
         {
+            grabObj.GetComponent<Rigidbody2D>().velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed - objWeight), grabObj.GetComponent<Rigidbody2D>().velocity.y);
             // Debug.Log(rb.velocity);
-        }
+        }*/
 
         if (Input.GetKeyDown(KeyCode.G) && !isJumping)
         {
@@ -109,12 +111,11 @@ public class PlayerController : MonoBehaviour
 
                 grabWidth = grabObj.GetComponent<Collider2D>().bounds.extents.x / grabObj.transform.localScale.x;
                 grabPos = grabObj.transform.position;
-                //Debug.Log(grabPos);
                 grabPos.x += 0.1f * scale.x; // grabWidth * scale.x;
                 grabObj.transform.position = grabPos;
-                Debug.Log(grabPos);
                 grabObj.transform.SetParent(transform);
-                objWeight = grabObj.GetComponent<Rigidbody2D>().mass / 5.0f;
+                //objWeight = grabObj.GetComponent<Rigidbody2D>().mass / 5.0f;
+                //grabObj.GetComponent<Rigidbody2D>().sharedMaterial.friction = 0f;
                 //Debug.Log("Mass:" + objWeight);
                 isGrabbing = true;
             }
@@ -122,27 +123,31 @@ public class PlayerController : MonoBehaviour
         else
         {
             grabObj.GetComponent<Rigidbody2D>().isKinematic = false;
+            //grabObj.GetComponent<Rigidbody2D>().sharedMaterial.friction = 1.0f;
+            /*grabScale = grabObj.transform.localScale;
+            if (grabScale.y < 0)
+            {
+                grabScale.y *= -1;
+            }
+            grabObj.transform.localScale = grabScale;*/
             grabObj.transform.SetParent(null);
             objWeight = 0.0f;
             grabObj = null;
             isGrabbing = false;
         }
 
-        Debug.Log(grabObj);
+        //Debug.Log(grabObj);
         animator.SetBool("isGrabbing", isGrabbing);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        isJumping = false;
         if (collision.CompareTag("Stage"))
         {
             isJumping = false;
             // Debug.Log("On the ground");
         }
-    }
-    private void OnTriggerStay2D(Collider2D collision)
-    {
+
         if (collision.CompareTag("GravityField")) // 重力場中にあるとき、gravityManagerでの変更を読み込む
         {
             moveSpeed = gravityManager.moveSpeed;

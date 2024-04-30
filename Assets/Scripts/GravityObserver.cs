@@ -12,11 +12,25 @@ public class GravityObserver : MonoBehaviour
 
     [SerializeField] private float OBJ_WEIGHT;
 
+    // private bool isReverse = false;
+    // private Vector3 scale;
+
     void Awake()
     {
         rb.gravityScale = gravityManager.G_SCALE;
         rb.mass = OBJ_WEIGHT;
+        // isReverse = gravityManager.isReverse;
     }
+
+    /*void Update()
+    {
+        scale = gameObject.transform.localScale;
+        if (!isReverse && scale.y < 0)
+        {
+            scale.y *= -1;
+            gameObject.transform.localScale = scale;
+        }
+    }*/
 
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -24,6 +38,13 @@ public class GravityObserver : MonoBehaviour
         {
             rb.gravityScale = gravityManager.gravityScale * OBJ_WEIGHT;
             rb.mass = OBJ_WEIGHT * Mathf.Min(0.5f, Mathf.Abs(rb.gravityScale / gravityManager.G_SCALE));
+            /*isReverse = gravityManager.isReverse;
+            scale = gameObject.transform.localScale;
+            if (isReverse && scale.y == 1)
+            {
+                scale.y = -1;
+                gameObject.transform.localScale = scale;
+            }*/
         }
     }
 
@@ -33,6 +54,7 @@ public class GravityObserver : MonoBehaviour
         {
             rb.gravityScale = gravityManager.G_SCALE;
             rb.mass = OBJ_WEIGHT;
+            // isReverse = false;
         }
 
     }
