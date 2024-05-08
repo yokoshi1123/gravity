@@ -36,7 +36,7 @@ public class GravityObserver : MonoBehaviour
     {
         if (collision.CompareTag("GravityField")) // d—Íê’†‚É‚ ‚é‚Æ‚«AgravityManager‚Å‚Ì•ÏX‚ğ“Ç‚İ‚Ş
         {
-            rb.gravityScale = gravityManager.gravityScale * OBJ_WEIGHT;
+            rb.gravityScale = gravityManager.gravityScale; // * OBJ_WEIGHT;
             rb.mass = OBJ_WEIGHT * Mathf.Min(0.5f, Mathf.Abs(rb.gravityScale / gravityManager.G_SCALE));
             /*isReverse = gravityManager.isReverse;
             scale = gameObject.transform.localScale;
