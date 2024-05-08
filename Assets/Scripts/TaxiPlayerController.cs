@@ -1,104 +1,160 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UIElements;
-// using TMPro;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(CircleCollider2D))]
+[RequireComponent(typeof(CapsuleCollider2D))]
 
 public class TaxiPlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Animator animator;
 
-    // public EnvironmentManager environmentManager;
     public GravityManager gravityManager; // EnvironmentManagerを廃止
-    // public TextMeshProUGUI gravityText;
 
     [SerializeField] private float moveSpeed;
-    // [SerializeField] private float gravityScale;
-    [SerializeField] private float jumpForce = 20.0f;
+    private float jumpForce = 20.0f;
 
+    [SerializeField] private Transform grabPoint;
+
+    private bool isWalking = false;
     private bool isJumping = false;
-    // private bool inField= false;
+    private bool isGrabbing = false;
+    private bool isReverse = false;
     private int jumpDirection = 1;
-    // private int gScale = 2;
+
+    private Vector3 scale;
+
+    private float rayDistance = 0.2f;
+    private GameObject grabObj;
+    private float objWeight = 0.0f;
+    private RaycastHit2D hit;
+    private float grabWidth;
+    private Vector3 grabPos;
+
 
     void Awake()
     {
-        /* moveSpeed = environmentManager.moveSpeed;
-        jumpForce = environmentManager.jumpForce;
-        gravityDefault = environmentManager.gravityDefault; */
         moveSpeed = gravityManager.M_SPEED;
         rb.gravityScale = gravityManager.G_SCALE;
-        // gravityText.text = "Gravity * 1.0";
+        isReverse = gravityManager.isReverse;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        /*if (Input.GetKeyDown(KeyCode.UpArrow))
+
+        float horizontal = Input.GetAxis("Horizontal");
+        // Debug.Log(horizontal);
+        isWalking = horizontal != 0;
+
+        scale = gameObject.transform.localScale;
+        if (isWalking && !isGrabbing)
         {
-            gScale = (gScale + 399999) % 4;
-            ChangeGravity();
+            if (horizontal < 0 && scale.x > 0 || horizontal > 0 && scale.x < 0)
+            {
+                scale.x *= -1;
+            }
+            gameObject.transform.localScale = scale;
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+
+        if (!isReverse && scale.y == -1)
         {
-            gScale = (gScale + 400001) % 4;
-            ChangeGravity();
-        }*/
+            // Debug.Log(scale.y);
+            scale.y = 1;
+            gameObject.transform.localScale = scale;
+        }
 
         //ジャンプ
-        if (Input.GetKeyDown(KeyCode.Space) && !isJumping && !(rb.velocity.y < -0.5f))
+        if (Input.GetKeyDown(KeyCode.Space) && !isJumping && !isGrabbing && !(rb.velocity.y < -0.5f))
         {
             Jump();
         }
 
         //プレイヤーの移動
-        rb.velocity = new Vector2(Input.GetAxis("Horizontal") * moveSpeed, rb.velocity.y);
-
-        /* if (inField)
+        rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed - objWeight), rb.velocity.y);
+        if (isGrabbing)
         {
-            rb.gravityScale = gravityDefault * (-1.0f);
-            // moveSpeed = environmentManager.moveSpeed * 0.7f;
+            // Debug.Log(rb.velocity);
         }
-        else if (!inField)
+
+        if (Input.GetKeyDown(KeyCode.G) && !isJumping)
         {
-            rb.gravityScale = gravityDefault ;
-            // moveSpeed = environmentManager.moveSpeed ;
-        } */
+            Grab();
+        }
+
+        animator.SetBool("isWalking", isWalking);
+        animator.SetBool("isJumping", isJumping);
     }
 
 
 
-    void Jump()
+    private void Jump()
     {
         isJumping = true;
-        jumpDirection = (rb.gravityScale == gravityManager.G_SCALE * (-1.0f)) ? -1 : 1;
+        // Debug.Log("Jumping");
+        jumpDirection = (isReverse) ? -1 : 1;
         rb.AddForce(Vector2.up * jumpForce * jumpDirection, ForceMode2D.Impulse);
+    }
+
+    private void Grab()
+    {
+        if (grabObj == null)
+        {
+            hit = Physics2D.Raycast(grabPoint.position, transform.right, rayDistance);
+            if (hit.collider != null && hit.collider.tag == "Movable")
+            {
+                grabObj = hit.collider.gameObject;
+                grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
+
+                grabWidth = grabObj.GetComponent<Collider2D>().bounds.extents.x / grabObj.transform.localScale.x;
+                grabPos = grabObj.transform.position;
+                //Debug.Log(grabPos);
+                grabPos.x += 0.1f * scale.x; // grabWidth * scale.x;
+                grabObj.transform.position = grabPos;
+                Debug.Log(grabPos);
+                grabObj.transform.SetParent(transform);
+                objWeight = grabObj.GetComponent<Rigidbody2D>().mass / 5.0f;
+                //Debug.Log("Mass:" + objWeight);
+                isGrabbing = true;
+            }
+        }
+        else
+        {
+            grabObj.GetComponent<Rigidbody2D>().isKinematic = false;
+            grabObj.transform.SetParent(null);
+            objWeight = 0.0f;
+            grabObj = null;
+            isGrabbing = false;
+        }
+
+        Debug.Log(grabObj);
+        animator.SetBool("isGrabbing", isGrabbing);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        /*isJumping = false;
         if (collision.CompareTag("Stage"))
         {
             isJumping = false;
-        }
-
-         /*if (collision.CompareTag("GravityField"))
-        {
-            // inField = true;
-            moveSpeed = gravityManager.moveSpeed;
-            gravityScale = gravityManager.gravityScale;
-        } */
+            // Debug.Log("On the ground");
+        }*/
     }
-
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("GravityField")) // 重力場中にあるとき、gravityManagerでの変更を読み込む
         {
             moveSpeed = gravityManager.moveSpeed;
             rb.gravityScale = gravityManager.gravityScale;
+            isReverse = gravityManager.isReverse;
+            scale = gameObject.transform.localScale;
+            if (isReverse && scale.y == 1)
+            {
+                scale.y = -1;
+                gameObject.transform.localScale = scale;
+            }
             // Debug.Log("In the gravity field: " + rb.gravityScale);
         }
     }
@@ -111,47 +167,32 @@ public class TaxiPlayerController : MonoBehaviour
             //Debug.Log("すり抜け終えた");
             moveSpeed = gravityManager.M_SPEED;
             rb.gravityScale = gravityManager.G_SCALE;
+            isReverse = false;
         }
 
-        if (collision.CompareTag("Stage"))
+        /*if (collision.CompareTag("Stage"))//空中にいるときはisJumpingをtrue
         {
             isJumping = true;
+            // Debug.Log("In the air");
+        }*/
+    }
+
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        //isJumping = (other.gameObject.tag == "Stage") ? false : true;//ミス
+        if(other.gameObject.tag == "Stage")
+        {
+            isJumping = false;
+            Debug.Log("In the air");
         }
 
     }
 
-    /* void ChangeGravity()
+    private void OnCollisionExit2D(Collision2D other)
     {
-        // Debug.Log("gscale: " + gScale);
-        // jumpDirection = (gScale == 0) ? -1 : 1;
-        
-        switch (gScale)
+        if (other.gameObject.tag == "Stage")
         {
-            case 0: // x(-1.0)
-                rb.gravityScale = gravityDefault * (-1.0f);
-                moveSpeed = environmentManager.moveSpeed;
-                gravityText.text = "Gravity * (-1.0)";
-                break;
-            case 1: // x0.5
-                rb.gravityScale = gravityDefault * 0.5f;
-                moveSpeed = environmentManager.moveSpeed * 0.7f;
-                gravityText.text = "Gravity * 0.5";
-                break;
-            case 2: // x1.0
-                rb.gravityScale = gravityDefault;
-                moveSpeed = environmentManager.moveSpeed;
-                gravityText.text = "Gravity * 1.0";
-                break;
-            case 3: // x2.0
-                rb.gravityScale = gravityDefault * 2.0f;
-                moveSpeed = environmentManager.moveSpeed * 0.5f;
-                gravityText.text = "Gravity * 2.0";
-                break;
-            default:
-                Debug.Log("ChangeGravityでエラー");
-                break;
+            isJumping = true;
         }
-        
-
-    }*/
+    }
 }
