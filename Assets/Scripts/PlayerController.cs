@@ -156,10 +156,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Stage"))
+        /*if (collision.CompareTag("Stage"))
         {
             isJumping = false;
-        }
+        }*/
 
         if (collision.CompareTag("GravityField")) // d—Íê’†‚É‚ ‚é‚Æ‚«AgravityManager‚Å‚Ì•ÏX‚ğ“Ç‚İ‚Ş
         {
@@ -173,6 +173,11 @@ public class PlayerController : MonoBehaviour
                 gameObject.transform.localScale = scale;
             }
         }
+
+        else
+        {
+            isJumping = false;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -184,7 +189,8 @@ public class PlayerController : MonoBehaviour
             isReverse = false;
         }
 
-        if (collision.CompareTag("Stage"))//‹ó’†‚É‚¢‚é‚Æ‚«‚ÍisJumping‚ğtrue
+        //if (collision.CompareTag("Stage"))//‹ó’†‚É‚¢‚é‚Æ‚«‚ÍisJumping‚ğtrue
+        else
         {
             isJumping = true;
         }
