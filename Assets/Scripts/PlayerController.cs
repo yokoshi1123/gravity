@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private BoxCollider2D grabCollider;
 
-    public GravityManager gravityManager; // EnvironmentManagerを廃止
+    public GravityManager gravityManager;
 
     [SerializeField] private float moveSpeed;
     private float jumpForce = 20.0f;
@@ -33,10 +33,12 @@ public class PlayerController : MonoBehaviour
     private GameObject grabObj;
     private float objWeight = 0.0f;
     private RaycastHit2D hit;
-    private float grabWidth;
+    //private float grabWidth;
     private Vector3 grabPos;
-    private Vector3 grabScale;
+   // private Vector3 grabScale;
 
+    [SerializeField] private float ABYSS = -10f;
+    public Vector2 respawnPoint = new Vector2(0, 2);
 
     void Awake()
     {
@@ -48,7 +50,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         float horizontal = Input.GetAxis("Horizontal");
-        // Debug.Log(horizontal);
         isWalking = horizontal != 0;
 
         scale = gameObject.transform.localScale;
@@ -63,7 +64,6 @@ public class PlayerController : MonoBehaviour
 
         if (!isReverse && scale.y == -1)
         {
-            // Debug.Log(scale.y);
             scale.y = 1;
             gameObject.transform.localScale = scale;
         }
@@ -76,12 +76,7 @@ public class PlayerController : MonoBehaviour
         
         //プレイヤーの移動
         rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed - objWeight), rb.velocity.y);
-        /*if (isGrabbing)
-        {
-            grabObj.GetComponent<Rigidbody2D>().velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed - objWeight), grabObj.GetComponent<Rigidbody2D>().velocity.y);
-            // Debug.Log(rb.velocity);
-        }*/
-
+        
         if (Input.GetKeyDown(KeyCode.G) && !isJumping)
         {
             Grab();
@@ -89,6 +84,11 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("isWalking", isWalking);
         animator.SetBool("isJumping", isJumping);
+
+        if (transform.position.y < ABYSS)
+        {
+            Respawn();
+        }
     }
 
 
@@ -96,7 +96,6 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         isJumping = true;
-        // Debug.Log("Jumping");
         jumpDirection = (isReverse) ? -1 : 1; 
         rb.AddForce(Vector2.up * jumpForce * jumpDirection, ForceMode2D.Impulse);
     }
@@ -113,9 +112,8 @@ public class PlayerController : MonoBehaviour
 
                 //grabObj.GetComponent<CollisionController>().isGrabbed = true;
 
-                //grabWidth = grabObj.GetComponent<Collider2D>().bounds.extents.x / grabObj.transform.localScale.x;
                 grabPos = grabObj.transform.position;
-                grabPos.x += 0.1f * scale.x; // grabWidth * scale.x;
+                grabPos.x += 0.1f * scale.x;
                 grabObj.transform.position = new Vector2(grabPos.x, grabPos.y+0.2f);
                 grabObj.transform.SetParent(transform);
 
@@ -124,9 +122,6 @@ public class PlayerController : MonoBehaviour
                 //grabCollider.size = grabObj.GetComponent<BoxCollider2D>().size;
                 //grabCollider.enabled = true;
 
-                //objWeight = grabObj.GetComponent<Rigidbody2D>().mass / 5.0f;
-                //grabObj.GetComponent<Rigidbody2D>().sharedMaterial.friction = 0f;
-                //Debug.Log("Mass:" + objWeight);
                 isGrabbing = true;
             }
         }
@@ -137,21 +132,26 @@ public class PlayerController : MonoBehaviour
             //grabObj.GetComponent<BoxCollider2D>().enabled = true;
 
             //grabObj.GetComponent<CollisionController>().isGrabbed = true;
-            //grabObj.GetComponent<Rigidbody2D>().sharedMaterial.friction = 1.0f;
-            /*grabScale = grabObj.transform.localScale;
-            if (grabScale.y < 0)
-            {
-                grabScale.y *= -1;
-            }
-            grabObj.transform.localScale = grabScale;*/
             grabObj.transform.SetParent(null);
             objWeight = 0.0f;
             grabObj = null;
             isGrabbing = false;
         }
 
-        //Debug.Log(grabObj);
         animator.SetBool("isGrabbing", isGrabbing);
+    }
+    private void Respawn()
+    {
+        rb.velocity = Vector2.zero;
+        transform.position = respawnPoint;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Toxic")
+        {
+            Respawn();
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -159,7 +159,6 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("Stage"))
         {
             isJumping = false;
-            // Debug.Log("On the ground");
         }
 
         if (collision.CompareTag("GravityField")) // 重力場中にあるとき、gravityManagerでの変更を読み込む
@@ -173,7 +172,6 @@ public class PlayerController : MonoBehaviour
                 scale.y = -1;
                 gameObject.transform.localScale = scale;
             }
-            // Debug.Log("In the gravity field: " + rb.gravityScale);
         }
     }
 
@@ -181,8 +179,6 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("GravityField")) // 重力場から出たとき、デフォルトに戻す
         {
-            // inField = false;
-            //Debug.Log("すり抜け終えた");
             moveSpeed = gravityManager.M_SPEED;
             rb.gravityScale = gravityManager.G_SCALE;
             isReverse = false;
@@ -191,7 +187,6 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("Stage"))//空中にいるときはisJumpingをtrue
         {
             isJumping = true;
-            // Debug.Log("In the air");
         }
     }
 }

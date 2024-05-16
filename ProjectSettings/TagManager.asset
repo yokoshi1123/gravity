@@ -7,6 +7,7 @@ TagManager:
   - Stage
   - GravityField
   - Movable
+  - Toxic
   layers:
   - Default
   - TransparentFX
