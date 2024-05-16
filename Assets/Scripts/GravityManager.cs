@@ -40,6 +40,41 @@ public class GravityManager : MonoBehaviour
 
         }
 
+        if (Input.GetMouseButton(0)) // マウスの左ボタンを離した時の座標を取得
+        {
+            endMPosition = Input.mousePosition;
+            // スクリーン座標からワールド座標に変換
+            endMPosition = Camera.main.ScreenToWorldPoint(new Vector3(endMPosition.x, endMPosition.y, CAMERAZPOSITION));
+            // Debug.Log("End:(" + endMPosition.x + ", " + endMPosition.y + ")");
+
+            Vector2 startMPosition2 = startMPosition;
+            Vector2 endMPosition2 = endMPosition;
+            if (startMPosition.x > endMPosition.x) // startMPosition.x > endMPosition.x なら値を入れ替え
+            {
+                // Debug.Log(startMPosition + ", " + endMPosition);
+                (startMPosition2, endMPosition2) = (endMPosition, startMPosition);
+                // Debug.Log(startMPosition + ", " + endMPosition);
+            }
+            if (startMPosition.y > endMPosition.y) // startMPosition.y > endMPosition.y なら値を入れ替え
+            {
+                // Debug.Log(startMPosition + ", " + endMPosition);
+                (startMPosition2.y, endMPosition2.y) = (endMPosition.y, startMPosition.y);
+                // Debug.Log(startMPosition + ", " + endMPosition);
+            }
+
+            // 既にGravityFieldのクローンがあれば削除
+            destroyGF = GameObject.FindWithTag("GravityField");
+            if (destroyGF != null)
+            {
+                Destroy(destroyGF);
+            }
+            // GravityFieldのクローンを作成
+            GameObject gField = (GameObject)Instantiate(gravityField, (startMPosition2 + endMPosition2) / 2, Quaternion.identity);
+            // 横幅をドラッグした幅に変更
+            gField.transform.localScale = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
+
+        }
+
         if (Input.GetMouseButtonUp(0)) // マウスの左ボタンを離した時の座標を取得
         {
             endMPosition = Input.mousePosition;

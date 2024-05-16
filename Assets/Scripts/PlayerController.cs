@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,6 +12,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator animator;
+    [SerializeField] private BoxCollider2D grabCollider;
 
     public GravityManager gravityManager; // EnvironmentManager‚ð”pŽ~
 
@@ -109,11 +111,19 @@ public class PlayerController : MonoBehaviour
                 grabObj = hit.collider.gameObject;
                 grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
 
-                grabWidth = grabObj.GetComponent<Collider2D>().bounds.extents.x / grabObj.transform.localScale.x;
+                //grabObj.GetComponent<CollisionController>().isGrabbed = true;
+
+                //grabWidth = grabObj.GetComponent<Collider2D>().bounds.extents.x / grabObj.transform.localScale.x;
                 grabPos = grabObj.transform.position;
                 grabPos.x += 0.1f * scale.x; // grabWidth * scale.x;
-                grabObj.transform.position = grabPos;
+                grabObj.transform.position = new Vector2(grabPos.x, grabPos.y+0.2f);
                 grabObj.transform.SetParent(transform);
+
+                grabObj.GetComponent<BoxCollider2D>().enabled = false;
+                //grabCollider.offset = grabObj.GetComponent<BoxCollider2D>().transform.position - grabPoint.position; // transform.position;
+                //grabCollider.size = grabObj.GetComponent<BoxCollider2D>().size;
+                //grabCollider.enabled = true;
+
                 //objWeight = grabObj.GetComponent<Rigidbody2D>().mass / 5.0f;
                 //grabObj.GetComponent<Rigidbody2D>().sharedMaterial.friction = 0f;
                 //Debug.Log("Mass:" + objWeight);
@@ -123,6 +133,10 @@ public class PlayerController : MonoBehaviour
         else
         {
             grabObj.GetComponent<Rigidbody2D>().isKinematic = false;
+            //grabCollider.enabled = false;
+            //grabObj.GetComponent<BoxCollider2D>().enabled = true;
+
+            //grabObj.GetComponent<CollisionController>().isGrabbed = true;
             //grabObj.GetComponent<Rigidbody2D>().sharedMaterial.friction = 1.0f;
             /*grabScale = grabObj.transform.localScale;
             if (grabScale.y < 0)
