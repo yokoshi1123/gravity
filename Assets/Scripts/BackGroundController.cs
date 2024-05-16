@@ -5,13 +5,14 @@ using UnityEngine;
 public class BackGroundController : MonoBehaviour
 {
     // îwåiÇÃñáêî
-    int spriteCount = 2;
+    private int spriteCount = 2;
     // îwåiÇ™âÒÇËçûÇ›
-    float rightOffset = 1.5f;
-    float leftOffset = -0.5f;
+    private float rightOffset = 1.5f;
+    private float leftOffset = -0.5f;
 
-    Transform bgTfm;
-    SpriteRenderer mySpriteRndr;
+    private Transform bgTfm;
+    private SpriteRenderer mySpriteRndr;
+    [SerializeField] private Transform player;
     float width;
 
     void Start()
@@ -19,11 +20,13 @@ public class BackGroundController : MonoBehaviour
         bgTfm = transform;
         mySpriteRndr = GetComponent<SpriteRenderer>();
         width = mySpriteRndr.bounds.size.x;
+        transform.position = new Vector2(transform.position.x, player.position.y + 1.5f);
     }
 
 
     void Update()
     {
+        transform.position = new Vector2(transform.position.x, player.position.y + 1.5f);
         // ç¿ïWïœä∑
         Vector3 myViewport = Camera.main.WorldToViewportPoint(bgTfm.position);
         // Debug.Log(name + ":" + myViewport);
