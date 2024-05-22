@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(CapsuleCollider2D))]
 
 public class PlayerController : MonoBehaviour
 {
