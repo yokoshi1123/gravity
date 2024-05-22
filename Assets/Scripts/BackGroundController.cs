@@ -21,13 +21,13 @@ public class BackGroundController : MonoBehaviour
         //mySpriteRndr = GetComponent<SpriteRenderer>();
         //width = mySpriteRndr.bounds.size.x;
         //transform.position = new Vector2(transform.position.x, player.position.y + 1.5f);
-        transform.position = new Vector2(player.position.x, player.position.y + 1.0f);
+        transform.position = new Vector2(player.position.x, Mathf.Max(2.0f, player.position.y + 1.0f));
     }
 
 
     void Update()
     {
-        transform.position = new Vector2(player.position.x, player.position.y + 1.0f);
+        transform.position = new Vector2(player.position.x, Mathf.Max(2.0f, player.position.y + 1.0f));
         //transform.position = new Vector2(transform.position.x, player.position.y + 1.5f);
         //// ç¿ïWïœä∑
         //Vector3 myViewport = Camera.main.WorldToViewportPoint(bgTfm.position);

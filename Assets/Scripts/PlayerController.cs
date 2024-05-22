@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 grabPos;
    // private Vector3 grabScale;
 
-    [SerializeField] private float ABYSS = -10f;
+    [SerializeField] private float ABYSS = 10.0f;
     public Vector2 respawnPoint = new Vector2(0, 2);
 
     void Awake()
