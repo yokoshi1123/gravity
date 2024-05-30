@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(AudioSource))]
 
 public class PlayerController : MonoBehaviour
 {
@@ -70,6 +71,7 @@ public class PlayerController : MonoBehaviour
         //ƒWƒƒƒ“ƒv
         if (Input.GetKeyDown(KeyCode.Space) && !isJumping && !isGrabbing && !(rb.velocity.y < -0.5f))
         {
+            GetComponent<AudioSource>().Play();
             Jump();
         }
         
