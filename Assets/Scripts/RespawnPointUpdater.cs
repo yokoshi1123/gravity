@@ -8,6 +8,8 @@ public class RespawnPointUpdater : MonoBehaviour
     public Sprite before;
     public Sprite after;
 
+    [SerializeField] private GameObject SE;
+
     void Awake()
     {
         gameObject.SetActive(true);
@@ -18,6 +20,7 @@ public class RespawnPointUpdater : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             collision.gameObject.GetComponent<PlayerController>().respawnPoint = transform.position;
+            SE.SetActive(true);
             gameObject.SetActive(false);
             texture.sprite = after;
         }

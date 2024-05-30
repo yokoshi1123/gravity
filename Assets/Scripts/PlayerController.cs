@@ -40,6 +40,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private string sceneName;
 
+    [SerializeField] private AudioClip deathBySpikes;
+
     void Awake()
     {
         moveSpeed = gravityManager.M_SPEED;
@@ -88,7 +90,7 @@ public class PlayerController : MonoBehaviour
 
         if (transform.position.y < ABYSS)
         {
-            Respawn();
+            StartCoroutine(Respawn()); //Respawn();
         }
     }
 
@@ -141,8 +143,12 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("isGrabbing", isGrabbing);
     }
-    private void Respawn()
+    private IEnumerator Respawn()
     {
+        Time.timeScale = 0;
+        yield return new WaitForSecondsRealtime(1); // 1•b’x‰„
+        //Debug.Log("Died");
+        Time.timeScale = 1;
         rb.velocity = Vector2.zero;
         transform.position = respawnPoint;
     }
@@ -156,7 +162,8 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.tag == "Toxic")
         {
-            Respawn();
+            GetComponent<AudioSource>().PlayOneShot(deathBySpikes);
+            StartCoroutine(Respawn()); //Respawn();
         }
     }
 
