@@ -40,7 +40,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private string sceneName;
 
-    [SerializeField] private AudioClip deathBySpikes;
+    [SerializeField] private AudioClip jumpSE;
+    [SerializeField] private AudioClip spikeSE;
+    [SerializeField] private AudioClip respawnSE;
+    [SerializeField] private AudioClip warpSE;
 
     void Awake()
     {
@@ -73,7 +76,7 @@ public class PlayerController : MonoBehaviour
         //ƒWƒƒƒ“ƒv
         if (Input.GetKeyDown(KeyCode.Space) && !isJumping && !isGrabbing && !(rb.velocity.y < -0.5f))
         {
-            GetComponent<AudioSource>().Play();
+            GetComponent<AudioSource>().PlayOneShot(jumpSE, 0.2f);
             Jump();
         }
         
@@ -149,6 +152,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSecondsRealtime(1); // 1•b’x‰„
         //Debug.Log("Died");
         Time.timeScale = 1;
+        GetComponent<AudioSource>().PlayOneShot(respawnSE, 0.8f);
         rb.velocity = Vector2.zero;
         transform.position = respawnPoint;
     }
@@ -157,12 +161,13 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Goal")
         {
+            GetComponent<AudioSource>().PlayOneShot(warpSE, 0.8f);
             SceneManager.LoadScene(sceneName);
         }
 
         if (collision.gameObject.tag == "Toxic")
         {
-            GetComponent<AudioSource>().PlayOneShot(deathBySpikes);
+            GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.6f);
             StartCoroutine(Respawn()); //Respawn();
         }
     }
