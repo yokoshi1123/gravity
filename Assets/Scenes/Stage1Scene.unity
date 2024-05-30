@@ -15447,6 +15447,10 @@ PrefabInstance:
       value: Stage2Scene
       objectReference: {fileID: 0}
     - target: {fileID: 4953391581170830859, guid: 36eb50de15ef5bf42b1df1c0d2071e9c, type: 3}
+      propertyPath: deathBySpikes
+      value: 
+      objectReference: {fileID: 8300000, guid: 0b615f7554139e0479b4e47860faae03, type: 3}
+    - target: {fileID: 4953391581170830859, guid: 36eb50de15ef5bf42b1df1c0d2071e9c, type: 3}
       propertyPath: gravityManager
       value: 
       objectReference: {fileID: 1454888816}
