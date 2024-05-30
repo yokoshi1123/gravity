@@ -8,6 +8,7 @@ TagManager:
   - GravityField
   - Movable
   - Toxic
+  - Goal
   layers:
   - Default
   - TransparentFX

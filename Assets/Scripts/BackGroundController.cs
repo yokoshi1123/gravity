@@ -12,7 +12,7 @@ public class BackGroundController : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(xMin + "," + xMax +"," + yMin + "," +yMax);
+        //Debug.Log(xMin + "," + xMax +"," + yMin + "," +yMax);
         transform.position = new Vector2(Mathf.Max(xMin, player.position.x), Mathf.Max(yMin, player.position.y + 2.0f));
         transform.position = new Vector2(Mathf.Min(xMax, transform.position.x), Mathf.Min(yMax, transform.position.y));
     }

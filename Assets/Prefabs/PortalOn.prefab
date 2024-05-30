@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 229879310268385917}
   - component: {fileID: 8677775556558048806}
+  - component: {fileID: 1919266673820136912}
   m_Layer: 0
   m_Name: PortalOn
-  m_TagString: Untagged
+  m_TagString: Goal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,3 +85,29 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &1919266673820136912
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4566753684268240457}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.455, y: 2.06}
+  m_SpriteTilingProperty:
+    border: {x: 1.2500001, y: 0.25, z: 1.3750001, w: 0.125}
+    pivot: {x: 0.4861, y: 0.0555}
+    oldSize: {x: 4.5, y: 4.5}
+    newSize: {x: 4.5, y: 4.5}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.95, y: 4.1}
+  m_EdgeRadius: 0

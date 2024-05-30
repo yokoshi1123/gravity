@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 
@@ -38,6 +36,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float ABYSS = 10.0f;
     public Vector2 respawnPoint = new Vector2(0, 2);
+
+    [SerializeField] private string sceneName;
 
     void Awake()
     {
@@ -147,6 +147,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.tag == "Goal")
+        {
+            SceneManager.LoadScene(sceneName);
+        }
+
         if (collision.gameObject.tag == "Toxic")
         {
             Respawn();
