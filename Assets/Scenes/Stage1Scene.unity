@@ -15440,7 +15440,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2658543233087785055, guid: 36eb50de15ef5bf42b1df1c0d2071e9c, type: 3}
       propertyPath: m_Volume
-      value: 0.2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4953391581170830859, guid: 36eb50de15ef5bf42b1df1c0d2071e9c, type: 3}
       propertyPath: sceneName
