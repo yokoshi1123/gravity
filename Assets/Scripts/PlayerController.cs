@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float horizontal = Input.GetAxis("Horizontal");
+        float horizontal = Input.GetAxisRaw("Horizontal");
         isWalking = horizontal != 0;
 
         scale = gameObject.transform.localScale;
@@ -153,6 +153,11 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSecondsRealtime(1); // 1•b’x‰„
         //Debug.Log("Died");
         Time.timeScale = 1;
+        GameObject destroyGF = GameObject.FindWithTag("GravityField");
+        if (destroyGF != null)
+        {
+            Destroy(destroyGF);
+        }
         rb.velocity = Vector2.zero;
         transform.position = respawnPoint;
         //Debug.Log("before:" + isJumping);
