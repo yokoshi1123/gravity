@@ -113,13 +113,13 @@ public class GravityManager : MonoBehaviour
         //}
 
         // è„â∫ÉLÅ[Ç≈gravityScaleÇÃïœçX
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
         {
             gScale = (gScale + 399999) % 4;
             ChangeGravity();
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
         {
             gScale = (gScale + 400001) % 4;
             ChangeGravity();

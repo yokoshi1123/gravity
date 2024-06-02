@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 grabPos;
    // private Vector3 grabScale;
 
-    [SerializeField] private float ABYSS = 10.0f;
+    //[SerializeField] private float ABYSS = 10.0f;
     public Vector2 respawnPoint = new Vector2(0, 2);
 
     [SerializeField] private string sceneName;
@@ -49,7 +49,8 @@ public class PlayerController : MonoBehaviour
     {
         moveSpeed = gravityManager.M_SPEED;
         rb.gravityScale = gravityManager.G_SCALE;
-        isReverse = gravityManager.isReverse; 
+        isReverse = gravityManager.isReverse;
+        respawnPoint = transform.position;
     }
 
     void Update()
@@ -76,7 +77,7 @@ public class PlayerController : MonoBehaviour
         //ƒWƒƒƒ“ƒv
         if (Input.GetKeyDown(KeyCode.Space) && !isJumping && !isGrabbing && !(rb.velocity.y < -0.5f))
         {
-            GetComponent<AudioSource>().PlayOneShot(jumpSE, 0.2f);
+            GetComponent<AudioSource>().PlayOneShot(jumpSE, 0.3f);
             Jump();
         }
         
@@ -91,10 +92,10 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isWalking", isWalking);
         animator.SetBool("isJumping", isJumping);
 
-        if (transform.position.y < ABYSS)
-        {
-            StartCoroutine(Respawn()); //Respawn();
-        }
+        //if (transform.position.y < ABYSS)
+        //{
+        //    StartCoroutine(Respawn()); //Respawn();
+        //}
     }
 
 
@@ -152,22 +153,30 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSecondsRealtime(1); // 1•b’x‰„
         //Debug.Log("Died");
         Time.timeScale = 1;
-        GetComponent<AudioSource>().PlayOneShot(respawnSE, 0.8f);
         rb.velocity = Vector2.zero;
         transform.position = respawnPoint;
+        //Debug.Log("before:" + isJumping);
+        GetComponent<AudioSource>().PlayOneShot(respawnSE, 0.2f);
+        //Debug.Log("after:" + isJumping);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Goal")
         {
-            GetComponent<AudioSource>().PlayOneShot(warpSE, 0.8f);
+            GetComponent<AudioSource>().PlayOneShot(warpSE, 0.5f);
             SceneManager.LoadScene(sceneName);
         }
 
         if (collision.gameObject.tag == "Toxic")
         {
-            GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.6f);
+            GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.4f);
+            StartCoroutine(Respawn()); //Respawn();
+        }
+
+        if (collision.gameObject.tag == "Abyss")
+        {
+            isJumping = true;
             StartCoroutine(Respawn()); //Respawn();
         }
     }
