@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //ƒWƒƒƒ“ƒv
-        if (Input.GetKeyDown(KeyCode.Space) && !isJumping && !isGrabbing && !(rb.velocity.y < -0.5f))
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && !isJumping && !isGrabbing && !(rb.velocity.y < -0.5f))
         {
             GetComponent<AudioSource>().PlayOneShot(jumpSE, 0.3f);
             Jump();
