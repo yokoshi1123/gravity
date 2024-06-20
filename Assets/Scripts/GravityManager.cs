@@ -25,6 +25,8 @@ public class GravityManager : MonoBehaviour
 
     public TextMeshProUGUI gravityText;
 
+    private IEnumerator routine;
+
     void Awake()
     {
         moveSpeed = M_SPEED;
@@ -74,6 +76,8 @@ public class GravityManager : MonoBehaviour
             if (destroyGF != null)
             {
                 Destroy(destroyGF);
+                StopCoroutine(routine);
+                routine = null;
             }
             // GravityFieldのクローンを作成
             GameObject gField = (GameObject)Instantiate(gravityField, (startMPosition2 + endMPosition2) / 2, Quaternion.identity);
@@ -82,6 +86,9 @@ public class GravityManager : MonoBehaviour
 
             // 効果音
             GetComponent<AudioSource>().Play();
+
+            routine = WaitAndDestroy();
+            StartCoroutine(routine);
         }
 
         // 下キーでgravityScaleの変更
@@ -145,7 +152,15 @@ public class GravityManager : MonoBehaviour
                 Debug.Log("ChangeGravityでエラー");
                 break;
         }
+    }
 
-
+    private IEnumerator WaitAndDestroy()
+    {
+        yield return new WaitForSecondsRealtime(10); // 1秒遅延
+        destroyGF = GameObject.FindWithTag("GravityField");
+        if (destroyGF != null)
+        {
+            Destroy(destroyGF);
+        }
     }
 }

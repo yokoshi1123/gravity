@@ -116,18 +116,16 @@ public class PlayerController : MonoBehaviour
             {
                 grabObj = hit.collider.gameObject;
                 grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
-
-                //grabObj.GetComponent<CollisionController>().isGrabbed = true;
-
                 grabPos = grabObj.transform.position;
-                grabPos.x += 0.1f * scale.x;
-                grabObj.transform.position = new Vector2(grabPos.x, grabPos.y+0.2f);
+                grabObj.transform.position = new Vector2(grabPos.x + 0.15f * scale.x, grabPos.y + 0.2f);
+
+                grabCollider.offset = (grabObj.transform.position - grabPoint.position) * new Vector2(scale.x, 1);
+                grabCollider.size = grabObj.GetComponent<BoxCollider2D>().size;
+                grabObj.GetComponent<BoxCollider2D>().enabled = false;
+                grabCollider.enabled = true;
                 grabObj.transform.SetParent(transform);
 
-                grabObj.GetComponent<BoxCollider2D>().enabled = false;
-                //grabCollider.offset = grabObj.GetComponent<BoxCollider2D>().transform.position - grabPoint.position; // transform.position;
-                //grabCollider.size = grabObj.GetComponent<BoxCollider2D>().size;
-                //grabCollider.enabled = true;
+                
 
                 isGrabbing = true;
             }
@@ -135,10 +133,10 @@ public class PlayerController : MonoBehaviour
         else
         {
             grabObj.GetComponent<Rigidbody2D>().isKinematic = false;
-            //grabCollider.enabled = false;
-            //grabObj.GetComponent<BoxCollider2D>().enabled = true;
-
-            //grabObj.GetComponent<CollisionController>().isGrabbed = true;
+            grabCollider.enabled = false;
+            grabObj.GetComponent<BoxCollider2D>().enabled = true;
+            grabPos = grabObj.transform.position;
+            grabObj.transform.position = new Vector2(grabPos.x - 0.15f * scale.x, grabPos.y + 0.2f);
             grabObj.transform.SetParent(null);
             objWeight = 0.0f;
             grabObj = null;
