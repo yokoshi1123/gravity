@@ -117,9 +117,9 @@ public class PlayerController : MonoBehaviour
                 grabObj = hit.collider.gameObject;
                 grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
                 grabPos = grabObj.transform.position;
-                grabObj.transform.position = new Vector2(grabPos.x + 0.15f * scale.x, grabPos.y + 0.2f);
+                grabObj.transform.position = new Vector2(grabPos.x + 0.15f * scale.x, grabPos.y + 0.2f*scale.y);
 
-                grabCollider.offset = (grabObj.transform.position - grabPoint.position) * new Vector2(scale.x, 1);
+                grabCollider.offset = (grabObj.transform.position - grabPoint.position) * new Vector2(scale.x, scale.y);
                 grabCollider.size = grabObj.GetComponent<BoxCollider2D>().size;
                 grabObj.GetComponent<BoxCollider2D>().enabled = false;
                 grabCollider.enabled = true;
@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour
             grabCollider.enabled = false;
             grabObj.GetComponent<BoxCollider2D>().enabled = true;
             grabPos = grabObj.transform.position;
-            grabObj.transform.position = new Vector2(grabPos.x - 0.15f * scale.x, grabPos.y + 0.2f);
+            grabObj.transform.position = new Vector2(grabPos.x - 0.15f * scale.x, grabPos.y + 0.2f*scale.y);
             grabObj.transform.SetParent(null);
             objWeight = 0.0f;
             grabObj = null;
@@ -163,6 +163,15 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("after:" + isJumping);
     }
 
+    /*private IEnumerator Test()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            yield return new WaitForSecondsRealtime(0.05f);
+            Debug.Log(i);
+        }
+    }*/
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Goal")
@@ -174,13 +183,14 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "Toxic")
         {
             GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.4f);
-            StartCoroutine(Respawn()); //Respawn();
+            StartCoroutine(Respawn());
+            //StartCoroutine(Test());
         }
 
         if (collision.gameObject.tag == "Abyss")
         {
             isJumping = true;
-            StartCoroutine(Respawn()); //Respawn();
+            StartCoroutine(Respawn());
         }
     }
 
