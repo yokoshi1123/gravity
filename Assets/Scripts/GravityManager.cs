@@ -156,7 +156,7 @@ public class GravityManager : MonoBehaviour
 
     private IEnumerator WaitAndDestroy()
     {
-        yield return new WaitForSecondsRealtime(10); // 1•b’x‰„
+        yield return new WaitForSecondsRealtime(5); // 5•b’x‰„
         destroyGF = GameObject.FindWithTag("GravityField");
         if (destroyGF != null)
         {
