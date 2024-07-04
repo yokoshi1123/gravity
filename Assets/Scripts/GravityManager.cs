@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEditor.UIElements;
 
 [RequireComponent(typeof(AudioSource))]
 
@@ -38,7 +39,7 @@ public class GravityManager : MonoBehaviour
 
     void Update()
     {
-        GameObject gravityField = (GameObject)Resources.Load("GravityField");
+        GameObject gravityField = (GameObject)Resources.Load("Square");//"GravityField");
 
         if (Input.GetMouseButtonDown(0)) // マウスの左ボタンを押した時の座標を取得
         { 
@@ -58,18 +59,18 @@ public class GravityManager : MonoBehaviour
 
             Vector2 startMPosition2 = startMPosition;
             Vector2 endMPosition2 = endMPosition;
-            if (startMPosition.x > endMPosition.x) // startMPosition.x > endMPosition.x なら値を入れ替え
-            {
-                // Debug.Log(startMPosition + ", " + endMPosition);
-                (startMPosition2, endMPosition2) = (endMPosition, startMPosition);
-                // Debug.Log(startMPosition + ", " + endMPosition);
-            }
-            if (startMPosition.y > endMPosition.y) // startMPosition.y > endMPosition.y なら値を入れ替え
-            {
-                // Debug.Log(startMPosition + ", " + endMPosition);
-                (startMPosition2.y, endMPosition2.y) = (endMPosition.y, startMPosition.y);
-                // Debug.Log(startMPosition + ", " + endMPosition);
-            }
+            //if (startMPosition.x > endMPosition.x) // startMPosition.x > endMPosition.x なら値を入れ替え
+            //{
+            //    // Debug.Log(startMPosition + ", " + endMPosition);
+            //    (startMPosition2, endMPosition2) = (endMPosition, startMPosition);
+            //    // Debug.Log(startMPosition + ", " + endMPosition);
+            //}
+            //if (startMPosition.y > endMPosition.y) // startMPosition.y > endMPosition.y なら値を入れ替え
+            //{
+            //    // Debug.Log(startMPosition + ", " + endMPosition);
+            //    (startMPosition2.y, endMPosition2.y) = (endMPosition.y, startMPosition.y);
+            //    // Debug.Log(startMPosition + ", " + endMPosition);
+            //}
 
             // 既にGravityFieldのクローンがあれば削除
             destroyGF = GameObject.FindWithTag("GravityField");
@@ -81,8 +82,10 @@ public class GravityManager : MonoBehaviour
             }
             // GravityFieldのクローンを作成
             GameObject gField = (GameObject)Instantiate(gravityField, (startMPosition2 + endMPosition2) / 2, Quaternion.identity);
-            // 横幅をドラッグした幅に変更
-            gField.transform.localScale = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
+            gField.transform.position = gField.transform.position + new Vector3(0, 0, -gField.transform.position.z - 0.1f);
+            // ドラッグしたサイズに拡大
+            //gField.transform.localScale = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
+            gField.GetComponent<SpriteRenderer>().size = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
 
             // 効果音
             GetComponent<AudioSource>().Play();
