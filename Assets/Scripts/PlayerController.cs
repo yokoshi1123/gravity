@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private BoxCollider2D grabCollider;
 
     public GravityManager gravityManager;
+    [SerializeField] private GameObject pauseButton;
 
     [SerializeField] private float moveSpeed;
     private float jumpForce = 20.0f;
@@ -147,10 +148,12 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator Respawn()
     {
+        pauseButton.SetActive(false);
         Time.timeScale = 0;
         yield return new WaitForSecondsRealtime(1); // 1•b’x‰„
         //Debug.Log("Died");
         Time.timeScale = 1;
+        pauseButton.SetActive(true);
         GameObject destroyGF = GameObject.FindWithTag("GravityField");
         if (destroyGF != null)
         {
