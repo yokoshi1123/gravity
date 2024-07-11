@@ -86,6 +86,7 @@ public class GravityManager : MonoBehaviour
             // ドラッグしたサイズに拡大
             //gField.transform.localScale = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
             gField.GetComponent<SpriteRenderer>().size = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
+            gField.GetComponent<BoxCollider2D>().size = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
 
             // 効果音
             GetComponent<AudioSource>().Play();
@@ -94,13 +95,7 @@ public class GravityManager : MonoBehaviour
             StartCoroutine(routine);
         }
 
-        // 下キーでgravityScaleの変更
-        /*if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-        {
-            gScale = (gScale + 299999) % 3; // (gScale + 399999) % 4;
-            ChangeGravity();
-        }*/
-
+        // 下キー/SキーでgravityScaleの変更
         if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
         {
             gScale = (gScale + 300001) % 3; // (gScale + 400001) % 4;
@@ -134,23 +129,18 @@ public class GravityManager : MonoBehaviour
             case 0: // x(-1.0)
                 gravityScale = G_SCALE * (-1.0f);
                 moveSpeed = M_SPEED;
-                gravityText.text = "-1.0G / 反転"; // string.Format("{ 0,6}","-1.0G") + " / 反転";//"重力場：-1.0G / 反転"; // "GRAVITY : -1.0";
+                gravityText.text = "-1.0G / 反転"; // string.Format("{ 0,6}","-1.0G") + " / 反転";//"重力場：-1.0G / 反転";
                 break;
             case 1: // x0.5
                 gravityScale = G_SCALE * 0.5f;
                 moveSpeed = M_SPEED * 1.3f;
-                gravityText.text = "0.5G / 　軽"; // string.Format("{0,6}","0.5G") + " / 　軽"; //"重力場：0.5G / 軽"; // "GRAVITY : 0.5";
+                gravityText.text = "0.5G / 　軽"; // string.Format("{0,6}","0.5G") + " / 　軽"; //"重力場：0.5G / 軽";
                 break;
             case 2: // x2.0
-                gravityScale = G_SCALE * 2.0f; // gravityScale = G_SCALE;
-                moveSpeed = M_SPEED * 0.7f; // moveSpeed = M_SPEED;
-                gravityText.text = "2.0G / 　重"; // string.Format("{ 0,6}", "2.0G") + " / 　重";//"重力場：2.0G / 重"; // "GRAVITY : 1.0";
+                gravityScale = G_SCALE * 2.0f;
+                moveSpeed = M_SPEED * 0.7f;
+                gravityText.text = "2.0G / 　重"; // string.Format("{ 0,6}", "2.0G") + " / 　重";//"重力場：2.0G / 重";
                 break;
-            //case 3: // x2.0
-            //    gravityScale = G_SCALE * 2.0f;
-            //    moveSpeed = M_SPEED * 0.7f;
-            //    gravityText.text = "GRAVITY : 2.0";
-            //    break;
             default:
                 Debug.Log("ChangeGravityでエラー");
                 break;
