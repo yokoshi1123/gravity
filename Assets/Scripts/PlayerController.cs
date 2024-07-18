@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour
                 grabObj.transform.position = new Vector2(grabPos.x + 0.15f * scale.x, grabPos.y + 0.2f*scale.y);
 
                 grabCollider.offset = (grabObj.transform.position - grabPoint.position) * new Vector2(scale.x, scale.y);
-                grabCollider.size = grabObj.GetComponent<BoxCollider2D>().size;
+                grabCollider.size = grabObj.transform.localScale;
                 grabObj.GetComponent<BoxCollider2D>().enabled = false;
                 grabCollider.enabled = true;
                 grabObj.transform.SetParent(transform);

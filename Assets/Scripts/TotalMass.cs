@@ -60,7 +60,7 @@ public class TotalMass : MonoBehaviour
         return totalMass;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
         otherTM = other.gameObject.GetComponent<TotalMass>();
         otherPosition = other.transform.position;
@@ -69,15 +69,15 @@ public class TotalMass : MonoBehaviour
             otherObjs.Add(other.gameObject);
         }
     }
-    private void OnTriggerExit2D(Collider2D other)
+    private void OnCollisionExit2D(Collision2D other)
     {
         if (otherObjs.Contains(other.gameObject))
         {
-            if (addedObjs.ContainsKey(other.name))
+            if (addedObjs.ContainsKey(other.gameObject.name))
             { 
                 otherTM = other.gameObject.GetComponent<TotalMass>();
                 totalMass -= otherTM.GetMass();
-                addedObjs.Remove(other.name);
+                addedObjs.Remove(other.gameObject.name);
                 otherTM.SetBool(false);
             }
             otherObjs.Remove(other.gameObject);
