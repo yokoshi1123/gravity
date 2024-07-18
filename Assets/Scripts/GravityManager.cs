@@ -21,8 +21,8 @@ public class GravityManager : MonoBehaviour
 
     private int gScale = 1;
 
-    //private float mouseWheel = 1;
-    //private float mouthWheelDelta = 0;
+    private bool isChangeable = true;
+    private int mouseWheel = 1;
 
     public TextMeshProUGUI gravityText;
 
@@ -59,18 +59,6 @@ public class GravityManager : MonoBehaviour
 
             Vector2 startMPosition2 = startMPosition;
             Vector2 endMPosition2 = endMPosition;
-            //if (startMPosition.x > endMPosition.x) // startMPosition.x > endMPosition.x なら値を入れ替え
-            //{
-            //    // Debug.Log(startMPosition + ", " + endMPosition);
-            //    (startMPosition2, endMPosition2) = (endMPosition, startMPosition);
-            //    // Debug.Log(startMPosition + ", " + endMPosition);
-            //}
-            //if (startMPosition.y > endMPosition.y) // startMPosition.y > endMPosition.y なら値を入れ替え
-            //{
-            //    // Debug.Log(startMPosition + ", " + endMPosition);
-            //    (startMPosition2.y, endMPosition2.y) = (endMPosition.y, startMPosition.y);
-            //    // Debug.Log(startMPosition + ", " + endMPosition);
-            //}
 
             // 既にGravityFieldのクローンがあれば削除
             destroyGF = GameObject.FindWithTag("GravityField");
@@ -96,32 +84,25 @@ public class GravityManager : MonoBehaviour
         }
 
         // 下キー/SキーでgravityScaleの変更
-        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-        {
-            gScale = (gScale + 300001) % 3; // (gScale + 400001) % 4;
-            ChangeGravity();
-        }
+        //if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+        //{
+        //    gScale = (gScale + 300001) % 3; // (gScale + 400001) % 4;
+        //    ChangeGravity();
+        //}
 
-        /*if (Input.GetAxis("Mouse ScrollWheel") != 0)
+        if (Input.GetAxis("Mouse ScrollWheel") != 0 && isChangeable)
         {
-           *if (mouthWheelDelta != Input.GetAxis("Mouse ScrollWheel"))
-            {
-                Debug.Log("pre:" + mouthWheelDelta + ". now:" + Input.GetAxis("Mouse ScrollWheel"));
-                mouseWheel = (float)(int)mouseWheel;
-            }
-            mouthWheelDelta = Input.GetAxis("Mouse ScrollWheel");
-            mouseWheel += mouthWheelDelta;
-            Debug.Log(mouseWheel);
-            mouseWheel += Input.GetAxis("Mouse ScrollWheel");
+            StartCoroutine(MouseWheelWait());
+            //Debug.Log(Input.GetAxis("Mouse ScrollWheel"));
+            mouseWheel -= (int)Input.GetAxis("Mouse ScrollWheel");
             gScale = ((int)mouseWheel + 30000) % 3;      
             ChangeGravity();
-        }*/
+        }
     }
 
     void ChangeGravity()
     {
         // Debug.Log("gscale: " + gScale);
-        // jumpDirection = (gScale == 0) ? -1 : 1;
 
         isReverse = (gScale == 0) ? true : false;
         switch (gScale)
@@ -155,5 +136,12 @@ public class GravityManager : MonoBehaviour
         {
             Destroy(destroyGF);
         }
+    }
+
+    private IEnumerator MouseWheelWait() // マウスホイールからの入力を0.2秒無視する
+    {
+        isChangeable = false;
+        yield return new WaitForSecondsRealtime(0.2f);
+        isChangeable = true;
     }
 }
