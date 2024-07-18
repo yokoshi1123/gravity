@@ -1011,6 +1011,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6433508179982386337, guid: c24659f77b2d5c3418a723cfa1108c63, type: 3}
   m_PrefabInstance: {fileID: 574740719}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &458935080 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7517067110232644101, guid: b8e684c2f4c5a3f4b830e91142ca4317, type: 3}
+  m_PrefabInstance: {fileID: 788684139}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &483492079
 GameObject:
   m_ObjectHideFlags: 0
@@ -9599,7 +9604,7 @@ GameObject:
   - component: {fileID: 694386820}
   - component: {fileID: 694386821}
   m_Layer: 0
-  m_Name: RepawnManager
+  m_Name: RespawnManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9632,7 +9637,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52ac57921df327744a1adbcf1dfdc8a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respawned: 0
+  respawn: 0
+  canMove: 1
+  resAnimation: 0
+  respawning1: 0
+  respawning2: 0
   PlayerAvatar: {fileID: 521280808}
 --- !u!4 &732262853 stripped
 Transform:
@@ -11324,6 +11333,10 @@ PrefabInstance:
       value: ToBeContinued
       objectReference: {fileID: 0}
     - target: {fileID: 4953391581170830859, guid: 36eb50de15ef5bf42b1df1c0d2071e9c, type: 3}
+      propertyPath: pauseButton
+      value: 
+      objectReference: {fileID: 458935080}
+    - target: {fileID: 4953391581170830859, guid: 36eb50de15ef5bf42b1df1c0d2071e9c, type: 3}
       propertyPath: deathBySpikes
       value: 
       objectReference: {fileID: 8300000, guid: 0b615f7554139e0479b4e47860faae03, type: 3}
@@ -11331,6 +11344,10 @@ PrefabInstance:
       propertyPath: gravityManager
       value: 
       objectReference: {fileID: 1054533681}
+    - target: {fileID: 4953391581170830859, guid: 36eb50de15ef5bf42b1df1c0d2071e9c, type: 3}
+      propertyPath: respawnManager
+      value: 
+      objectReference: {fileID: 694386821}
     - target: {fileID: 4953391581170830868, guid: 36eb50de15ef5bf42b1df1c0d2071e9c, type: 3}
       propertyPath: m_Name
       value: Player

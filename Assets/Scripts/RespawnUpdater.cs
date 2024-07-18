@@ -7,7 +7,9 @@ public class RespawnUpdater : MonoBehaviour
     [SerializeField] private GameObject SE;
     [SerializeField] private Animator animator;
     private bool change = false;
-    public bool respawned = false;
+    private bool resAnimation;
+
+    //public bool respawned = false;
     private GameObject resManager;
     private Vector3 posi;
     private Transform myTransform;
@@ -17,6 +19,10 @@ public class RespawnUpdater : MonoBehaviour
     void Awake()
     {
         resManager = GameObject.Find("RespawnManager");
+        if(resManager == null)
+        {
+            Debug.Log("NULL");
+        }
         
     }
 
@@ -24,6 +30,12 @@ public class RespawnUpdater : MonoBehaviour
     {
         myTransform = this.transform;
         posi = myTransform.position;
+        resAnimation = resManager.GetComponent<RespawnManager>().resAnimation;
+
+        if (resAnimation)
+        {
+            animator.SetBool("resAnimation", resAnimation);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -43,13 +55,14 @@ public class RespawnUpdater : MonoBehaviour
 
     public void RespawnAnimation1End()
     {
-        //posi.z = 1.0f;
-        //resManager.GetComponent<RespawnManager>().respawned = true;
+        posi.z = 1.0f;
+        resManager.GetComponent<RespawnManager>().respawning1 = true;
     }
 
     public void RespawnAnimation2End()
     {
-        //posi.z = -1.0f;
+        posi.z = -1.0f;
+        resManager.GetComponent<RespawnManager>().respawning2 = true;
     }
 
 }

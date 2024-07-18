@@ -4,7 +4,20 @@ using UnityEngine;
 
 public class RespawnManager : MonoBehaviour
 {
-    public bool respawned = false;
+    //à»â∫ÇÕPlayerÇ…ìnÇ∑bool
+    public bool respawn = false;
+    public bool canMove = true;
+
+    //à»â∫ÇÕAnimationÇÃÇ¬Ç»Ç¨ÇÃbool
+    public bool resAnimation = false;
+
+
+    //à»â∫ÇÕAnimationÇ©ÇÁìnÇ≥ÇÍÇÈbool
+    public bool respawning1 = false;
+    public bool respawning2 = false;
+    
+
+
     [SerializeField] private GameObject PlayerAvatar;
 
 
@@ -17,16 +30,24 @@ public class RespawnManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //PlayerAvatar.SetActive(false);
-        //Debug.Log("è¡Ç¶ÇÈ");
+        if (respawn)
+        {
+            PlayerAvatar.SetActive(false);
+            canMove = false;
+            //Debug.Log("è¡Ç¶ÇÈ");
+        }
+        
+        if (respawning1)
+        {
+            PlayerAvatar.SetActive(true);
+        }
+
+        if(respawning2)
+        {
+            canMove = true;
+        }
+        
     }
 
-    void AnimationController()
-    {
-        /*PlayerAvatar.SetActive(false);
-        transform.position = respawnPoint;
-        while (!respawned) { }
-        PlayerAvator.SetActive(true);
-        respawned = false;*/
-    }
+    
 }

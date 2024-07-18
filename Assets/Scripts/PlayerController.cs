@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public GravityManager gravityManager;
     [SerializeField] private GameObject pauseButton;
 
+    public RespawnManager respawnManager;
+
     [SerializeField] private float moveSpeed;
     private float jumpForce = 20.0f;
 
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour
     private bool isJumping = false;
     private bool isGrabbing = false;
     private bool isReverse = false;
+    private bool canMove;
     private int jumpDirection = 1;
 
     private Vector3 scale;
@@ -56,47 +59,53 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        isWalking = horizontal != 0;
+        canMove = respawnManager.canMove;
 
-        scale = gameObject.transform.localScale;
-        if (isWalking && !isGrabbing)
+
+        if (canMove)
         {
-            if (horizontal < 0 && scale.x > 0 || horizontal > 0 && scale.x < 0)
+            float horizontal = Input.GetAxisRaw("Horizontal");
+            isWalking = horizontal != 0;
+
+            scale = gameObject.transform.localScale;
+            if (isWalking && !isGrabbing)
             {
-                scale.x *= -1;
+                if (horizontal < 0 && scale.x > 0 || horizontal > 0 && scale.x < 0)
+                {
+                    scale.x *= -1;
+                }
+                gameObject.transform.localScale = scale;
             }
-            gameObject.transform.localScale = scale;
+
+            if (!isReverse && scale.y == -1)
+            {
+                scale.y = 1;
+                gameObject.transform.localScale = scale;
+            }
+
+            //ジャンプ
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && !isJumping && !isGrabbing && !(rb.velocity.y < -0.5f))
+            {
+                GetComponent<AudioSource>().PlayOneShot(jumpSE, 0.3f);
+                Jump();
+            }
+
+            //プレイヤーの移動
+            rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed - objWeight), rb.velocity.y);
+
+            if (Input.GetKeyDown(KeyCode.G) && !isJumping)
+            {
+                Grab();
+            }
+
+            animator.SetBool("isWalking", isWalking);
+            animator.SetBool("isJumping", isJumping);
+
+            //if (transform.position.y < ABYSS)
+            //{
+            //    StartCoroutine(Respawn()); //Respawn();
+            //}
         }
-
-        if (!isReverse && scale.y == -1)
-        {
-            scale.y = 1;
-            gameObject.transform.localScale = scale;
-        }
-
-        //ジャンプ
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && !isJumping && !isGrabbing && !(rb.velocity.y < -0.5f))
-        {
-            GetComponent<AudioSource>().PlayOneShot(jumpSE, 0.3f);
-            Jump();
-        }
-        
-        //プレイヤーの移動
-        rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed - objWeight), rb.velocity.y);
-        
-        if (Input.GetKeyDown(KeyCode.G) && !isJumping)
-        {
-            Grab();
-        }       
-
-        animator.SetBool("isWalking", isWalking);
-        animator.SetBool("isJumping", isJumping);
-
-        //if (transform.position.y < ABYSS)
-        //{
-        //    StartCoroutine(Respawn()); //Respawn();
-        //}
     }
 
 
@@ -146,6 +155,7 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("isGrabbing", isGrabbing);
     }
+
     private IEnumerator Respawn()
     {
         pauseButton.SetActive(false);
@@ -160,7 +170,34 @@ public class PlayerController : MonoBehaviour
             Destroy(destroyGF);
         }
         rb.velocity = Vector2.zero;
+        respawnManager.respawn = true;
         transform.position = respawnPoint;
+        respawnManager.resAnimation = true;
+        if(respawnManager.respawn)
+        {
+            Debug.Log("respawn");
+        }
+        if (respawnManager.resAnimation)
+        {
+            Debug.Log("resAnimation");
+        }
+
+        int i = 0;
+        while (!respawnManager.respawning2 && i<=300)
+        {
+            i++;
+        }
+
+        if (i >= 250)
+        {
+            Debug.Log("i=15");
+        }
+
+        respawnManager.respawn = false;
+        respawnManager.resAnimation = false;
+        respawnManager.respawning1 = false;
+        respawnManager.respawning2 = false;
+
         //Debug.Log("before:" + isJumping);
         GetComponent<AudioSource>().PlayOneShot(respawnSE, 0.2f);
         //Debug.Log("after:" + isJumping);
