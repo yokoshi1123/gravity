@@ -183,12 +183,13 @@ public class PlayerController : MonoBehaviour
         }
 
         int i = 0;
-        while (!respawnManager.respawning2 && i<=300)
+        while (!respawnManager.respawning2 && i<=30)
         {
+            yield return new WaitForSecondsRealtime(0.1f);
             i++;
         }
 
-        if (i >= 250)
+        if (i >= 25)
         {
             Debug.Log("i=15");
         }
@@ -201,6 +202,8 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("before:" + isJumping);
         GetComponent<AudioSource>().PlayOneShot(respawnSE, 0.2f);
         //Debug.Log("after:" + isJumping);
+        //respawnManager.canActive = true;
+        //Debug.Log("canActive");
     }
 
     /*private IEnumerator Test()

@@ -34,8 +34,11 @@ public class RespawnUpdater : MonoBehaviour
 
         if (resAnimation)
         {
+            posi.z = 2.0f;
             animator.SetBool("resAnimation", resAnimation);
         }
+
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -46,6 +49,7 @@ public class RespawnUpdater : MonoBehaviour
             animator.SetBool("change", change);
             collision.gameObject.GetComponent<PlayerController>().respawnPoint = transform.position;
             SE.SetActive(true);
+            resManager.GetComponent<RespawnManager>().changePosi++;
 
             //change = true;
             //animator.SetBool("change", change);
@@ -55,7 +59,6 @@ public class RespawnUpdater : MonoBehaviour
 
     public void RespawnAnimation1End()
     {
-        posi.z = 1.0f;
         resManager.GetComponent<RespawnManager>().respawning1 = true;
     }
 
