@@ -91,9 +91,17 @@ public class PlayerController : MonoBehaviour
             }
 
             //ÉvÉåÉCÉÑÅ[ÇÃà⁄ìÆ
-            rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed - objWeight), rb.velocity.y);
+            if (!isGrabbing || !isJumping)
+            {
+                rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed - objWeight), rb.velocity.y);
+            }
+            else
+            {
+                rb.velocity = new Vector2(0, rb.velocity.y);
+            }
 
-            if (Input.GetKeyDown(KeyCode.G) && !isJumping)
+
+            if (Input.GetKeyDown(KeyCode.G))
             {
                 Grab();
             }
@@ -108,18 +116,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-
     private void Jump()
     {
         isJumping = true;
-        jumpDirection = (isReverse) ? -1 : 1; 
+        jumpDirection = (isReverse) ? -1 : 1;
         rb.AddForce(Vector2.up * jumpForce * jumpDirection, ForceMode2D.Impulse);
     }
 
     private void Grab()
     {
-        if (grabObj == null)
+        if (grabObj == null && !isJumping)
         {
             hit = Physics2D.Raycast(grabPoint.position, transform.right, rayDistance);
             if (hit.collider != null && hit.collider.tag == "Movable")
@@ -127,33 +133,34 @@ public class PlayerController : MonoBehaviour
                 grabObj = hit.collider.gameObject;
                 grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
                 grabPos = grabObj.transform.position;
-                grabObj.transform.position = new Vector2(grabPos.x + 0.15f * scale.x, grabPos.y + 0.2f*scale.y);
+                grabObj.transform.position = new Vector2(grabPos.x + 0.15f * scale.x, grabPos.y + 0.2f * scale.y);
 
                 grabCollider.offset = (grabObj.transform.position - grabPoint.position) * new Vector2(scale.x, scale.y);
                 grabCollider.size = grabObj.transform.localScale;
+                //Debug.Log(grabObj.name + grabObj.transform.localScale);
                 grabObj.GetComponent<BoxCollider2D>().enabled = false;
                 grabCollider.enabled = true;
                 grabObj.transform.SetParent(transform);
 
-                
+
 
                 isGrabbing = true;
             }
         }
-        else
+        else if (grabObj != null)
         {
             grabObj.GetComponent<Rigidbody2D>().isKinematic = false;
-            grabCollider.enabled = false;
-            grabObj.GetComponent<BoxCollider2D>().enabled = true;
-            grabPos = grabObj.transform.position;
-            grabObj.transform.position = new Vector2(grabPos.x - 0.15f * scale.x, grabPos.y + 0.2f*scale.y);
-            grabObj.transform.SetParent(null);
-            objWeight = 0.0f;
-            grabObj = null;
-            isGrabbing = false;
-        }
+        grabCollider.enabled = false;
+        grabObj.GetComponent<BoxCollider2D>().enabled = true;
+        grabPos = grabObj.transform.position;
+        grabObj.transform.position = new Vector2(grabPos.x - 0.15f * scale.x, grabPos.y + 0.2f*scale.y);
+        grabObj.transform.SetParent(null);
+        objWeight = 0.0f;
+        grabObj = null;
+        isGrabbing = false;
+    }
 
-        animator.SetBool("isGrabbing", isGrabbing);
+    animator.SetBool("isGrabbing", isGrabbing);
     }
 
     private IEnumerator Respawn()

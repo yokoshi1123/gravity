@@ -12,9 +12,11 @@ public class WeightScale : MonoBehaviour
 
     [SerializeField] private Vector2 defaultPosition;
 
-    [SerializeField] private float MOVELENGTH = 0.1f;
+    //[SerializeField] private float MOVELENGTH = 0.1f;
 
     private int direction;
+
+    private int i = 0;
     
     // Start is called before the first frame update
     void Awake()
@@ -29,11 +31,14 @@ public class WeightScale : MonoBehaviour
     void Update()
     {
         totalWeight = (int)(totalMass.GetMass()) * rb.gravityScale / gravityManager.G_SCALE;
-        Debug.Log("Total Weight is " + totalWeight);
-        if (Mathf.Abs(transform.position.y - defaultPosition.y) < totalWeight * MOVELENGTH)
-        {
-            direction = (transform.position.y >= defaultPosition.y) ? 1 : -1;
-            rb.MovePosition(new Vector2(transform.position.x, transform.position.y) + Vector2.down * direction);
-        }
+        //Debug.Log("Total Weight is " + totalWeight);
+        Debug.Log(i);
+        i++;
+
+        //if (Mathf.Abs(transform.position.y - defaultPosition.y) < totalWeight * MOVELENGTH)
+        //{
+        //    direction = (transform.position.y >= defaultPosition.y) ? 1 : -1;
+        //    rb.MovePosition(new Vector2(transform.position.x, transform.position.y) + Vector2.down * direction);
+        //}
     }
 }
