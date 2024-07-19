@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7532597012395382254}
   - component: {fileID: 1824369420449528926}
   - component: {fileID: -139838206251211877}
+  - component: {fileID: 2592625654869674556}
   m_Layer: 0
   m_Name: GravityField
   m_TagString: GravityField
@@ -26,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6260287198611083169}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.44, y: 0, z: -0.1}
-  m_LocalScale: {x: 1, y: 16, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -75,11 +76,11 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.21960784, g: 0.7019608, b: 0.3254902, a: 0.50980395}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.50980395}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_DrawMode: 2
+  m_Size: {x: 4, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -103,11 +104,75 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
+    newSize: {x: 4, y: 4}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 2
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2592625654869674556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6260287198611083169}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c08e95508f14844a6ae666808cb2fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textureSets:
+  - textures:
+    - {fileID: 21300000, guid: 88498cbc26041c346912af70a40f6f7f, type: 3}
+    - {fileID: 21300000, guid: 1824b23b66971b24487d5d1be9349a2a, type: 3}
+    - {fileID: 21300000, guid: 3ea29d08ff36e7140b4ce3df4b7a484b, type: 3}
+    - {fileID: 21300000, guid: ca6f7c7c39a23ab48a44607cfa172da9, type: 3}
+    - {fileID: 21300000, guid: e32527fb87674eb449d482937469cbe2, type: 3}
+    - {fileID: 21300000, guid: 9c112d5afaa105b458bb3f6ad4dde2f8, type: 3}
+    - {fileID: 21300000, guid: 7c38bcfcb251ab54ab140ad934b901c7, type: 3}
+    - {fileID: 21300000, guid: fb719c674fd2d1447988f8fc67c05823, type: 3}
+    - {fileID: 21300000, guid: aa37b0e4294c70f4fbb5bfcd78b756d7, type: 3}
+    - {fileID: 21300000, guid: bf5bbaaf1dfd4a642a7ec60d7abac9fb, type: 3}
+    - {fileID: 21300000, guid: 5392d624f623b574ab8149c697f683e5, type: 3}
+    - {fileID: 21300000, guid: db5d1d7be09eb464995be129ef81d632, type: 3}
+    - {fileID: 21300000, guid: af4528ff5081cdc419c5e4bda63f6dbf, type: 3}
+    - {fileID: 21300000, guid: 7703b61d4a6742948a690e82d63099e6, type: 3}
+    - {fileID: 21300000, guid: 3d719d2b738dd7047861a3358b04b093, type: 3}
+    - {fileID: 21300000, guid: 0d8e55294c3dd6b43b870384789d03f1, type: 3}
+  - textures:
+    - {fileID: 21300000, guid: e996365bdc530084a99f29b979bfed50, type: 3}
+    - {fileID: 21300000, guid: 0cd5749b470441f4fb55cf53384ab04c, type: 3}
+    - {fileID: 21300000, guid: e6d104fd67429ea4399713f4e9859a95, type: 3}
+    - {fileID: 21300000, guid: 1967f856a09366545908200861a23ce6, type: 3}
+    - {fileID: 21300000, guid: 12a46ca91bb421c43a5d5552c63f0a85, type: 3}
+    - {fileID: 21300000, guid: 81cac503ae05b25489e93e4cca502b1e, type: 3}
+    - {fileID: 21300000, guid: 790d9846684f08b418d9598006b4ba8b, type: 3}
+    - {fileID: 21300000, guid: 54c31d8642870a74e86b19655dd97b14, type: 3}
+    - {fileID: 21300000, guid: 97a3ce2fc1971954e95d05611d30aae1, type: 3}
+    - {fileID: 21300000, guid: 69d43f44499548c4c954e77b0356cb8e, type: 3}
+    - {fileID: 21300000, guid: 243af18cc9a69de4f8eca53b5dfc51f9, type: 3}
+    - {fileID: 21300000, guid: eea4bb160bdd4a642b825ba83b75e0af, type: 3}
+    - {fileID: 21300000, guid: 9a564a6818e84bb40ab487417392e323, type: 3}
+    - {fileID: 21300000, guid: 4618e802ae2f73d49b93a5206679fd12, type: 3}
+    - {fileID: 21300000, guid: 89719fd8422e5f64490b7d9d616efbb8, type: 3}
+    - {fileID: 21300000, guid: 78f0981387cb59d40b9d2011b6959b9f, type: 3}
+  - textures:
+    - {fileID: 21300000, guid: cea275635e56ec44492fdc9d2fdfc181, type: 3}
+    - {fileID: 21300000, guid: f1199ef2cc85a924bbfc57d51cc7e852, type: 3}
+    - {fileID: 21300000, guid: 957ac3cac4ea4194b9930c3af7bd6e5b, type: 3}
+    - {fileID: 21300000, guid: 5f9fff81d388254428d59c547f00888d, type: 3}
+    - {fileID: 21300000, guid: e1400694e96f4cf4192c47898c88a3d5, type: 3}
+    - {fileID: 21300000, guid: 5d605d57bb92e4e4c9a0d8100aa768dd, type: 3}
+    - {fileID: 21300000, guid: 58a919481a5c76f4587f8689ca43f6c6, type: 3}
+    - {fileID: 21300000, guid: 000ed40ad1e62fa43b6e0e70de84bb70, type: 3}
+    - {fileID: 21300000, guid: 36e68c0e8aebfc14eb5ee6bdc864f1e3, type: 3}
+    - {fileID: 21300000, guid: 87a2e735ffb90be47a3a4322546cfd4c, type: 3}
+    - {fileID: 21300000, guid: 2aaee2fe15667864f9ec9fc408c671b1, type: 3}
+    - {fileID: 21300000, guid: d7f95a00f9b88084eaa0712edfdffd3d, type: 3}
+    - {fileID: 21300000, guid: 950db208ff255724cb5e058c862becfa, type: 3}
+    - {fileID: 21300000, guid: 071ab83472a4b4b4689b21eb43c5b324, type: 3}
+    - {fileID: 21300000, guid: 16e1873c486fb8e43a0525e416587592, type: 3}
+    - {fileID: 21300000, guid: 391d4c4740290ba498d6752870bd9577, type: 3}

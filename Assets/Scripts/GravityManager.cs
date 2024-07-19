@@ -39,7 +39,7 @@ public class GravityManager : MonoBehaviour
 
     void Update()
     {
-        GameObject gravityField = (GameObject)Resources.Load("Square");//"GravityField");
+        GameObject gravityField = (GameObject)Resources.Load("GravityField"); //"Square");//
 
         if (Input.GetMouseButtonDown(0)) // マウスの左ボタンを押した時の座標を取得
         { 
@@ -126,6 +126,11 @@ public class GravityManager : MonoBehaviour
                 Debug.Log("ChangeGravityでエラー");
                 break;
         }
+    }
+
+    public int GetGScale()
+    {
+        return gScale;
     }
 
     private IEnumerator WaitAndDestroy()
