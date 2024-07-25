@@ -7,12 +7,12 @@ public class RespawnUpdater : MonoBehaviour
     [SerializeField] private GameObject SE;
     [SerializeField] private Animator animator;
     private bool change = false;
-    private bool resAnimation;
+    private bool resAnimation = false;
 
     //public bool respawned = false;
     private GameObject resManager;
     private Vector3 posi;
-    private Transform myTransform;
+    //private Transform myTransform;
     
 
 
@@ -23,22 +23,27 @@ public class RespawnUpdater : MonoBehaviour
         {
             Debug.Log("NULL");
         }
+
         
+
     }
 
     void Update()
     {
-        myTransform = this.transform;
-        posi = myTransform.position;
+        
         resAnimation = resManager.GetComponent<RespawnManager>().resAnimation;
 
         if (resAnimation)
         {
-            posi.z = 2.0f;
-            animator.SetBool("resAnimation", resAnimation);
+            transform.position += new Vector3(0, 0, -transform.position.z - 2.0f);
+        }
+        else
+        {
+            //animator.SetBool("resAnimation", resAnimation);
         }
 
-
+        animator.SetBool("resAnimation", resAnimation);
+        resManager.GetComponent<RespawnManager>().resAnimation = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -46,6 +51,7 @@ public class RespawnUpdater : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             change = true;
+
             animator.SetBool("change", change);
             collision.gameObject.GetComponent<PlayerController>().respawnPoint = transform.position;
             SE.SetActive(true);
@@ -59,12 +65,13 @@ public class RespawnUpdater : MonoBehaviour
 
     public void RespawnAnimation1End()
     {
+        Debug.Log("Animation1 End");
         resManager.GetComponent<RespawnManager>().respawning1 = true;
     }
 
     public void RespawnAnimation2End()
     {
-        posi.z = -1.0f;
+        transform.position += new Vector3(0, 0, -transform.position.z + 1.0f);
         resManager.GetComponent<RespawnManager>().respawning2 = true;
     }
 

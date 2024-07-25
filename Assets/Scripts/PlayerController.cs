@@ -180,6 +180,7 @@ public class PlayerController : MonoBehaviour
         respawnManager.respawn = true;
         transform.position = respawnPoint;
         respawnManager.resAnimation = true;
+
         if(respawnManager.respawn)
         {
             Debug.Log("respawn");
@@ -190,10 +191,18 @@ public class PlayerController : MonoBehaviour
         }
 
         int i = 0;
-        while (!respawnManager.respawning2 && i<=30)
+
+
+        
+        //Debug.Log(respawnManager.changePosi);
+        if (respawnManager.changePosi >= 1)
         {
-            yield return new WaitForSecondsRealtime(0.1f);
-            i++;
+
+            while (!respawnManager.respawning2 && i <= 30)
+            {
+                yield return new WaitForSecondsRealtime(0.05f);
+                i++;
+            }
         }
 
         if (i >= 25)
@@ -201,10 +210,9 @@ public class PlayerController : MonoBehaviour
             Debug.Log("i=15");
         }
 
-        respawnManager.respawn = false;
-        respawnManager.resAnimation = false;
-        respawnManager.respawning1 = false;
-        respawnManager.respawning2 = false;
+        //respawnManager.resAnimation = false;
+        
+
 
         //Debug.Log("before:" + isJumping);
         GetComponent<AudioSource>().PlayOneShot(respawnSE, 0.2f);
