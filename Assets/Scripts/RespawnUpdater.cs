@@ -23,9 +23,6 @@ public class RespawnUpdater : MonoBehaviour
         {
             Debug.Log("NULL");
         }
-
-        
-
     }
 
     void Update()
@@ -65,7 +62,7 @@ public class RespawnUpdater : MonoBehaviour
 
     public void RespawnAnimation1End()
     {
-        Debug.Log("Animation1 End");
+        //Debug.Log("Animation1 End");
         resManager.GetComponent<RespawnManager>().respawning1 = true;
     }
 

@@ -114,6 +114,13 @@ public class PlayerController : MonoBehaviour
             //    StartCoroutine(Respawn()); //Respawn();
             //}
         }
+
+        //canMove = false‚Ì‚Æ‚«A‘¬“x0‚É‚µ‘±‚¯‚é
+        if(!canMove)
+        {
+            rb.velocity = Vector2.zero;
+        }
+
     }
 
     private void Jump()
@@ -181,14 +188,14 @@ public class PlayerController : MonoBehaviour
         transform.position = respawnPoint;
         respawnManager.resAnimation = true;
 
-        if(respawnManager.respawn)
+        /*if(respawnManager.respawn)
         {
             Debug.Log("respawn");
         }
         if (respawnManager.resAnimation)
         {
             Debug.Log("resAnimation");
-        }
+        }*/
 
         int i = 0;
 
@@ -205,10 +212,10 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (i >= 25)
+        /*if (i >= 25)
         {
             Debug.Log("i=15");
-        }
+        }*/
 
         //respawnManager.resAnimation = false;
         

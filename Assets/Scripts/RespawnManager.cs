@@ -34,10 +34,10 @@ public class RespawnManager : MonoBehaviour
     void Update()
     {
         
-        if (respawning1)
+        /*if (respawning1)
         {
             Debug.Log("respawning1=true");
-        }
+        }*/
         
         if (respawn)
         {
