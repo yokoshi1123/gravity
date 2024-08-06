@@ -10,7 +10,7 @@ public class JumpPad : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Movable")
         {
             rb = collision.gameObject.GetComponent<Rigidbody2D>();
             rb.velocity = new Vector2(rb.velocity.x, 0f);

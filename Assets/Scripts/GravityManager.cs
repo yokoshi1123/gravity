@@ -128,6 +128,16 @@ public class GravityManager : MonoBehaviour
         }
     }
 
+    //private float GetGravityScale()
+    //{
+    //    return gravityScale;
+    //}
+
+    //private (float, float, bool) GetValue()
+    //{
+    //    return (gravityScale, moveSpeed, isReverse);
+    //}
+
     public int GetGScale()
     {
         return gScale;

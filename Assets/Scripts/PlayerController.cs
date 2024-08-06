@@ -157,17 +157,17 @@ public class PlayerController : MonoBehaviour
         else if (grabObj != null)
         {
             grabObj.GetComponent<Rigidbody2D>().isKinematic = false;
-        grabCollider.enabled = false;
-        grabObj.GetComponent<BoxCollider2D>().enabled = true;
-        grabPos = grabObj.transform.position;
-        grabObj.transform.position = new Vector2(grabPos.x - 0.15f * scale.x, grabPos.y + 0.2f*scale.y);
-        grabObj.transform.SetParent(null);
-        objWeight = 0.0f;
-        grabObj = null;
-        isGrabbing = false;
-    }
+            grabCollider.enabled = false;
+            grabObj.GetComponent<BoxCollider2D>().enabled = true;
+            grabPos = grabObj.transform.position;
+            grabObj.transform.position = new Vector2(grabPos.x - 0.15f * scale.x, grabPos.y + 0.2f*scale.y);
+            grabObj.transform.SetParent(null);
+            objWeight = 0.0f;
+            grabObj = null;
+            isGrabbing = false;
+        }
 
-    animator.SetBool("isGrabbing", isGrabbing);
+        animator.SetBool("isGrabbing", isGrabbing);
     }
 
     private IEnumerator Respawn()
@@ -279,7 +279,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        else
+        else if (!collision.CompareTag("Platform") || (collision.CompareTag("Platform") && transform.position.y - 2 > collision.gameObject.transform.position.y))
         {
             isJumping = false;
         }

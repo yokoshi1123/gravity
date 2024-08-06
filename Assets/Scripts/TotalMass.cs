@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEngine;
 public class TotalMass : MonoBehaviour
 {
+    private GravityManager gravityManager;
+    
     private List<GameObject> otherObjs = new List<GameObject>();
     private Dictionary<string, float> addedObjs = new Dictionary<string, float>();
 
@@ -19,6 +21,7 @@ public class TotalMass : MonoBehaviour
     private bool isAdded = false;
     void Start()
     {
+        gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
         myPosition = transform.position;
         totalMass = GetComponent<Rigidbody2D>().mass;
     }
@@ -39,7 +42,7 @@ public class TotalMass : MonoBehaviour
             else if (addedObjs.ContainsKey(other.name) && otherTM.GetMass() != addedObjs[other.name])
             {
                 totalMass += otherTM.GetMass() - addedObjs[other.name];
-                Debug.Log(otherTM.GetMass() + ", " + addedObjs[other.name]);
+                //Debug.Log(otherTM.GetMass() + ", " + addedObjs[other.name]);
                 addedObjs[other.name] = otherTM.GetMass();
                 //Debug.Log("Updated");
             }
@@ -64,10 +67,10 @@ public class TotalMass : MonoBehaviour
     {
         otherTM = other.gameObject.GetComponent<TotalMass>();
         otherPosition = other.transform.position;
-        if (otherTM != null && (myPosition.y <= otherPosition.y) && !otherObjs.Contains(other.gameObject))
+        if (otherTM != null && ((otherPosition.y - myPosition.y) * Mathf.Sign(gravityManager.gravityScale) >= 0) && !otherObjs.Contains(other.gameObject)) // (myPosition.y <= otherPosition.y)
         {
             otherObjs.Add(other.gameObject);
-        }
+        }     
     }
     private void OnCollisionExit2D(Collision2D other)
     {

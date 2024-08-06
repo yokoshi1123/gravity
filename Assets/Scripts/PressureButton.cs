@@ -5,17 +5,24 @@ using UnityEngine;
 public class PressureButton : MonoBehaviour
 {
     private GameObject target;
-    private Rigidbody2D rb;
+    private GravityManager gravityManager;
+    //private Rigidbody2D rb;
+    private TotalMass mass;
     [SerializeField] private GameObject button;
     [SerializeField] private float onValue = 10f;
 
+    void Awake()
+    {
+        gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
+    }
     void Update()
     {
         if (target != null)
         {
-            rb = target.GetComponent<Rigidbody2D>();
+            //rb = target.GetComponent<Rigidbody2D>();
+            mass = target.GetComponent<TotalMass>();
 
-            if (rb.mass * rb.gravityScale >= onValue)
+            if (mass.GetMass() >= onValue) //(rb.mass * rb.gravityScale >= onValue)
             {
                 button.transform.localScale = new Vector2(0.4f, 1f);
                 //Debug.Log("The button is pressed");
