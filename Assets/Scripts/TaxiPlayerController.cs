@@ -15,6 +15,7 @@ public class TaxiPlayerController : MonoBehaviour
     public GravityManager gravityManager; // EnvironmentManagerを廃止
 
     [SerializeField] private float moveSpeed;
+    [SerializeField] private int gravityDirection;
     private float jumpForce = 20.0f;
 
     [SerializeField] private Transform grabPoint;
@@ -37,9 +38,10 @@ public class TaxiPlayerController : MonoBehaviour
 
     void Awake()
     {
-        moveSpeed = gravityManager.M_SPEED;
-        rb.gravityScale = gravityManager.G_SCALE;
-        isReverse = gravityManager.isReverse;
+        //moveSpeed = gravityManager.M_SPEED;
+        //rb.gravityScale = gravityManager.G_SCALE;
+        //isReverse = gravityManager.isReverse;
+        (moveSpeed, rb.gravityScale, gravityDirection) = gravityManager.GetDefaultValue();
     }
 
     void Update()
@@ -146,9 +148,10 @@ public class TaxiPlayerController : MonoBehaviour
     {
         if (collision.CompareTag("GravityField")) // 重力場中にあるとき、gravityManagerでの変更を読み込む
         {
-            moveSpeed = gravityManager.moveSpeed;
-            rb.gravityScale = gravityManager.gravityScale;
-            isReverse = gravityManager.isReverse;
+            //moveSpeed = gravityManager.moveSpeed;
+            //rb.gravityScale = gravityManager.gravityScale;
+            //isReverse = gravityManager.isReverse;
+            (moveSpeed, rb.gravityScale, gravityDirection) = gravityManager.GetValue();
             scale = gameObject.transform.localScale;
             if (isReverse && scale.y == 1)
             {
@@ -165,9 +168,10 @@ public class TaxiPlayerController : MonoBehaviour
         {
             // inField = false;
             //Debug.Log("すり抜け終えた");
-            moveSpeed = gravityManager.M_SPEED;
-            rb.gravityScale = gravityManager.G_SCALE;
-            isReverse = false;
+            //moveSpeed = gravityManager.M_SPEED;
+            //rb.gravityScale = gravityManager.G_SCALE;
+            //isReverse = false;
+            (moveSpeed, rb.gravityScale, gravityDirection) = gravityManager.GetDefaultValue();
         }
 
         /*if (collision.CompareTag("Stage"))//空中にいるときはisJumpingをtrue

@@ -12,12 +12,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private BoxCollider2D grabCollider;
 
-    public GravityManager gravityManager;
+    private GravityManager gravityManager;
     [SerializeField] private GameObject pauseButton;
 
     public RespawnManager respawnManager;
 
     [SerializeField] private float moveSpeed;
+    [SerializeField] private int gravityDirection;
     private float jumpForce = 20.0f;
 
     [SerializeField] private Transform grabPoint;
@@ -25,9 +26,9 @@ public class PlayerController : MonoBehaviour
     private bool isWalking = false;
     private bool isJumping = false;
     private bool isGrabbing = false;
-    private bool isReverse = false;
+    //private bool isReverse = false;
     private bool canMove;
-    private int jumpDirection = 1;
+    //private int jumpDirection = 1;
 
     private Vector3 scale;
 
@@ -51,9 +52,11 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        moveSpeed = gravityManager.M_SPEED;
-        rb.gravityScale = gravityManager.G_SCALE;
-        isReverse = gravityManager.isReverse;
+        gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
+        //moveSpeed = gravityManager.M_SPEED;
+        //rb.gravityScale = gravityManager.G_SCALE;
+        //isReverse = gravityManager.isReverse;
+        (rb.gravityScale, moveSpeed, gravityDirection) = gravityManager.GetDefaultValue();
         respawnPoint = transform.position;
     }
 
@@ -77,11 +80,13 @@ public class PlayerController : MonoBehaviour
                 gameObject.transform.localScale = scale;
             }
 
-            if (!isReverse && scale.y == -1)
-            {
-                scale.y = 1;
-                gameObject.transform.localScale = scale;
-            }
+            //if (!isReverse && scale.y == -1)
+            //{
+            //    scale.y = 1;
+            //    gameObject.transform.localScale = scale;
+            //}
+            scale.y = gravityDirection;
+            gameObject.transform.localScale = scale;
 
             //ジャンプ
             if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && !isJumping && !isGrabbing && !(rb.velocity.y < -0.5f))
@@ -126,8 +131,8 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         isJumping = true;
-        jumpDirection = (isReverse) ? -1 : 1;
-        rb.AddForce(Vector2.up * jumpForce * jumpDirection, ForceMode2D.Impulse);
+        //jumpDirection = (isReverse) ? -1 : 1;
+        rb.AddForce(Vector2.up * jumpForce * gravityDirection, ForceMode2D.Impulse);
     }
 
     private void Grab()
@@ -268,18 +273,21 @@ public class PlayerController : MonoBehaviour
 
         if (collision.CompareTag("GravityField")) // 重力場中にあるとき、gravityManagerでの変更を読み込む
         {
-            moveSpeed = gravityManager.moveSpeed;
-            rb.gravityScale = gravityManager.gravityScale;
-            isReverse = gravityManager.isReverse;
+            //moveSpeed = gravityManager.moveSpeed;
+            //rb.gravityScale = gravityManager.gravityScale;
+            //isReverse = gravityManager.isReverse;
+            (rb.gravityScale, moveSpeed, gravityDirection) = gravityManager.GetValue();
             scale = gameObject.transform.localScale;
-            if (isReverse && scale.y == 1)
-            {
-                scale.y = -1;
-                gameObject.transform.localScale = scale;
-            }
+            //if (isReverse && scale.y == 1)
+            //{
+            //    scale.y = -1;
+            //    gameObject.transform.localScale = scale;
+            //}
+            scale.y = gravityDirection;
+            gameObject.transform.localScale = scale;
         }
 
-        else if (!collision.CompareTag("Platform") || (collision.CompareTag("Platform") && transform.position.y - 2 > collision.gameObject.transform.position.y))
+        else if (!collision.CompareTag("Platform") || (collision.CompareTag("Platform") && transform.position.y > 2 + collision.gameObject.transform.position.y))
         {
             isJumping = false;
         }
@@ -289,9 +297,10 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("GravityField")) // 重力場から出たとき、デフォルトに戻す
         {
-            moveSpeed = gravityManager.M_SPEED;
-            rb.gravityScale = gravityManager.G_SCALE;
-            isReverse = false;
+            //moveSpeed = gravityManager.M_SPEED;
+            //rb.gravityScale = gravityManager.G_SCALE;
+            //isReverse = false;
+            (rb.gravityScale, moveSpeed, gravityDirection) = gravityManager.GetDefaultValue();
         }
 
         //if (collision.CompareTag("Stage"))//空中にいるときはisJumpingをtrue

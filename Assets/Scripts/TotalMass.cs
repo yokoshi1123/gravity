@@ -67,7 +67,7 @@ public class TotalMass : MonoBehaviour
     {
         otherTM = other.gameObject.GetComponent<TotalMass>();
         otherPosition = other.transform.position;
-        if (otherTM != null && ((otherPosition.y - myPosition.y) * Mathf.Sign(gravityManager.gravityScale) >= 0) && !otherObjs.Contains(other.gameObject)) // (myPosition.y <= otherPosition.y)
+        if (otherTM != null && ((otherPosition.y - myPosition.y) * Mathf.Sign(other.gameObject.GetComponent<Rigidbody2D>().gravityScale) >= 0) && !otherObjs.Contains(other.gameObject)) // (myPosition.y <= otherPosition.y)
         {
             otherObjs.Add(other.gameObject);
         }     

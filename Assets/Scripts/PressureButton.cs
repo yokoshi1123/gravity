@@ -6,7 +6,7 @@ public class PressureButton : MonoBehaviour
 {
     private GameObject target;
     private GravityManager gravityManager;
-    //private Rigidbody2D rb;
+    private Rigidbody2D rb;
     private TotalMass mass;
     [SerializeField] private GameObject button;
     [SerializeField] private float onValue = 10f;
@@ -19,13 +19,13 @@ public class PressureButton : MonoBehaviour
     {
         if (target != null)
         {
-            //rb = target.GetComponent<Rigidbody2D>();
+            rb = target.GetComponent<Rigidbody2D>();
             mass = target.GetComponent<TotalMass>();
 
-            if (mass.GetMass() >= onValue) //(rb.mass * rb.gravityScale >= onValue)
+            if (rb != null && mass != null && mass.GetMass() * rb.gravityScale / gravityManager.GetDeFaultGravityScale() >= onValue) //(rb.mass * rb.gravityScale >= onValue)
             {
                 button.transform.localScale = new Vector2(0.4f, 1f);
-                //Debug.Log("The button is pressed");
+                Debug.Log(mass.GetMass() * rb.gravityScale / gravityManager.GetDeFaultGravityScale() + ": The button is pressed");
             }
             else
             {

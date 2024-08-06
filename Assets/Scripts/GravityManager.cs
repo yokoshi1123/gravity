@@ -8,11 +8,14 @@ using UnityEditor.UIElements;
 
 public class GravityManager : MonoBehaviour
 {
-    public float M_SPEED = 10.0f;
-    public float G_SCALE = 5.0f;
-    public float moveSpeed;
-    public float gravityScale;
-    public bool isReverse = false;
+    private float G_SCALE = 5.0f;
+    private float M_SPEED = 10.0f;
+
+    [SerializeField] private float gravityScale;
+    [SerializeField] private float moveSpeed;
+    
+    //public bool isReverse = false;
+    private int gravityDirection = 1;
 
     private Vector2 startMPosition = Vector2.zero;
     private Vector2 endMPosition = Vector2.zero;
@@ -24,7 +27,7 @@ public class GravityManager : MonoBehaviour
     private bool isChangeable = true;
     private int mouseWheel = 1;
 
-    public TextMeshProUGUI gravityText;
+    [SerializeField] private TextMeshProUGUI gravityText;
 
     private IEnumerator routine;
 
@@ -104,7 +107,8 @@ public class GravityManager : MonoBehaviour
     {
         // Debug.Log("gscale: " + gScale);
 
-        isReverse = (gScale == 0) ? true : false;
+        //isReverse = (gScale == 0) ? true : false;
+        gravityDirection = (int)Mathf.Sign(1.5f * gScale - 1.0f);
         switch (gScale)
         {
             case 0: // x(-1.0)
@@ -128,15 +132,23 @@ public class GravityManager : MonoBehaviour
         }
     }
 
-    //private float GetGravityScale()
-    //{
-    //    return gravityScale;
-    //}
+    public float GetGravityScale()
+    {
+        return gravityScale;
+    }
+    public float GetDeFaultGravityScale()
+    {
+        return G_SCALE;
+    }
 
-    //private (float, float, bool) GetValue()
-    //{
-    //    return (gravityScale, moveSpeed, isReverse);
-    //}
+    public (float, float, int) GetValue()
+    {
+        return (gravityScale, moveSpeed, gravityDirection);
+    }
+    public (float, float, int) GetDefaultValue()
+    {
+        return (G_SCALE, M_SPEED, 1);
+    }
 
     public int GetGScale()
     {

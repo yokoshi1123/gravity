@@ -30,7 +30,7 @@ public class WeightScale : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        totalWeight = (int)(totalMass.GetMass()) * rb.gravityScale / gravityManager.G_SCALE;
+        totalWeight = (int)(totalMass.GetMass()) * rb.gravityScale / gravityManager.GetDeFaultGravityScale();
         //Debug.Log("Total Weight is " + totalWeight);
         Debug.Log(i);
         i++;

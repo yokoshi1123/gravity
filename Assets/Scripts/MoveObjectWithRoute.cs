@@ -13,6 +13,8 @@ public class MoveObjectWithRoute : MonoBehaviour
     private int nowPoint = 0;
     private bool returnPoint = false;
 
+    [SerializeField] private GameObject otherObj;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,6 +77,24 @@ public class MoveObjectWithRoute : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag != "Stage") // && (collision.gameObject.transform.position.y >= transform.position.y + transform.localScale.y/2))
+        {
+            otherObj = collision.gameObject;
+            otherObj.transform.SetParent(transform);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (otherObj != null)
+        {
+            otherObj.transform.SetParent(null);
+            otherObj = null;
         }
     }
 }
