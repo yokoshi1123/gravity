@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1824369420449528926}
   - component: {fileID: -139838206251211877}
   - component: {fileID: 2592625654869674556}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: GravityField
   m_TagString: GravityField
   m_Icon: {fileID: 0}

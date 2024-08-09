@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8402589274741176735}
   - component: {fileID: 8402589274741176734}
-  - component: {fileID: 8402589274741176736}
+  - component: {fileID: 1271089555488836129}
   m_Layer: 0
-  m_Name: Laser
+  m_Name: LaserMachine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8402589274741176733}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 0.5, z: 0}
-  m_LocalScale: {x: 0.6, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8402589275789463346}
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: eb7e66390ddbad4419a51d40a0b1cbfa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -86,8 +86,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &8402589274741176736
-BoxCollider2D:
+--- !u!60 &1271089555488836129
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,15 +103,60 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.5546875, y: 1}
+      - {x: 0.42578125, y: 0.87890625}
+      - {x: 0.0625, y: 0.7578125}
+      - {x: 0.0546875, y: 0.75}
+      - {x: -0.125, y: 0.6953125}
+      - {x: -0.1328125, y: 0.6875}
+      - {x: -0.3125, y: 0.6328125}
+      - {x: -0.3203125, y: 0.625}
+      - {x: -0.5, y: 0.5703125}
+      - {x: -0.5625, y: 0.5078125}
+      - {x: -0.57421875, y: 0.50390625}
+      - {x: -0.9453125, y: 0.16015625}
+      - {x: -0.9453125, y: 0.05078125}
+      - {x: -0.94140625, y: 0.046875}
+      - {x: -0.625, y: 0.0546875}
+      - {x: -0.6171875, y: 0.0625}
+      - {x: -0.5, y: 0.1171875}
+      - {x: -0.4921875, y: 0.125}
+      - {x: -0.375, y: 0.1796875}
+      - {x: -0.3671875, y: 0.1875}
+      - {x: -0.25, y: 0.2421875}
+      - {x: -0.2421875, y: 0.25}
+      - {x: -0.2421875, y: 0.3046875}
+      - {x: 0.05859375, y: 0.23828125}
+      - {x: 0.546875, y: 0.125}
+      - {x: 0.484375, y: 0.06640625}
+      - {x: 0.4921875, y: -0.0625}
+      - {x: 0.546875, y: -0.1328125}
+      - {x: 0.59375, y: -0.171875}
+      - {x: 0.29296875, y: -0.1796875}
+      - {x: 0.3046875, y: -0.2421875}
+      - {x: 0.0625, y: -0.2421875}
+      - {x: 0.0546875, y: -0.25}
+      - {x: 0.0546875, y: -0.3046875}
+      - {x: -0.24609375, y: -0.2421875}
+      - {x: -0.625, y: -0.0546875}
+      - {x: -0.9375, y: -0.0546875}
+      - {x: -0.9453125, y: -0.0625}
+      - {x: -0.9453125, y: -0.125}
+      - {x: -0.89453125, y: -0.19921875}
+      - {x: -0.50390625, y: -0.57421875}
+      - {x: 0.24609375, y: -0.82421875}
+      - {x: 0.484375, y: -0.9453125}
+      - {x: 0.55078125, y: -1}
+      - {x: 1, y: -1}
+      - {x: 1, y: 1}
 --- !u!1 &8402589275789463345
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,8 +167,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8402589275789463346}
   - component: {fileID: 8402589275789463348}
-  - component: {fileID: 8402589275789463347}
   - component: {fileID: 8402589275789463349}
+  - component: {fileID: 6027399876760323621}
   m_Layer: 0
   m_Name: Beam
   m_TagString: Toxic
@@ -139,8 +184,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8402589275789463345}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 19.5, z: 0}
-  m_LocalScale: {x: 0, y: 40, z: 1}
+  m_LocalPosition: {x: -1, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8402589274741176735}
@@ -187,32 +232,17 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0.1882353, a: 1}
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 2
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_SpriteTileMode: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8402589275789463347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8402589275789463345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8d7cdd1b0037284f9468a37d2ad8b8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offset: 3
-  onDuration: 3
-  offDuration: 6
 --- !u!61 &8402589275789463349
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -233,9 +263,53 @@ BoxCollider2D:
     oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
+    drawMode: 2
+    adaptiveTiling: 1
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.125}
   m_EdgeRadius: 0
+--- !u!114 &6027399876760323621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8402589275789463345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8d7cdd1b0037284f9468a37d2ad8b8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OFFSET: 3
+  ONDURATION: 3
+  OFFDURATION: 6
+  ONTEXTURE: 14
+  machine: {fileID: 8402589274741176733}
+  machineTextures:
+  - {fileID: 21300000, guid: eb7e66390ddbad4419a51d40a0b1cbfa, type: 3}
+  - {fileID: 21300000, guid: aeb0331d0dea19348aa08708dd4f0232, type: 3}
+  - {fileID: 21300000, guid: 974c73639bcdd9a468961981db892d47, type: 3}
+  - {fileID: 21300000, guid: 8cc51ebb8853cf74c869ab54bb83da9b, type: 3}
+  - {fileID: 21300000, guid: 9d6bdfd435c8d12428c4f2d36cba761c, type: 3}
+  - {fileID: 21300000, guid: 3c5648009470c354a92ac25532d5cdb3, type: 3}
+  - {fileID: 21300000, guid: 3aa9d49dd5d1c904ab96c43fca81a84f, type: 3}
+  - {fileID: 21300000, guid: b97aca76e9fa5ad4cafa3dc1ec2b14b0, type: 3}
+  - {fileID: 21300000, guid: 69c22f9036bb6994789344083800ffde, type: 3}
+  - {fileID: 21300000, guid: b10e8b44f9488c643a573db18e98603b, type: 3}
+  - {fileID: 21300000, guid: be718f66aa052314fbe2870107312d20, type: 3}
+  - {fileID: 21300000, guid: 2c33a22853f367d4d9985042606cfb9e, type: 3}
+  - {fileID: 21300000, guid: abb3d9c4b952f904892063d86713ef6c, type: 3}
+  - {fileID: 21300000, guid: 3461184b1047df943af845e5e1a4b8a7, type: 3}
+  - {fileID: 21300000, guid: 81679cc25d70b1e4187ca852d0b29c02, type: 3}
+  - {fileID: 21300000, guid: b4de98b410029c546abbd83367b326a8, type: 3}
+  - {fileID: 21300000, guid: 35d4d7a1310da594aa9c3c5aa5a7633a, type: 3}
+  - {fileID: 21300000, guid: eb7e66390ddbad4419a51d40a0b1cbfa, type: 3}
+  beamTextures:
+  - {fileID: 21300000, guid: 21880a45cc890344b8e936a28e241bb7, type: 3}
+  - {fileID: 21300000, guid: 9820ef9143946944b9eea93b3e827701, type: 3}
+  - {fileID: 21300000, guid: 4217c2edbb6a2d442973591df0cb86c1, type: 3}
+  - {fileID: 21300000, guid: 18c9d5906d708e547a015e0630d5c3cd, type: 3}
+  - {fileID: 21300000, guid: f9f46d69fa48ca8408a2967847903b5b, type: 3}
+  - {fileID: 21300000, guid: 148b674453ab1374bb657f0ca3be9bc4, type: 3}
+  - {fileID: 21300000, guid: f775c2afe95321a4f88b30366587ecdd, type: 3}

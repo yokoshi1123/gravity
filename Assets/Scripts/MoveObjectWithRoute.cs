@@ -19,7 +19,7 @@ public class MoveObjectWithRoute : MonoBehaviour
     private Vector2 oldPosition = Vector2.zero;
 
     private int delay = 0;
-    private int DELAY = 8;
+    private const int DELAY = 8;
 
     // Start is called before the first frame update
     void Start()

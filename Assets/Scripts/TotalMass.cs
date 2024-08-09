@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 public class TotalMass : MonoBehaviour
 {
-    private GravityManager gravityManager;
+    //private GravityManager gravityManager;
     
     private List<GameObject> otherObjs = new List<GameObject>();
     private Dictionary<string, float> addedObjs = new Dictionary<string, float>();
@@ -21,7 +21,7 @@ public class TotalMass : MonoBehaviour
     private bool isAdded = false;
     void Start()
     {
-        gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
+        //gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
         myPosition = transform.position;
         totalMass = GetComponent<Rigidbody2D>().mass;
     }

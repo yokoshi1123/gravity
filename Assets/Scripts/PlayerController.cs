@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float moveSpeed;
     [SerializeField] private int gravityDirection;
-    private float jumpForce = 20.0f;
+    private const float JUMPFORCE = 20.0f;
 
     [SerializeField] private Transform grabPoint;
 
@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 scale;
 
-    private float rayDistance = 0.2f;
+    private float RAYDISTANCE = 0.2f;
     private GameObject grabObj;
     private RaycastHit2D hit;
     //private float grabWidth;
@@ -144,28 +144,29 @@ public class PlayerController : MonoBehaviour
     {
         isJumping = true;
         //jumpDirection = (isReverse) ? -1 : 1;
-        rb.AddForce(Vector2.up * jumpForce * gravityDirection, ForceMode2D.Impulse);
+        rb.AddForce(gravityDirection * JUMPFORCE * Vector2.up, ForceMode2D.Impulse);
     }
 
     private void Grab()
     {
         if (grabObj == null && !isJumping)
         {
-            hit = Physics2D.Raycast(grabPoint.position, transform.right, rayDistance);
-            if (hit.collider != null && hit.collider.tag == "Movable")
+            hit = Physics2D.Raycast(grabPoint.position, transform.right, RAYDISTANCE);
+            if (hit.collider != null && hit.collider.CompareTag("Movable"))
             {
                 grabObj = hit.collider.gameObject;
                 grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
                 grabPos = grabObj.transform.position;
                 grabObj.transform.position = new Vector2(grabPos.x + 0.15f * scale.x, grabPos.y + 0.2f * scale.y);
 
-                grabCollider.offset = (grabObj.transform.position - grabPoint.position) * new Vector2(scale.x, scale.y);
+                grabCollider.offset = (grabObj.transform.position - grabPoint.position) * (Vector2)scale;
                 grabCollider.size = grabObj.transform.localScale;
                 //Debug.Log(grabObj.name + grabObj.transform.localScale);
-                grabObj.GetComponent<BoxCollider2D>().enabled = false;
-                grabCollider.enabled = true;
+                //grabCollider.enabled = true;
+                //grabObj.GetComponent<BoxCollider2D>().enabled = false;
                 grabObj.transform.SetParent(transform);
                 totalMass.PlusMass(grabObj.GetComponent<TotalMass>().GetMass());
+                //Debug.Log(grabCollider.name + ", " + grabCollider.tag);
 
                 isGrabbing = true;
             }
@@ -203,6 +204,7 @@ public class PlayerController : MonoBehaviour
         respawnManager.respawn = true;
         transform.position = respawnPoint;
         respawnManager.resAnimation = true;
+        Grab();
 
         /*if(respawnManager.respawn)
         {
