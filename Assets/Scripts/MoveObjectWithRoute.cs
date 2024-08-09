@@ -11,9 +11,15 @@ public class MoveObjectWithRoute : MonoBehaviour
 
     private Rigidbody2D rb;
     private int nowPoint = 0;
+    private int nextPoint = 0;
     private bool returnPoint = false;
 
-    [SerializeField] private GameObject otherObj;
+    private Vector2 toVector;
+    private Vector2 mFloorVelocity = Vector2.zero;
+    private Vector2 oldPosition = Vector2.zero;
+
+    private int delay = 0;
+    private int DELAY = 8;
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +28,7 @@ public class MoveObjectWithRoute : MonoBehaviour
 
         if (movePoint != null && movePoint.Length > 0 && rb != null)
         {
-            rb.position = movePoint[0].transform.position;
+            transform.position = movePoint[0].transform.position;
         }
     }
 
@@ -31,22 +37,30 @@ public class MoveObjectWithRoute : MonoBehaviour
     {
         if (movePoint != null && movePoint.Length > 1 && rb != null)
         {
-            // 通常進行
-            if (!returnPoint)
+            mFloorVelocity = (rb.position - oldPosition) / Time.deltaTime;
+            if (mFloorVelocity.y > 0)
             {
-                int nextPoint = nowPoint + 1;
+                mFloorVelocity.y = 0;
+            }
+            oldPosition = rb.position;
+
+            // 通常進行
+            if (!returnPoint && delay >= DELAY)
+            {
+                nextPoint = nowPoint + 1;
 
                 // 目標ポイントとの誤差がわずかになるまで移動
                 if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
                 {
-                    Vector2 toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
+                    toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
                     rb.MovePosition(toVector);
                 }
 
                 else
                 {
                     rb.MovePosition(movePoint[nextPoint].transform.position);
-                    ++nowPoint;
+                    nowPoint++;
+                    delay = 0;
 
                     if (nowPoint + 1 >= movePoint.Length)
                     {
@@ -54,22 +68,23 @@ public class MoveObjectWithRoute : MonoBehaviour
                     }
                 }
             }
-            else
+            else if (delay >= DELAY)
             {
                 // 折り返し進行
-                int nextPoint = nowPoint - 1;
+                nextPoint = nowPoint - 1;
 
                 // 目標ポイントとの誤差がわずかになるまで移動
                 if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
                 {
-                    Vector2 toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
+                    toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
                     rb.MovePosition(toVector);
                 }
 
                 else
                 {
                     rb.MovePosition(movePoint[nextPoint].transform.position);
-                    --nowPoint;
+                    nowPoint--;
+                    delay = 0;
 
                     if (nowPoint <= 0)
                     {
@@ -77,24 +92,17 @@ public class MoveObjectWithRoute : MonoBehaviour
                     }
                 }
             }
+            else
+            {
+                delay++;
+            }
+
+            //Debug.Log("toVector : " + toVector);
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public Vector2 GetMFloorVelocity()
     {
-        if (collision.gameObject.tag != "Stage") // && (collision.gameObject.transform.position.y >= transform.position.y + transform.localScale.y/2))
-        {
-            otherObj = collision.gameObject;
-            otherObj.transform.SetParent(transform);
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (otherObj != null)
-        {
-            otherObj.transform.SetParent(null);
-            otherObj = null;
-        }
+        return mFloorVelocity;
     }
 }

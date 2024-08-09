@@ -10,7 +10,7 @@ TagManager:
   - Toxic
   - Goal
   - Abyss
-  - Platform
+  - MovingFloor
   layers:
   - Default
   - TransparentFX

@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D rb;
+    private Rigidbody2D rb;
     [SerializeField] private Animator animator;
     [SerializeField] private BoxCollider2D grabCollider;
 
@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject pauseButton;
 
     public RespawnManager respawnManager;
+
+    private TotalMass totalMass;
 
     [SerializeField] private float moveSpeed;
     [SerializeField] private int gravityDirection;
@@ -34,7 +36,6 @@ public class PlayerController : MonoBehaviour
 
     private float rayDistance = 0.2f;
     private GameObject grabObj;
-    private float objWeight = 0.0f;
     private RaycastHit2D hit;
     //private float grabWidth;
     private Vector3 grabPos;
@@ -42,6 +43,9 @@ public class PlayerController : MonoBehaviour
 
     //[SerializeField] private float ABYSS = 10.0f;
     public Vector2 respawnPoint = new Vector2(0, 2);
+
+    private MoveObjectWithRoute movingFloor;
+    private Vector2 mFloorVelocity;
 
     [SerializeField] private string sceneName;
 
@@ -53,6 +57,9 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
+        rb = GetComponent<Rigidbody2D>();
+        totalMass = GetComponent<TotalMass>();
+        
         //moveSpeed = gravityManager.M_SPEED;
         //rb.gravityScale = gravityManager.G_SCALE;
         //isReverse = gravityManager.isReverse;
@@ -63,7 +70,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         canMove = respawnManager.canMove;
-
 
         if (canMove)
         {
@@ -98,13 +104,19 @@ public class PlayerController : MonoBehaviour
             //ÉvÉåÉCÉÑÅ[ÇÃà⁄ìÆ
             if (!isGrabbing || !isJumping)
             {
-                rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed - objWeight), rb.velocity.y);
+                rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed/totalMass.GetMass()), rb.velocity.y);
             }
             else
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
             }
 
+            if (movingFloor != null && !isJumping)
+            {
+                mFloorVelocity = movingFloor.GetMFloorVelocity();
+                //Debug.Log(mFloorVelocity);
+                rb.velocity += mFloorVelocity;
+            }
 
             if (Input.GetKeyDown(KeyCode.G))
             {
@@ -153,8 +165,7 @@ public class PlayerController : MonoBehaviour
                 grabObj.GetComponent<BoxCollider2D>().enabled = false;
                 grabCollider.enabled = true;
                 grabObj.transform.SetParent(transform);
-
-
+                totalMass.PlusMass(grabObj.GetComponent<TotalMass>().GetMass());
 
                 isGrabbing = true;
             }
@@ -167,7 +178,7 @@ public class PlayerController : MonoBehaviour
             grabPos = grabObj.transform.position;
             grabObj.transform.position = new Vector2(grabPos.x - 0.15f * scale.x, grabPos.y + 0.2f*scale.y);
             grabObj.transform.SetParent(null);
-            objWeight = 0.0f;
+            totalMass.PlusMass(-grabObj.GetComponent<TotalMass>().GetMass());
             grabObj = null;
             isGrabbing = false;
         }
@@ -204,8 +215,6 @@ public class PlayerController : MonoBehaviour
 
         int i = 0;
 
-
-        
         //Debug.Log(respawnManager.changePosi);
         if (respawnManager.changePosi >= 1)
         {
@@ -224,8 +233,6 @@ public class PlayerController : MonoBehaviour
 
         //respawnManager.resAnimation = false;
         
-
-
         //Debug.Log("before:" + isJumping);
         GetComponent<AudioSource>().PlayOneShot(respawnSE, 0.2f);
         //Debug.Log("after:" + isJumping);
@@ -244,20 +251,20 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Goal")
+        if (collision.gameObject.CompareTag("Goal"))
         {
             GetComponent<AudioSource>().PlayOneShot(warpSE, 0.5f);
             SceneManager.LoadScene(sceneName);
         }
 
-        if (collision.gameObject.tag == "Toxic")
+        if (collision.gameObject.CompareTag("Toxic"))
         {
             GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.4f);
             StartCoroutine(Respawn());
             //StartCoroutine(Test());
         }
 
-        if (collision.gameObject.tag == "Abyss")
+        if (collision.gameObject.CompareTag("Abyss"))
         {
             isJumping = true;
             StartCoroutine(Respawn());
@@ -286,10 +293,15 @@ public class PlayerController : MonoBehaviour
             scale.y = gravityDirection;
             gameObject.transform.localScale = scale;
         }
-
-        else if (!collision.CompareTag("Platform") || (collision.CompareTag("Platform") && transform.position.y > 2 + collision.gameObject.transform.position.y))
+        else if (!collision.CompareTag("MovingFloor"))
         {
             isJumping = false;
+        }
+        else if (collision.CompareTag("MovingFloor") && transform.position.y > 2.05 + collision.gameObject.transform.position.y)
+        {
+            isJumping = false;
+            movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
+            //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
         }
     }
 
@@ -302,11 +314,16 @@ public class PlayerController : MonoBehaviour
             //isReverse = false;
             (rb.gravityScale, moveSpeed, gravityDirection) = gravityManager.GetDefaultValue();
         }
-
-        //if (collision.CompareTag("Stage"))//ãÛíÜÇ…Ç¢ÇÈÇ∆Ç´ÇÕisJumpingÇtrue
         else
         {
             isJumping = true;
         }
+
+        if (collision.CompareTag("MovingFloor"))
+        {
+            movingFloor = null;
+        }
+        //if (collision.CompareTag("Stage"))//ãÛíÜÇ…Ç¢ÇÈÇ∆Ç´ÇÕisJumpingÇtrue
+       
     }
 }

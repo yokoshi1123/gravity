@@ -17,7 +17,7 @@ public class TotalMass : MonoBehaviour
     [SerializeField] 
     private float totalMass;
 
-    //[SerializeField]
+    [SerializeField]
     private bool isAdded = false;
     void Start()
     {
@@ -61,6 +61,11 @@ public class TotalMass : MonoBehaviour
     public float GetMass()
     {
         return totalMass;
+    }
+
+    public void PlusMass(float value)
+    {
+        totalMass += value;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
