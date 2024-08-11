@@ -28,20 +28,15 @@ public class PlayerController : MonoBehaviour
     private bool isWalking = false;
     private bool isJumping = false;
     private bool isGrabbing = false;
-    //private bool isReverse = false;
     private bool canMove;
-    //private int jumpDirection = 1;
 
     private Vector3 scale;
 
-    private float RAYDISTANCE = 0.2f;
+    private const float RAYDISTANCE = 0.2f;
     private GameObject grabObj;
     private RaycastHit2D hit;
-    //private float grabWidth;
     private Vector3 grabPos;
-   // private Vector3 grabScale;
 
-    //[SerializeField] private float ABYSS = 10.0f;
     public Vector2 respawnPoint = new Vector2(0, 2);
 
     private MoveObjectWithRoute movingFloor;
@@ -60,9 +55,6 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         totalMass = GetComponent<TotalMass>();
         
-        //moveSpeed = gravityManager.M_SPEED;
-        //rb.gravityScale = gravityManager.G_SCALE;
-        //isReverse = gravityManager.isReverse;
         (rb.gravityScale, moveSpeed, gravityDirection) = gravityManager.GetDefaultValue();
         respawnPoint = transform.position;
     }
@@ -86,11 +78,6 @@ public class PlayerController : MonoBehaviour
                 gameObject.transform.localScale = scale;
             }
 
-            //if (!isReverse && scale.y == -1)
-            //{
-            //    scale.y = 1;
-            //    gameObject.transform.localScale = scale;
-            //}
             scale.y = gravityDirection;
             gameObject.transform.localScale = scale;
 
@@ -111,7 +98,7 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = new Vector2(0, rb.velocity.y);
             }
 
-            if (movingFloor != null && !isJumping)
+            if (movingFloor != null && !isWalking)
             {
                 mFloorVelocity = movingFloor.GetMFloorVelocity();
                 //Debug.Log(mFloorVelocity);
@@ -125,11 +112,6 @@ public class PlayerController : MonoBehaviour
 
             animator.SetBool("isWalking", isWalking);
             animator.SetBool("isJumping", isJumping);
-
-            //if (transform.position.y < ABYSS)
-            //{
-            //    StartCoroutine(Respawn()); //Respawn();
-            //}
         }
 
         //canMove = falseのとき、速度0にし続ける
@@ -143,7 +125,6 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         isJumping = true;
-        //jumpDirection = (isReverse) ? -1 : 1;
         rb.AddForce(gravityDirection * JUMPFORCE * Vector2.up, ForceMode2D.Impulse);
     }
 
@@ -157,13 +138,16 @@ public class PlayerController : MonoBehaviour
                 grabObj = hit.collider.gameObject;
                 grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
                 grabPos = grabObj.transform.position;
-                grabObj.transform.position = new Vector2(grabPos.x + 0.15f * scale.x, grabPos.y + 0.2f * scale.y);
+                grabObj.transform.position = new Vector2(grabPos.x + 0.15f * scale.x, grabPos.y);
 
-                grabCollider.offset = (grabObj.transform.position - grabPoint.position) * (Vector2)scale;
-                grabCollider.size = grabObj.transform.localScale;
+                grabPoint.position = grabObj.transform.position;
+                grabPoint.localScale = grabObj.transform.localScale;
+
+                //grabCollider.offset = (grabObj.transform.position - grabPoint.position) * (Vector2)scale;
+                //grabCollider.size = grabObj.transform.localScale;
                 //Debug.Log(grabObj.name + grabObj.transform.localScale);
-                //grabCollider.enabled = true;
-                //grabObj.GetComponent<BoxCollider2D>().enabled = false;
+                grabCollider.enabled = true;
+                grabObj.GetComponent<BoxCollider2D>().enabled = false;
                 grabObj.transform.SetParent(transform);
                 totalMass.PlusMass(grabObj.GetComponent<TotalMass>().GetMass());
                 //Debug.Log(grabCollider.name + ", " + grabCollider.tag);
@@ -176,8 +160,12 @@ public class PlayerController : MonoBehaviour
             grabObj.GetComponent<Rigidbody2D>().isKinematic = false;
             grabCollider.enabled = false;
             grabObj.GetComponent<BoxCollider2D>().enabled = true;
+
+            grabPoint.position = transform.position + new Vector3(0.9f * scale.x, -0.5f * scale.y, 0);
+            grabPoint.localScale = Vector3.one;
+
             grabPos = grabObj.transform.position;
-            grabObj.transform.position = new Vector2(grabPos.x - 0.15f * scale.x, grabPos.y + 0.2f*scale.y);
+            grabObj.transform.position = new Vector2(grabPos.x - 0.15f * scale.x, grabPos.y);
             grabObj.transform.SetParent(null);
             totalMass.PlusMass(-grabObj.GetComponent<TotalMass>().GetMass());
             grabObj = null;
@@ -261,6 +249,14 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Toxic"))
         {
+            bool yRange = Mathf.Abs(collision.gameObject.transform.position.y - transform.position.y) <= transform.localScale.y;
+
+            if (isGrabbing && (!yRange || yRange && (collision.gameObject.transform.position.x - grabObj.transform.position.x) * scale.x > 0))
+            {
+                //Debug.Log("Safe");
+                return;
+            }
+            
             GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.4f);
             StartCoroutine(Respawn());
             //StartCoroutine(Test());
@@ -272,26 +268,27 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Respawn());
         }
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("MovingFloor") && transform.position.y > collision.gameObject.transform.position.y)
+        {
+            isJumping = false;
+            movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
+            Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
+        }
+        //else if (collision.CompareTag("MovingFloor"))
+        //{
+        //    Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y);
+        //}
+
+    }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        /*if (collision.CompareTag("Stage"))
-        {
-            isJumping = false;
-        }*/
-
         if (collision.CompareTag("GravityField")) // 重力場中にあるとき、gravityManagerでの変更を読み込む
         {
-            //moveSpeed = gravityManager.moveSpeed;
-            //rb.gravityScale = gravityManager.gravityScale;
-            //isReverse = gravityManager.isReverse;
             (rb.gravityScale, moveSpeed, gravityDirection) = gravityManager.GetValue();
             scale = gameObject.transform.localScale;
-            //if (isReverse && scale.y == 1)
-            //{
-            //    scale.y = -1;
-            //    gameObject.transform.localScale = scale;
-            //}
             scale.y = gravityDirection;
             gameObject.transform.localScale = scale;
         }
@@ -299,21 +296,12 @@ public class PlayerController : MonoBehaviour
         {
             isJumping = false;
         }
-        else if (collision.CompareTag("MovingFloor") && transform.position.y > 2.05 + collision.gameObject.transform.position.y)
-        {
-            isJumping = false;
-            movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
-            //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
-        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("GravityField")) // 重力場から出たとき、デフォルトに戻す
         {
-            //moveSpeed = gravityManager.M_SPEED;
-            //rb.gravityScale = gravityManager.G_SCALE;
-            //isReverse = false;
             (rb.gravityScale, moveSpeed, gravityDirection) = gravityManager.GetDefaultValue();
         }
         else
@@ -324,8 +312,6 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("MovingFloor"))
         {
             movingFloor = null;
-        }
-        //if (collision.CompareTag("Stage"))//空中にいるときはisJumpingをtrue
-       
+        }       
     }
 }

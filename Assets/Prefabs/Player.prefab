@@ -263,12 +263,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44a5865ec93a64843b2286fb1b02a1fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 4953391581170830856}
   animator: {fileID: 4953391580771830774}
   grabCollider: {fileID: 4953391581519938356}
-  gravityManager: {fileID: 0}
   pauseButton: {fileID: 0}
+  respawnManager: {fileID: 0}
   moveSpeed: 0
+  gravityDirection: 0
   grabPoint: {fileID: 4953391581519938354}
   respawnPoint: {x: 0, y: 1.35}
   sceneName: 
@@ -481,5 +481,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0

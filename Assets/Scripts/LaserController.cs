@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class LaserController : MonoBehaviour
 {
+    [SerializeField] private bool isVertical = false;
+    
     [SerializeField] private float OFFSET = 3f;
     [SerializeField] private float ONDURATION = 3f;
     [SerializeField] private float OFFDURATION = 6f;
@@ -14,10 +16,10 @@ public class LaserController : MonoBehaviour
     private const int TRANSITION = 17;
 
     private RaycastHit2D hit;
+    private Transform hitObj;
     private const float RAYDISTANCE = 50f;
 
     private Vector3 basePos;
-    private Vector3 offsetPos;
 
     private BoxCollider2D beamCollider;
 
@@ -32,9 +34,9 @@ public class LaserController : MonoBehaviour
     void Awake()
     {       
         basePos = transform.position;
+        //Debug.Log(basePos);
         beamCollider = GetComponent<BoxCollider2D>();
-        
-        offsetPos = machine.transform.position;
+
         machineRenderer = machine.GetComponent<SpriteRenderer>();
         //machineRenderer.sprite = machineTextures[4];
         
@@ -48,22 +50,39 @@ public class LaserController : MonoBehaviour
 
     void Update()
     {
-        //Debug.DrawRay(basePos, Vector2.left * RAYDISTANCE, Color.green, 0.015f);
         beamCollider.enabled = false;
-        hit = Physics2D.Raycast(basePos, Vector2.left * machine.transform.localScale.x, RAYDISTANCE);
-        //while (hit.collider != null && hit.collider.name == this.name)
-        //{
-        //    hit = Physics2D.Raycast(hit.collider.transform.position, Vector2.left, RAYDISTANCE);
-        //}
-        if (hit.collider != null && !hit.collider.CompareTag("Player"))
-        {
-            Transform hitObj = hit.collider.transform;
-            //Debug.Log(hitObj.position);
-            transform.position = new Vector2((basePos.x + hitObj.position.x + hitObj.localScale.x / 2) / 2, basePos.y);
-            transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitObj.position.x) - hitObj.localScale.x / 2 - 0.05f, transform.localScale.y); //, beamTransform.localScale.z);
-        }
         if (beamRenderer.sprite != null)
-        {
+        {        
+            if (isVertical)
+            {
+                //Debug.DrawRay(basePos, Vector2.down * machine.transform.localScale.y * RAYDISTANCE, Color.green, 0.015f);
+                int layerMask = ~(1 << 2 | 1 << 7);
+                ////Debug.Log(layerMask);
+                hit = Physics2D.Raycast(basePos, Vector2.down * machine.transform.localScale.y, RAYDISTANCE, layerMask);
+                if (hit.collider != null) // && !hit.collider.CompareTag("Player"))
+                {
+                    hitObj = hit.collider.transform;
+                    Debug.Log(hit.collider.name);
+                    //Debug.Log(hitObj.position.y + Mathf.Sign(machine.transform.localScale.y) * hitObj.localScale.y * 0.5f); // (basePos.x + hitObj.position.y + 9) * 0.5f); // + Mathf.Sign(machine.transform.localScale.y) * hitObj.localScale.y * 0.5f) * 0.5f);
+                    transform.position = new Vector2(basePos.x, (basePos.y + hitObj.position.y + Mathf.Sign(machine.transform.localScale.y) * hitObj.localScale.y * 0.5f) * 0.5f);
+                    transform.localScale = new Vector2(Mathf.Abs(basePos.y - hitObj.position.y) - hitObj.localScale.y * 0.5f - 0.05f, transform.localScale.y); //, beamTransform.localScale.z);
+                }
+            }
+            else
+            {
+                //Debug.DrawRay(basePos, Vector2.left * RAYDISTANCE, Color.green, 0.015f);
+                int layerMask = ~(1 << 2 | 1 << 6);
+                hit = Physics2D.Raycast(basePos, Vector2.left * machine.transform.localScale.x, RAYDISTANCE, layerMask);
+                if (hit.collider != null) // && !hit.collider.CompareTag("Player"))
+                {
+                    hitObj = hit.collider.transform;
+                    Debug.Log(hit.collider.name);
+                    //Debug.Log(hitObj.position);
+                    transform.position = new Vector2((basePos.x + hitObj.position.x + Mathf.Sign(machine.transform.localScale.x) * hitObj.localScale.x * 0.5f) * 0.5f, basePos.y);
+                    transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitObj.position.x) - hitObj.localScale.x * 0.5f - 0.05f, transform.localScale.y); //, beamTransform.localScale.z);
+                }
+            }
+
             beamCollider.enabled = true;
         }
     }
