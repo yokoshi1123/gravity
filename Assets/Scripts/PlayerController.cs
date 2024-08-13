@@ -136,13 +136,10 @@ public class PlayerController : MonoBehaviour
             if (hit.collider != null && hit.collider.CompareTag("Movable"))
             {
                 grabObj = hit.collider.gameObject;
-                grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
                 grabPos = grabObj.transform.position;
+
+                grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
                 grabObj.transform.position = new Vector2(grabPos.x + 0.15f * scale.x, grabPos.y);
-
-                grabPoint.position = grabObj.transform.position;
-                grabPoint.localScale = grabObj.transform.localScale;
-
                 //grabCollider.offset = (grabObj.transform.position - grabPoint.position) * (Vector2)scale;
                 //grabCollider.size = grabObj.transform.localScale;
                 //Debug.Log(grabObj.name + grabObj.transform.localScale);
@@ -150,6 +147,8 @@ public class PlayerController : MonoBehaviour
                 grabObj.GetComponent<BoxCollider2D>().enabled = false;
                 grabObj.transform.SetParent(transform);
                 totalMass.PlusMass(grabObj.GetComponent<TotalMass>().GetMass());
+                grabPoint.position = grabObj.transform.position;
+                grabPoint.localScale = grabObj.transform.localScale;
                 //Debug.Log(grabCollider.name + ", " + grabCollider.tag);
 
                 isGrabbing = true;
@@ -160,14 +159,12 @@ public class PlayerController : MonoBehaviour
             grabObj.GetComponent<Rigidbody2D>().isKinematic = false;
             grabCollider.enabled = false;
             grabObj.GetComponent<BoxCollider2D>().enabled = true;
-
             grabPoint.position = transform.position + new Vector3(0.9f * scale.x, -0.5f * scale.y, 0);
             grabPoint.localScale = Vector3.one;
-
+            totalMass.PlusMass(-grabObj.GetComponent<TotalMass>().GetMass());
             grabPos = grabObj.transform.position;
             grabObj.transform.position = new Vector2(grabPos.x - 0.15f * scale.x, grabPos.y);
             grabObj.transform.SetParent(null);
-            totalMass.PlusMass(-grabObj.GetComponent<TotalMass>().GetMass());
             grabObj = null;
             isGrabbing = false;
         }

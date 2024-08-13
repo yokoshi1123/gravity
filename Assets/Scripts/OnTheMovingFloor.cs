@@ -30,7 +30,7 @@ public class OnTheMovingFloor : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("MovingFloor") && transform.position.y > transform.localScale.y/2 + collision.gameObject.transform.position.y)
+        if (collision.gameObject.CompareTag("MovingFloor") && transform.position.y > collision.gameObject.transform.position.y)
         {
             movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
         }
