@@ -191,14 +191,14 @@ public class PlayerController : MonoBehaviour
         respawnManager.resAnimation = true;
         Grab();
 
-        /*if(respawnManager.respawn)
+        if(respawnManager.respawn)
         {
             Debug.Log("respawn");
         }
         if (respawnManager.resAnimation)
         {
             Debug.Log("resAnimation");
-        }*/
+        }
 
         int i = 0;
 

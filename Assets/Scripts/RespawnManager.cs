@@ -21,6 +21,11 @@ public class RespawnManager : MonoBehaviour
     //ˆÈ‰º‚Í‰ŠúˆÊ’u‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éint
     public int changePosi = 0;
 
+    //ˆÈ‰º‚Írespawn‚ÌˆÊ’u‚ª•ÏX‚³‚ê‚½‚Æ‚«‚Étrue‚ğ•Ô‚·
+    public bool respawnchanged = false;
+
+
+
     [SerializeField] private GameObject PlayerAvatar;
 
 
