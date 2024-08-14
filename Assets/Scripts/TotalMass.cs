@@ -6,7 +6,7 @@ public class TotalMass : MonoBehaviour
 {
     //private GravityManager gravityManager;
 
-    //[SerializeField] 
+    [SerializeField]
     private List<GameObject> otherObjs = new();
     private Dictionary<string, float> addedObjs = new();
 
@@ -22,12 +22,14 @@ public class TotalMass : MonoBehaviour
     private bool isAdded = false;
 
     private float defaultMass;
+    private Vector2 defaultPosition;
 
 
     void Start()
     {
         //gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
         myPosition = transform.position;
+        defaultPosition = transform.localPosition;
         defaultMass = GetComponent<Rigidbody2D>().mass;
         totalMass = defaultMass;
     }
@@ -38,6 +40,7 @@ public class TotalMass : MonoBehaviour
 
         if (defaultMass != GetComponent<Rigidbody2D>().mass)
         {
+            //Debug.Log("Before: " + totalMass + ", After: " + (totalMass + GetComponent<Rigidbody2D>().mass - defaultMass));
             totalMass += GetComponent<Rigidbody2D>().mass - defaultMass;
             defaultMass = GetComponent<Rigidbody2D>().mass;
         }
@@ -45,11 +48,10 @@ public class TotalMass : MonoBehaviour
         foreach (GameObject other in otherObjs)
         {
             otherTM = other.GetComponent<TotalMass>();
-            if (!otherTM.GetBool())
+            if (!addedObjs.ContainsKey(other.name))
             {
                 totalMass += otherTM.GetMass();
                 addedObjs.Add(other.name, otherTM.GetMass());
-                otherTM.SetBool(true);
                 //Debug.Log("Added");
             }
             else if (addedObjs.ContainsKey(other.name) && otherTM.GetMass() != addedObjs[other.name])
@@ -76,6 +78,11 @@ public class TotalMass : MonoBehaviour
         return totalMass;
     }
 
+    public float GetDefaultMass()
+    {
+        return defaultMass;
+    }
+
     public void PlusMass(float value)
     {
         totalMass += value;
@@ -85,10 +92,20 @@ public class TotalMass : MonoBehaviour
     {
         otherTM = other.gameObject.GetComponent<TotalMass>();
         otherPosition = other.transform.position;
-        if (otherTM != null && ((otherPosition.y - myPosition.y) * Mathf.Sign(other.gameObject.GetComponent<Rigidbody2D>().gravityScale) >= 0) && GetComponent<Rigidbody2D>().gravityScale * other.gameObject.GetComponent<Rigidbody2D>().gravityScale > 0 && !otherObjs.Contains(other.gameObject)) // (myPosition.y <= otherPosition.y)
+        if (otherTM != null && ((otherPosition.y - myPosition.y) * Mathf.Sign(other.gameObject.GetComponent<Rigidbody2D>().gravityScale) > 0) && GetComponent<Rigidbody2D>().gravityScale * other.gameObject.GetComponent<Rigidbody2D>().gravityScale > 0 && !otherObjs.Contains(other.gameObject) && !otherTM.GetBool()) // (myPosition.y <= otherPosition.y)
         {
+            //if (other.gameObject.name != "Player")
+            //{
+            //    other.gameObject.transform.SetParent(this.gameObject.transform);
+            //}
             otherObjs.Add(other.gameObject);
-        }     
+            otherTM.SetBool(true);
+        }
+
+        if (this.gameObject.name != "Player" && other.gameObject.CompareTag("Abyss"))
+        {
+            StartCoroutine(Respawn());
+        }
     }
     private void OnCollisionExit2D(Collision2D other)
     {
@@ -99,10 +116,20 @@ public class TotalMass : MonoBehaviour
                 otherTM = other.gameObject.GetComponent<TotalMass>();
                 totalMass -= otherTM.GetMass();
                 addedObjs.Remove(other.gameObject.name);
+                //if (other.gameObject.name != "Player")
+                //{
+                //    other.gameObject.transform.SetParent(null);
+                //}
                 otherTM.SetBool(false);
             }
             otherObjs.Remove(other.gameObject);
             //Debug.Log("Removed");
         }
+    }
+
+    private IEnumerator Respawn()
+    {
+        yield return null;
+        transform.position = defaultPosition;
     }
 }
