@@ -7,9 +7,9 @@ public class LaserController : MonoBehaviour
 {
     [SerializeField] private bool isVertical = false;
     
-    [SerializeField] private float OFFSET = 3f;
-    [SerializeField] private float ONDURATION = 3f;
-    [SerializeField] private float OFFDURATION = 6f;
+    [SerializeField] private float OFFSET = 1f;
+    [SerializeField] private float ONDURATION = 2f;
+    [SerializeField] private float OFFDURATION = 3f;
 
     [SerializeField] private float ONTEXTURE = 14;
 
@@ -28,8 +28,8 @@ public class LaserController : MonoBehaviour
     private SpriteRenderer machineRenderer;
     private SpriteRenderer beamRenderer;
 
-    [SerializeField] private List<Sprite> machineTextures = new List<Sprite>();
-    [SerializeField] private List <Sprite> beamTextures = new List<Sprite>();
+    [SerializeField] private List<Sprite> machineTextures = new();
+    [SerializeField] private List <Sprite> beamTextures = new();
 
     void Awake()
     {       
@@ -62,7 +62,7 @@ public class LaserController : MonoBehaviour
                 if (hit.collider != null) // && !hit.collider.CompareTag("Player"))
                 {
                     hitObj = hit.collider.transform;
-                    Debug.Log(hit.collider.name);
+                    //Debug.Log(hit.collider.name);
                     //Debug.Log(hitObj.position.y + Mathf.Sign(machine.transform.localScale.y) * hitObj.localScale.y * 0.5f); // (basePos.x + hitObj.position.y + 9) * 0.5f); // + Mathf.Sign(machine.transform.localScale.y) * hitObj.localScale.y * 0.5f) * 0.5f);
                     transform.position = new Vector2(basePos.x, (basePos.y + hitObj.position.y + Mathf.Sign(machine.transform.localScale.y) * hitObj.localScale.y * 0.5f) * 0.5f);
                     transform.localScale = new Vector2(Mathf.Abs(basePos.y - hitObj.position.y) - hitObj.localScale.y * 0.5f - 0.05f, transform.localScale.y); //, beamTransform.localScale.z);
@@ -76,7 +76,7 @@ public class LaserController : MonoBehaviour
                 if (hit.collider != null) // && !hit.collider.CompareTag("Player"))
                 {
                     hitObj = hit.collider.transform;
-                    Debug.Log(hit.collider.name);
+                    //Debug.Log(hit.collider.name);
                     //Debug.Log(hitObj.position);
                     transform.position = new Vector2((basePos.x + hitObj.position.x + Mathf.Sign(machine.transform.localScale.x) * hitObj.localScale.x * 0.5f) * 0.5f, basePos.y);
                     transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitObj.position.x) - hitObj.localScale.x * 0.5f - 0.05f, transform.localScale.y); //, beamTransform.localScale.z);
@@ -113,5 +113,10 @@ public class LaserController : MonoBehaviour
             beamRenderer.sprite = null;
             yield return new WaitForSeconds(OFFDURATION);
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        
     }
 }

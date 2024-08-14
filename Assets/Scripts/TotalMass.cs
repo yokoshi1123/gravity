@@ -7,8 +7,8 @@ public class TotalMass : MonoBehaviour
     //private GravityManager gravityManager;
 
     //[SerializeField] 
-    private List<GameObject> otherObjs = new List<GameObject>();
-    private Dictionary<string, float> addedObjs = new Dictionary<string, float>();
+    private List<GameObject> otherObjs = new();
+    private Dictionary<string, float> addedObjs = new();
 
     private Vector2 myPosition;
     private Vector2 otherPosition = Vector2.zero;
@@ -20,16 +20,28 @@ public class TotalMass : MonoBehaviour
 
     [SerializeField]
     private bool isAdded = false;
+
+    private float defaultMass;
+
+
     void Start()
     {
         //gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
         myPosition = transform.position;
-        totalMass = GetComponent<Rigidbody2D>().mass;
+        defaultMass = GetComponent<Rigidbody2D>().mass;
+        totalMass = defaultMass;
     }
 
     void Update()
     {
         myPosition = transform.position;
+
+        if (defaultMass != GetComponent<Rigidbody2D>().mass)
+        {
+            totalMass += GetComponent<Rigidbody2D>().mass - defaultMass;
+            defaultMass = GetComponent<Rigidbody2D>().mass;
+        }
+
         foreach (GameObject other in otherObjs)
         {
             otherTM = other.GetComponent<TotalMass>();

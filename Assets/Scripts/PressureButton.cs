@@ -9,7 +9,7 @@ public class PressureButton : MonoBehaviour
     private Rigidbody2D rb;
     private TotalMass mass;
     [SerializeField] private GameObject button;
-    [SerializeField] private float onValue = 10f;
+    [SerializeField] private float onValue = 10f; 
 
     void Awake()
     {

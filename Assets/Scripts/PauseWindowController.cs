@@ -7,6 +7,8 @@ public class PauseWindowController : MonoBehaviour
 {
     [SerializeField] private GameObject pauseButton;
     [SerializeField] private GameObject pauseWindow;
+
+    //private bool isPaused = false;
     
     public void Pause()
     {
@@ -19,6 +21,13 @@ public class PauseWindowController : MonoBehaviour
     {
         Time.timeScale = 1;
         pauseButton.SetActive(true);
-        pauseWindow?.SetActive(false);
+        pauseWindow.SetActive(false);
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        { 
+            Pause();
+        }
     }
 }

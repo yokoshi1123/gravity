@@ -8,8 +8,8 @@ using UnityEditor.UIElements;
 
 public class GravityManager : MonoBehaviour
 {
-    private float G_SCALE = 5.0f;
-    private float M_SPEED = 10.0f;
+    private const float G_SCALE = 5.0f;
+    private const float M_SPEED = 10.0f;
 
     [SerializeField] private float gravityScale;
     [SerializeField] private float moveSpeed;
@@ -19,10 +19,11 @@ public class GravityManager : MonoBehaviour
 
     private Vector2 startMPosition = Vector2.zero;
     private Vector2 endMPosition = Vector2.zero;
-    private float CAMERAZPOSITION = -20f;
+    private const float CAMERAZPOSITION = -20f;
     private GameObject destroyGF;
 
     private int gScale = 1;
+    private float magnification = 0.5f;
 
     private bool isChangeable = true;
     private int mouseWheel = 1;
@@ -108,7 +109,8 @@ public class GravityManager : MonoBehaviour
         // Debug.Log("gscale: " + gScale);
 
         //isReverse = (gScale == 0) ? true : false;
-        gravityDirection = (int)Mathf.Sign(1.5f * gScale - 1.0f);
+        magnification = 1.5f * gScale - 1.0f;
+        gravityDirection = (int)Mathf.Sign(magnification);
         switch (gScale)
         {
             case 0: // x(-1.0)
@@ -141,18 +143,23 @@ public class GravityManager : MonoBehaviour
         return G_SCALE;
     }
 
-    public (float, float, int) GetValue()
+    public (float, float, float) GetValue()
     {
-        return (gravityScale, moveSpeed, gravityDirection);
+        return (gravityScale, moveSpeed, magnification);
     }
-    public (float, float, int) GetDefaultValue()
+    public (float, float, float) GetDefaultValue()
     {
-        return (G_SCALE, M_SPEED, 1);
+        return (G_SCALE, M_SPEED, 1f);
     }
 
     public int GetGScale()
     {
         return gScale;
+    }
+
+    public float GetMagnification()
+    {
+        return magnification;
     }
 
     private IEnumerator WaitAndDestroy()

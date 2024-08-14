@@ -15,6 +15,7 @@ public class TaxiPlayerController : MonoBehaviour
     public GravityManager gravityManager; // EnvironmentManager‚ð”pŽ~
 
     [SerializeField] private float moveSpeed;
+    [SerializeField] private float magnification;
     [SerializeField] private int gravityDirection;
     private float jumpForce = 20.0f;
 
@@ -41,7 +42,8 @@ public class TaxiPlayerController : MonoBehaviour
         //moveSpeed = gravityManager.M_SPEED;
         //rb.gravityScale = gravityManager.G_SCALE;
         //isReverse = gravityManager.isReverse;
-        (moveSpeed, rb.gravityScale, gravityDirection) = gravityManager.GetDefaultValue();
+        (moveSpeed, rb.gravityScale, magnification) = gravityManager.GetDefaultValue();
+        gravityDirection = (int)Mathf.Sign(magnification);
     }
 
     void Update()
@@ -151,7 +153,8 @@ public class TaxiPlayerController : MonoBehaviour
             //moveSpeed = gravityManager.moveSpeed;
             //rb.gravityScale = gravityManager.gravityScale;
             //isReverse = gravityManager.isReverse;
-            (moveSpeed, rb.gravityScale, gravityDirection) = gravityManager.GetValue();
+            (moveSpeed, rb.gravityScale, magnification) = gravityManager.GetValue();
+            gravityDirection = (int)Mathf.Sign(magnification);
             scale = gameObject.transform.localScale;
             if (isReverse && scale.y == 1)
             {
@@ -171,7 +174,8 @@ public class TaxiPlayerController : MonoBehaviour
             //moveSpeed = gravityManager.M_SPEED;
             //rb.gravityScale = gravityManager.G_SCALE;
             //isReverse = false;
-            (moveSpeed, rb.gravityScale, gravityDirection) = gravityManager.GetDefaultValue();
+            (moveSpeed, rb.gravityScale, magnification) = gravityManager.GetDefaultValue();
+            gravityDirection = 1;
         }
 
         /*if (collision.CompareTag("Stage"))//‹ó’†‚É‚¢‚é‚Æ‚«‚ÍisJumping‚ðtrue

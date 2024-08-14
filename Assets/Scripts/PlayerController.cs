@@ -13,15 +13,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private BoxCollider2D grabCollider;
 
     private GravityManager gravityManager;
+
     [SerializeField] private GameObject pauseButton;
 
     public RespawnManager respawnManager;
 
     private TotalMass totalMass;
 
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private int gravityDirection;
-    private const float JUMPFORCE = 20.0f;
+    private float moveSpeed;
+    private float magnification;
+    private int gravityDirection;
+    private const float JUMPFORCE = 20.5f;
+    [SerializeField] private float OBJ_MASS = 1f;
 
     [SerializeField] private Transform grabPoint;
 
@@ -37,7 +40,7 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D hit;
     private Vector3 grabPos;
 
-    public Vector2 respawnPoint = new Vector2(0, 2);
+    public Vector2 respawnPoint = new(0, 2);
 
     private MoveObjectWithRoute movingFloor;
     private Vector2 mFloorVelocity;
@@ -55,7 +58,9 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         totalMass = GetComponent<TotalMass>();
         
-        (rb.gravityScale, moveSpeed, gravityDirection) = gravityManager.GetDefaultValue();
+        (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
+        gravityDirection = 1;
+        rb.mass = OBJ_MASS;
         respawnPoint = transform.position;
     }
 
@@ -82,23 +87,24 @@ public class PlayerController : MonoBehaviour
             gameObject.transform.localScale = scale;
 
             //ジャンプ
-            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && !isJumping && !isGrabbing && !(rb.velocity.y < -0.5f))
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && !isJumping && !isGrabbing)
             {
                 GetComponent<AudioSource>().PlayOneShot(jumpSE, 0.3f);
+                //Debug.Log(rb.velocity.y);
                 Jump();
             }
 
             //プレイヤーの移動
             if (!isGrabbing || !isJumping)
             {
-                rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed/totalMass.GetMass()), rb.velocity.y);
+                rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed/totalMass.GetMass() * Mathf.Abs(magnification)), rb.velocity.y);
             }
             else
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
             }
 
-            if (movingFloor != null && !isWalking)
+            if (movingFloor != null && !isWalking && !isJumping)
             {
                 mFloorVelocity = movingFloor.GetMFloorVelocity();
                 //Debug.Log(mFloorVelocity);
@@ -125,7 +131,12 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         isJumping = true;
-        rb.AddForce(gravityDirection * JUMPFORCE * Vector2.up, ForceMode2D.Impulse);
+        rb.velocity = new(rb.velocity.x, 0f);
+        rb.AddForce(gravityDirection * JUMPFORCE * Vector2.up * magnification, ForceMode2D.Impulse);
+        //if (movingFloor != null)
+        //{
+        //    Debug.Log(mFloorVelocity);
+        //}
     }
 
     private void Grab()
@@ -265,33 +276,42 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Respawn());
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("MovingFloor") && transform.position.y > collision.gameObject.transform.position.y)
-        {
-            isJumping = false;
-            movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
-            Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
-        }
-        //else if (collision.CompareTag("MovingFloor"))
-        //{
-        //    Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y);
-        //}
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("Platform") && transform.position.y > collision.gameObject.transform.position.y)
+    //    {
+    //        isJumping = false;
+    //        movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
+    //        //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
+    //    }
+    //    //else if (collision.CompareTag("Platform"))
+    //    //{
+    //    //    Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y);
+    //    //}
 
-    }
+    //}
 
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("GravityField")) // 重力場中にあるとき、gravityManagerでの変更を読み込む
         {
-            (rb.gravityScale, moveSpeed, gravityDirection) = gravityManager.GetValue();
+            (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetValue();
+            gravityDirection = (int)Mathf.Sign(magnification);
+            rb.mass = OBJ_MASS * Mathf.Abs(magnification);
             scale = gameObject.transform.localScale;
             scale.y = gravityDirection;
             gameObject.transform.localScale = scale;
         }
-        else if (!collision.CompareTag("MovingFloor"))
+        else if (!collision.CompareTag("Platform"))
         {
             isJumping = false;
+        }
+
+        if (collision.CompareTag("Platform") && transform.position.y > collision.gameObject.transform.position.y)
+        {
+            isJumping = false;
+            movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
+            //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
         }
     }
 
@@ -299,14 +319,16 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("GravityField")) // 重力場から出たとき、デフォルトに戻す
         {
-            (rb.gravityScale, moveSpeed, gravityDirection) = gravityManager.GetDefaultValue();
+            (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
+            gravityDirection = 1;
+            rb.mass = OBJ_MASS;
         }
         else
         {
             isJumping = true;
         }
 
-        if (collision.CompareTag("MovingFloor"))
+        if (collision.CompareTag("Platform"))
         {
             movingFloor = null;
         }       
