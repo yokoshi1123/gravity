@@ -15,7 +15,7 @@ public class GravityManager : MonoBehaviour
     [SerializeField] private float moveSpeed;
     
     //public bool isReverse = false;
-    private int gravityDirection = 1;
+    //private int gravityDirection = 1;
 
     private Vector2 startMPosition = Vector2.zero;
     private Vector2 endMPosition = Vector2.zero;
@@ -39,8 +39,6 @@ public class GravityManager : MonoBehaviour
         //gravityText.text = "重力場：--";
         ChangeGravity();
     }
-
-
     void Update()
     {
         GameObject gravityField = (GameObject)Resources.Load("GravityField"); //"Square");//
@@ -87,6 +85,11 @@ public class GravityManager : MonoBehaviour
             StartCoroutine(routine);
         }
 
+        if (Input.GetMouseButtonUp(0))
+        {
+            GameObject.FindWithTag("GravityField").GetComponent<BoxCollider2D>().enabled = true;
+        }
+
         // 下キー/SキーでgravityScaleの変更
         //if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
         //{
@@ -103,14 +106,13 @@ public class GravityManager : MonoBehaviour
             ChangeGravity();
         }
     }
-
     void ChangeGravity()
     {
         // Debug.Log("gscale: " + gScale);
 
         //isReverse = (gScale == 0) ? true : false;
         magnification = 1.5f * gScale - 1.0f;
-        gravityDirection = (int)Mathf.Sign(magnification);
+        //gravityDirection = (int)Mathf.Sign(magnification);
         switch (gScale)
         {
             case 0: // x(-1.0)
@@ -133,7 +135,6 @@ public class GravityManager : MonoBehaviour
                 break;
         }
     }
-
     public float GetGravityScale()
     {
         return gravityScale;
@@ -142,7 +143,6 @@ public class GravityManager : MonoBehaviour
     {
         return G_SCALE;
     }
-
     public (float, float, float) GetValue()
     {
         return (gravityScale, moveSpeed, magnification);
@@ -151,17 +151,14 @@ public class GravityManager : MonoBehaviour
     {
         return (G_SCALE, M_SPEED, 1f);
     }
-
     public int GetGScale()
     {
         return gScale;
     }
-
     public float GetMagnification()
     {
         return magnification;
     }
-
     private IEnumerator WaitAndDestroy()
     {
         yield return new WaitForSecondsRealtime(5); // 5秒遅延
@@ -171,7 +168,6 @@ public class GravityManager : MonoBehaviour
             Destroy(destroyGF);
         }
     }
-
     private IEnumerator MouseWheelWait() // マウスホイールからの入力を0.2秒無視する
     {
         isChangeable = false;

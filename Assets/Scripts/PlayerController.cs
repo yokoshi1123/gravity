@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,6 +24,8 @@ public class PlayerController : MonoBehaviour
     private float moveSpeed;
     private float magnification;
     private int gravityDirection;
+    private float oldMag = 1f;
+
     private const float JUMPFORCE = 20.1f;
     [SerializeField] private float OBJ_MASS = 1f;
 
@@ -35,11 +38,12 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 scale;
 
-    private const float RAYDISTANCE = 0.2f;
+    private const float RAYDISTANCE = 0.25f;
     private GameObject grabObj;
     private RaycastHit2D hit;
     private Vector3 grabPos;
     private float grabMass;
+    private bool isPlayer = false;
 
     public Vector2 respawnPoint = new(0, 2);
 
@@ -64,7 +68,6 @@ public class PlayerController : MonoBehaviour
         rb.mass = OBJ_MASS;
         respawnPoint = transform.position;
     }
-
     void Update()
     {
         canMove = respawnManager.canMove;
@@ -97,14 +100,16 @@ public class PlayerController : MonoBehaviour
 
             if (isGrabbing)
             {
-                totalMass.PlusMass(grabObj.GetComponent<TotalMass>().GetMass() - grabMass);
+                totalMass.SetMass(grabObj.GetComponent<TotalMass>().GetMass() - grabMass, true);
+                //rb.mass = OBJ_MASS * Mathf.Abs(magnification) + grabMass;
                 grabMass = grabObj.GetComponent<TotalMass>().GetMass();
             }
 
             //プレイヤーの移動
             if (!isGrabbing || !isJumping)
             {
-                rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed/totalMass.GetMass() * Mathf.Abs(magnification)), rb.velocity.y);
+                //Debug.Log(totalMass.GetMass() + ", " + Mathf.Max(1.0f, moveSpeed / totalMass.GetMass()));
+                rb.velocity = new Vector2(horizontal * Mathf.Max(1.0f, moveSpeed/totalMass.GetMass() /* Mathf.Abs(magnification)*/), rb.velocity.y);
             }
             else
             {
@@ -134,40 +139,46 @@ public class PlayerController : MonoBehaviour
         }
 
     }
-
     private void Jump()
     {
         isJumping = true;
         rb.velocity = new(rb.velocity.x, 0f);
-        rb.AddForce(JUMPFORCE * Vector2.up * magnification, ForceMode2D.Impulse);
+        rb.AddForce(JUMPFORCE * magnification * Vector2.up, ForceMode2D.Impulse);
         //if (movingFloor != null)
         //{
         //    Debug.Log(mFloorVelocity);
         //}
     }
-
     private void Grab()
     {
         if (grabObj == null && !isJumping)
         {
-            hit = Physics2D.Raycast(grabPoint.position, transform.right, RAYDISTANCE);
-            if (hit.collider != null && hit.collider.CompareTag("Movable"))
+            int layerMask = ~(1 << 2 | 1 << 6);
+            hit = Physics2D.Raycast(grabPoint.position, Vector2.right * scale.x, RAYDISTANCE, layerMask);
+            //Debug.DrawRay(grabPoint.position, Vector2.right * scale.x * RAYDISTANCE, Color.green, 0.015f);
+            if (hit.collider != null && hit.collider.CompareTag("Movable") && hit.collider.transform.position.y >= grabPoint.position.y)
             {
+                //Debug.Log("Grabbed");
                 grabObj = hit.collider.gameObject;
                 grabPos = grabObj.transform.position;
 
+                grabPos = new Vector2(grabPos.x + 0.1f * scale.x, grabPos.y);
                 grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
-                grabObj.transform.position = new Vector2(grabPos.x + 0.15f * scale.x, grabPos.y);
-                //grabCollider.offset = (grabObj.transform.position - grabPoint.position) * (Vector2)scale;
-                //grabCollider.size = grabObj.transform.localScale;
-                //Debug.Log(grabObj.name + grabObj.transform.localScale);
-                grabCollider.enabled = true;
-                grabObj.GetComponent<BoxCollider2D>().enabled = false;
                 grabObj.transform.SetParent(transform);
-                grabMass = grabObj.GetComponent<TotalMass>().GetDefaultMass();
-                totalMass.PlusMass(grabMass);
+                //Debug.Log(grabObj.name + grabObj.transform.localScale);
+
+                //grabCollider.offset = (grabObj.transform.position - transform.position) * (Vector2)scale;
+                //grabCollider.size = grabObj.transform.localScale;
                 grabPoint.position = grabObj.transform.position;
                 grabPoint.localScale = grabObj.transform.localScale;
+                grabCollider.enabled = true;
+                grabObj.GetComponent<BoxCollider2D>().enabled = false;
+
+                grabMass = grabObj.GetComponent<TotalMass>().GetMass();
+                totalMass.SetMass(grabMass, true);
+                //rb.mass = OBJ_MASS * magnification + grabMass;
+                //grabPoint.position = grabObj.transform.position;
+                //grabPoint.localScale = grabObj.transform.localScale;
                 //Debug.Log(grabCollider.name + ", " + grabCollider.tag);
 
                 isGrabbing = true;
@@ -180,9 +191,11 @@ public class PlayerController : MonoBehaviour
             grabObj.GetComponent<BoxCollider2D>().enabled = true;
             grabPoint.position = transform.position + new Vector3(0.9f * scale.x, -0.5f * scale.y, 0);
             grabPoint.localScale = Vector3.one;
-            totalMass.PlusMass(-totalMass.GetMass() + OBJ_MASS * Mathf.Abs(magnification));
+            grabMass = grabObj.GetComponent<TotalMass>().GetMass();
+            totalMass.SetMass(-grabMass, true);
+            //rb.mass = OBJ_MASS * Mathf.Abs(magnification);
             grabPos = grabObj.transform.position;
-            grabObj.transform.position = new Vector2(grabPos.x - 0.15f * scale.x, grabPos.y);
+            grabPos = new Vector2(grabPos.x - 0.1f * scale.x, grabPos.y);
             grabObj.transform.SetParent(null);
             grabObj = null;
             isGrabbing = false;
@@ -190,7 +203,14 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("isGrabbing", isGrabbing);
     }
-
+    public bool GetIsGrabbing()
+    {
+        return isGrabbing;
+    }
+    public void SetIsPlayer(bool value)
+    {
+        isPlayer = value;
+    }
     private IEnumerator Respawn()
     {
         pauseButton.SetActive(false);
@@ -208,7 +228,10 @@ public class PlayerController : MonoBehaviour
         respawnManager.respawn = true;
         transform.position = respawnPoint;
         respawnManager.resAnimation = true;
-        Grab();
+        if (isGrabbing)
+        {
+           Grab();
+        }
 
         if(respawnManager.respawn)
         {
@@ -254,7 +277,6 @@ public class PlayerController : MonoBehaviour
             Debug.Log(i);
         }
     }*/
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Goal"))
@@ -265,13 +287,18 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Toxic"))
         {
-            bool yRange = Mathf.Abs(collision.gameObject.transform.position.y - transform.position.y) <= transform.localScale.y;
+            //bool yRange = Mathf.Abs(collision.gameObject.transform.position.y - transform.position.y) <= transform.localScale.y;
 
-            if (isGrabbing && (!yRange || yRange && (collision.gameObject.transform.position.x - grabObj.transform.position.x) * scale.x > 0))
+            //if (isGrabbing && (!yRange || yRange && (collision.gameObject.transform.position.x - grabObj.transform.position.x) * scale.x > 0))
+            //{
+            //    //Debug.Log("Safe");
+            //    return;
+            //}
+            if (!isPlayer)
             {
-                //Debug.Log("Safe");
                 return;
             }
+            isPlayer = false;
             
             GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.4f);
             StartCoroutine(Respawn());
@@ -284,28 +311,27 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Respawn());
         }
     }
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("Platform") && transform.position.y > collision.gameObject.transform.position.y)
-    //    {
-    //        isJumping = false;
-    //        movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
-    //        //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
-    //    }
-    //    //else if (collision.CompareTag("Platform"))
-    //    //{
-    //    //    Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y);
-    //    //}
-
-    //}
-
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("GravityField")) // 重力場中にあるとき、gravityManagerでの変更を読み込む
+        if (collision.CompareTag("GravityField") && (isPlayer /*!isGCollider*/ || gravityManager.GetMagnification() == -1f)) // 重力場中にあるとき、gravityManagerでの変更を読み込む
         {
+            //Debug.Log("Stay");
             (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetValue();
             gravityDirection = (int)Mathf.Sign(magnification);
-            rb.mass = (isGrabbing) ? totalMass.GetMass() * Mathf.Abs(magnification) : OBJ_MASS * Mathf.Abs(magnification);
+            if (magnification != oldMag)
+            {
+                //totalMass.SetMass(-rb.mass, true);
+                rb.mass = OBJ_MASS * Mathf.Abs(magnification);
+                //totalMass.SetMass(rb.mass, true);
+
+                if (isGrabbing)
+                {
+                    //rb.mass += grabMass;
+                    //totalMass.SetMass(grabMass, true);
+                }
+                //Debug.Log(magnification + ": " + totalMass.GetMass());
+                oldMag = magnification;
+            }
             scale = gameObject.transform.localScale;
             scale.y = gravityDirection;
             gameObject.transform.localScale = scale;
@@ -322,14 +348,15 @@ public class PlayerController : MonoBehaviour
             //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
         }
     }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("GravityField")) // 重力場から出たとき、デフォルトに戻す
+        if (collision.CompareTag("GravityField") && !isPlayer /*!isGCollider*/) // 重力場から出たとき、デフォルトに戻す
         {
+            //Debug.Log("Exit");
             (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
             gravityDirection = 1;
             rb.mass = OBJ_MASS;
+            oldMag = 1f;
         }
         else
         {

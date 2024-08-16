@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1824369420449528926}
   - component: {fileID: -139838206251211877}
   - component: {fileID: 2592625654869674556}
+  - component: {fileID: 4303547899731605841}
   m_Layer: 2
   m_Name: GravityField
   m_TagString: GravityField
@@ -93,7 +94,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6260287198611083169}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -176,3 +177,15 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 071ab83472a4b4b4689b21eb43c5b324, type: 3}
     - {fileID: 21300000, guid: 16e1873c486fb8e43a0525e416587592, type: 3}
     - {fileID: 21300000, guid: 391d4c4740290ba498d6752870bd9577, type: 3}
+--- !u!114 &4303547899731605841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6260287198611083169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2537da3674a9a41b0706793b47c2b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

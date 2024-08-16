@@ -17,7 +17,7 @@ public class Shutter : MonoBehaviour
     void Update()
     {
         //turnOn = Switch.turnOn;
-        turnOn = pButton.GetBool();
+        turnOn = pButton.GetIsPressed();
         animator.SetBool("turnOn", turnOn);
 
         if(turnOn)

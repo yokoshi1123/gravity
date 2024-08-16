@@ -31,6 +31,8 @@ public class LaserController : MonoBehaviour
     [SerializeField] private List<Sprite> machineTextures = new();
     [SerializeField] private List <Sprite> beamTextures = new();
 
+    //private IEnumerator cycleEra;
+
     void Awake()
     {       
         basePos = transform.position;
@@ -100,6 +102,7 @@ public class LaserController : MonoBehaviour
                 }
                 yield return new WaitForSeconds(ONDURATION / ONTEXTURE);
                 machineRenderer.sprite = machineTextures[i];
+                Debug.Log(i);
             }
             beamRenderer.sprite = beamTextures[5];
             yield return new WaitForSeconds(ONDURATION);
@@ -109,6 +112,7 @@ public class LaserController : MonoBehaviour
                 yield return new WaitForSeconds(ONDURATION / ONTEXTURE);
                 machineRenderer.sprite = machineTextures[i];
                 beamRenderer.sprite = beamTextures[TRANSITION - i];
+                Debug.Log(i);
             }
             beamRenderer.sprite = null;
             yield return new WaitForSeconds(OFFDURATION);
@@ -117,6 +121,35 @@ public class LaserController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        //if (!collision.gameObject.CompareTag("Player") || collision.gameObject.GetComponent<PlayerController>().GetIsGrabbing())
+        //{
+        //    //StopCoroutine(LaserCycle());
+        //    beamCollider.enabled = false;
+        //    beamRenderer.sprite = null;
+        //    //int layerMask = ~(1 << 2 | 1 << 6);
+        //    //hit = Physics2D.Raycast(basePos, Vector2.left * machine.transform.localScale.x, RAYDISTANCE, layerMask);
+        //    //if (hit.collider != null) // && !hit.collider.CompareTag("Player"))
+        //    //{
+        //    //    hitObj = hit.collider.transform;
+        //    //    //Debug.Log(hit.collider.name);
+        //    //    //Debug.Log(hitObj.position);
+        //    //    transform.position = new Vector2((basePos.x + hitObj.position.x + Mathf.Sign(machine.transform.localScale.x) * hitObj.localScale.x * 0.5f) * 0.5f, basePos.y);
+        //    //    transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitObj.position.x) - hitObj.localScale.x * 0.5f - 0.05f, transform.localScale.y); //, beamTransform.localScale.z);
+        //    //}
+        //    //StartCoroutine(LaserCycle());
+        //}
+
+        if (collision.gameObject.name == "Player")
+        {
+            collision.gameObject.GetComponent<PlayerController>().SetIsPlayer(true);
+        }
     }
+
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.name == "Player")
+    //    {
+    //        collision.gameObject.GetComponent<PlayerController>().SetIsPlayer(false);
+    //    }
+    //}
 }
