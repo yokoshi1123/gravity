@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     private int gravityDirection;
     private float oldMag = 1f;
 
-    private const float JUMPFORCE = 20.1f;
+    private const float JUMPFORCE = 20.5f;
     [SerializeField] private float OBJ_MASS = 1f;
 
     [SerializeField] private Transform grabPoint;
@@ -42,8 +42,8 @@ public class PlayerController : MonoBehaviour
     private GameObject grabObj;
     private RaycastHit2D hit;
     private Vector3 grabPos;
-    private float grabMass;
-    private bool isPlayer = false;
+    //private float grabMass;
+    [SerializeField] private bool isPlayer = false;
 
     public Vector2 respawnPoint = new(0, 2);
 
@@ -98,12 +98,12 @@ public class PlayerController : MonoBehaviour
                 Jump();
             }
 
-            if (isGrabbing)
-            {
-                totalMass.SetMass(grabObj.GetComponent<TotalMass>().GetMass() - grabMass, true);
-                //rb.mass = OBJ_MASS * Mathf.Abs(magnification) + grabMass;
-                grabMass = grabObj.GetComponent<TotalMass>().GetMass();
-            }
+            //if (isGrabbing)
+            //{
+            //    totalMass.SetMass(grabObj.GetComponent<TotalMass>().GetMass() - grabMass, true);
+            //    //rb.mass = OBJ_MASS * Mathf.Abs(magnification) + grabMass;
+            //    grabMass = grabObj.GetComponent<TotalMass>().GetMass();
+            //}
 
             //ÉvÉåÉCÉÑÅ[ÇÃà⁄ìÆ
             if (!isGrabbing || !isJumping)
@@ -162,8 +162,9 @@ public class PlayerController : MonoBehaviour
                 grabObj = hit.collider.gameObject;
                 grabPos = grabObj.transform.position;
 
-                grabPos = new Vector2(grabPos.x + 0.1f * scale.x, grabPos.y);
+                //grabObj.transform.position = new Vector2(grabPos.x + 0.1f * scale.x, grabPos.y);
                 grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
+                transform.position += new Vector3(-0.1f * scale.x, 0f, 0f);
                 grabObj.transform.SetParent(transform);
                 //Debug.Log(grabObj.name + grabObj.transform.localScale);
 
@@ -173,9 +174,9 @@ public class PlayerController : MonoBehaviour
                 grabPoint.localScale = grabObj.transform.localScale;
                 grabCollider.enabled = true;
                 grabObj.GetComponent<BoxCollider2D>().enabled = false;
-
-                grabMass = grabObj.GetComponent<TotalMass>().GetMass();
-                totalMass.SetMass(grabMass, true);
+                
+                //grabMass = grabObj.GetComponent<TotalMass>().GetMass();
+                //totalMass.SetMass(grabMass, true);
                 //rb.mass = OBJ_MASS * magnification + grabMass;
                 //grabPoint.position = grabObj.transform.position;
                 //grabPoint.localScale = grabObj.transform.localScale;
@@ -187,17 +188,19 @@ public class PlayerController : MonoBehaviour
         else if (grabObj != null)
         {
             grabObj.GetComponent<Rigidbody2D>().isKinematic = false;
-            grabCollider.enabled = false;
             grabObj.GetComponent<BoxCollider2D>().enabled = true;
+            grabCollider.enabled = false;
             grabPoint.position = transform.position + new Vector3(0.9f * scale.x, -0.5f * scale.y, 0);
             grabPoint.localScale = Vector3.one;
-            grabMass = grabObj.GetComponent<TotalMass>().GetMass();
-            totalMass.SetMass(-grabMass, true);
+            //grabMass = grabObj.GetComponent<TotalMass>().GetMass();
+            //totalMass.SetMass(-grabMass, true);
             //rb.mass = OBJ_MASS * Mathf.Abs(magnification);
             grabPos = grabObj.transform.position;
-            grabPos = new Vector2(grabPos.x - 0.1f * scale.x, grabPos.y);
+            //grabObj.transform.position = new Vector2(grabPos.x - 0.1f * scale.x, grabPos.y);
             grabObj.transform.SetParent(null);
             grabObj = null;
+            transform.position += new Vector3(0.1f * scale.x, 0f, 0f);
+
             isGrabbing = false;
         }
 
@@ -294,11 +297,13 @@ public class PlayerController : MonoBehaviour
             //    //Debug.Log("Safe");
             //    return;
             //}
-            if (!isPlayer)
-            {
-                return;
-            }
-            isPlayer = false;
+            //if (!isPlayer)
+            //{
+            //    Debug.Log("Safe");
+            //    return;
+            //}
+            //Debug.Log("Out");
+            //isPlayer = false;
             
             GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.4f);
             StartCoroutine(Respawn());
@@ -309,6 +314,16 @@ public class PlayerController : MonoBehaviour
         {
             isJumping = true;
             StartCoroutine(Respawn());
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Platform") && transform.position.y > collision.gameObject.transform.position.y + 2f)
+        {
+            isJumping = false;
+            movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
+            //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
         }
     }
     private void OnTriggerStay2D(Collider2D collision)
@@ -341,12 +356,12 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
         }
 
-        if (collision.CompareTag("Platform") && transform.position.y > collision.gameObject.transform.position.y)
-        {
-            isJumping = false;
-            movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
-            //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
-        }
+        //if (collision.CompareTag("Platform") && transform.position.y > collision.gameObject.transform.position.y + 2f)
+        //{
+        //    isJumping = false;
+        //    movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
+        //    //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
+        //}
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -361,6 +376,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             isJumping = true;
+            //Debug.Log("In the air");
         }
 
         if (collision.CompareTag("Platform"))

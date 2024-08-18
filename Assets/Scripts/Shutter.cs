@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+[RequireComponent(typeof(TurnOn))]
 public class Shutter : MonoBehaviour
 {
 
@@ -13,11 +15,19 @@ public class Shutter : MonoBehaviour
     private bool turnOn = false;
     //private Transform defaultTransform;
 
+    private TurnOn to;
+
+    void Awake()
+    {
+        to = GetComponent<TurnOn>();
+    }
+
     // Update is called once per frame
     void Update()
     {
         //turnOn = Switch.turnOn;
-        turnOn = pButton.GetIsPressed();
+        //turnOn = pButton.GetIsPressed();
+        turnOn = to.GetTurnOn();
         animator.SetBool("turnOn", turnOn);
 
         if(turnOn)

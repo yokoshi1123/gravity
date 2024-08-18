@@ -52,6 +52,7 @@ public class LaserController : MonoBehaviour
 
     void Update()
     {
+
         beamCollider.enabled = false;
         if (beamRenderer.sprite != null)
         {        
@@ -64,7 +65,7 @@ public class LaserController : MonoBehaviour
                 if (hit.collider != null) // && !hit.collider.CompareTag("Player"))
                 {
                     hitObj = hit.collider.transform;
-                    //Debug.Log(hit.collider.name);
+                    Debug.Log(hit.collider.name);
                     //Debug.Log(hitObj.position.y + Mathf.Sign(machine.transform.localScale.y) * hitObj.localScale.y * 0.5f); // (basePos.x + hitObj.position.y + 9) * 0.5f); // + Mathf.Sign(machine.transform.localScale.y) * hitObj.localScale.y * 0.5f) * 0.5f);
                     transform.position = new Vector2(basePos.x, (basePos.y + hitObj.position.y + Mathf.Sign(machine.transform.localScale.y) * hitObj.localScale.y * 0.5f) * 0.5f);
                     transform.localScale = new Vector2(Mathf.Abs(basePos.y - hitObj.position.y) - hitObj.localScale.y * 0.5f - 0.05f, transform.localScale.y); //, beamTransform.localScale.z);
@@ -102,7 +103,7 @@ public class LaserController : MonoBehaviour
                 }
                 yield return new WaitForSeconds(ONDURATION / ONTEXTURE);
                 machineRenderer.sprite = machineTextures[i];
-                Debug.Log(i);
+                //Debug.Log(i);
             }
             beamRenderer.sprite = beamTextures[5];
             yield return new WaitForSeconds(ONDURATION);
@@ -112,7 +113,7 @@ public class LaserController : MonoBehaviour
                 yield return new WaitForSeconds(ONDURATION / ONTEXTURE);
                 machineRenderer.sprite = machineTextures[i];
                 beamRenderer.sprite = beamTextures[TRANSITION - i];
-                Debug.Log(i);
+                //Debug.Log(i);
             }
             beamRenderer.sprite = null;
             yield return new WaitForSeconds(OFFDURATION);
@@ -139,10 +140,16 @@ public class LaserController : MonoBehaviour
         //    //StartCoroutine(LaserCycle());
         //}
 
-        if (collision.gameObject.name == "Player")
-        {
-            collision.gameObject.GetComponent<PlayerController>().SetIsPlayer(true);
-        }
+        //Debug.Log(collision.gameObject.name);
+        //if (collision.gameObject.name == "Player")
+        //{
+        //    collision.gameObject.GetComponent<PlayerController>().SetIsPlayer(true);
+        //}
+        //else if (collision.gameObject.CompareTag("Player"))
+        //{
+        //    Debug.Log("Safe");
+        //    collision.gameObject.GetComponentInParent<PlayerController>().SetIsPlayer(false);
+        //}
     }
 
     //private void OnCollisionExit2D(Collision2D collision)

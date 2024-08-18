@@ -122,12 +122,12 @@ public class GravityManager : MonoBehaviour
                 break;
             case 1: // x0.5
                 gravityScale = G_SCALE * 0.5f;
-                moveSpeed = M_SPEED * 1.3f;
+                moveSpeed = M_SPEED * 0.75f; // * 1.3f;
                 gravityText.text = "0.5G / 　軽"; // string.Format("{0,6}","0.5G") + " / 　軽"; //"重力場：0.5G / 軽";
                 break;
             case 2: // x2.0
                 gravityScale = G_SCALE * 2.0f;
-                moveSpeed = M_SPEED * 0.7f;
+                moveSpeed = M_SPEED * 1.5f; // * 0.7f;
                 gravityText.text = "2.0G / 　重"; // string.Format("{ 0,6}", "2.0G") + " / 　重";//"重力場：2.0G / 重";
                 break;
             default:

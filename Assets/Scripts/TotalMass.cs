@@ -8,7 +8,7 @@ public class TotalMass : MonoBehaviour
 
     [SerializeField]
     private List<GameObject> otherObjs = new();
-    private Dictionary<string, float> addedObjs = new();
+    private readonly Dictionary<string, float> addedObjs = new();
 
     private Vector2 myPosition;
     private Vector2 otherPosition = Vector2.zero;
@@ -86,6 +86,7 @@ public class TotalMass : MonoBehaviour
     public void SetIsAdded(bool value)
     {
         isAdded = value;
+        //Debug.Log(gameObject.name + ": " + value);
     }
     public float GetMass()
     {
@@ -99,58 +100,6 @@ public class TotalMass : MonoBehaviour
     {
         totalMass = (isAddition) ? totalMass + value : value;
     }
-
-    //private void OnCollisionEnter2D(Collision2D other)
-    //{
-    //    otherTM = other.gameObject.GetComponent<TotalMass>();
-    //    otherPosition = other.transform.position;
-
-    //    try
-    //    {
-    //        if (otherTM != null && ((otherPosition.y - myPosition.y) * Mathf.Sign(GetComponent<Rigidbody2D>().gravityScale) > 0) && GetComponent<Rigidbody2D>().gravityScale * other.gameObject.GetComponent<Rigidbody2D>().gravityScale > 0 && !otherObjs.Contains(other.gameObject) && !otherTM.GetIsAdded())
-    //        {
-    //            otherObjs.Add(other.gameObject);
-    //            otherTM.SetIsAdded(true);
-    //        }
-    //    }
-    //    catch
-    //    {
-    //        if (otherTM != null && (otherPosition.y - myPosition.y > 0) && noRb && !otherObjs.Contains(other.gameObject) && !otherTM.GetIsAdded()) // (myPosition.y <= otherPosition.y)
-    //        {
-    //            otherObjs.Add(other.gameObject);
-    //            otherTM.SetIsAdded(true);
-    //        }
-    //    }
-    //    //if (noRb)
-    //    //{
-            
-    //    //}
-    //    //else if (otherTM != null && ((otherPosition.y - myPosition.y) * Mathf.Sign(other.gameObject.GetComponent<Rigidbody2D>().gravityScale) > 0) && GetComponent<Rigidbody2D>().gravityScale * other.gameObject.GetComponent<Rigidbody2D>().gravityScale > 0 && !otherObjs.Contains(other.gameObject) && !otherTM.GetIsAdded())
-    //    //{
-    //    //    Debug.Log("Error");
-    //    //}
-
-    //    if (this.gameObject.name != "Player" && other.gameObject.CompareTag("Abyss"))
-    //    {
-    //        StartCoroutine(Respawn());
-    //    }
-    //}
-    //private void OnCollisionExit2D(Collision2D other)
-    //{
-    //    if (otherObjs.Contains(other.gameObject))
-    //    {
-    //        if (addedObjs.ContainsKey(other.gameObject.name))
-    //        { 
-    //            otherTM = other.gameObject.GetComponent<TotalMass>();
-    //            totalMass -= otherTM.GetMass();
-    //            addedObjs.Remove(other.gameObject.name);
-    //            otherTM.SetIsAdded(false);
-    //            //Debug.Log("Removed : " + totalMass);
-    //        }
-    //        otherObjs.Remove(other.gameObject);
-
-    //    }
-    //}
     private void OnTriggerEnter2D(Collider2D other)
     {
         otherTM = other.gameObject.GetComponent<TotalMass>();
@@ -170,8 +119,17 @@ public class TotalMass : MonoBehaviour
             {
                 otherObjs.Add(other.gameObject);
                 otherTM.SetIsAdded(true);
+                //Debug.Log(other.gameObject.name + " is added : C");
             }
         }
+        //if (noRb)
+        //{
+
+        //}
+        //else if (otherTM != null && ((otherPosition.y - myPosition.y) * Mathf.Sign(other.gameObject.GetComponent<Rigidbody2D>().gravityScale) > 0) && GetComponent<Rigidbody2D>().gravityScale * other.gameObject.GetComponent<Rigidbody2D>().gravityScale > 0 && !otherObjs.Contains(other.gameObject) && !otherTM.GetIsAdded())
+        //{
+        //    Debug.Log("Error");
+        //}
 
         if (this.gameObject.name != "Player" && other.gameObject.CompareTag("Abyss"))
         {
@@ -194,6 +152,52 @@ public class TotalMass : MonoBehaviour
 
         }
     }
+
+    //private void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    otherTM = other.gameObject.GetComponent<TotalMass>();
+    //    otherPosition = other.transform.position;
+
+    //    try
+    //    {
+    //        if (otherTM != null && ((otherPosition.y - myPosition.y) * Mathf.Sign(GetComponent<Rigidbody2D>().gravityScale) > 0) && GetComponent<Rigidbody2D>().gravityScale * other.gameObject.GetComponent<Rigidbody2D>().gravityScale > 0 && !otherObjs.Contains(other.gameObject) && !otherTM.GetIsAdded())
+    //        {
+    //            otherObjs.Add(other.gameObject);
+    //            otherTM.SetIsAdded(true);
+    //        }
+    //    }
+    //    catch
+    //    {
+    //        if (otherTM != null && (otherPosition.y - myPosition.y > 0) && noRb && !otherObjs.Contains(other.gameObject) && !otherTM.GetIsAdded()) // (myPosition.y <= otherPosition.y)
+    //        {
+    //            otherObjs.Add(other.gameObject);
+    //            otherTM.SetIsAdded(true);
+    //            //Debug.Log(other.gameObject.name + " is added : T");
+    //        }
+    //    }
+
+    //    if (this.gameObject.name != "Player" && other.gameObject.CompareTag("Abyss"))
+    //    {
+    //        StartCoroutine(Respawn());
+    //    }
+    //}
+    //private void OnTriggerExit2D(Collider2D other)
+    //{
+    //    if (otherObjs.Contains(other.gameObject))
+    //    {
+    //        if (addedObjs.ContainsKey(other.gameObject.name))
+    //        {
+    //            otherTM = other.gameObject.GetComponent<TotalMass>();
+    //            totalMass -= otherTM.GetMass();
+    //            addedObjs.Remove(other.gameObject.name);
+    //            otherTM.SetIsAdded(false);
+    //            //Debug.Log("Removed : " + totalMass);
+    //            //Debug.Log(other.gameObject.name + " is removed");
+    //        }
+    //        otherObjs.Remove(other.gameObject);
+
+    //    }
+    //}
     public IEnumerator Respawn()
     {
         yield return null;
