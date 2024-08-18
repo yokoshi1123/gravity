@@ -325,6 +325,28 @@ public class PlayerController : MonoBehaviour
             movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
             //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
         }
+
+        if (collision.gameObject.CompareTag("Toxic"))
+        {
+            //bool yRange = Mathf.Abs(collision.gameObject.transform.position.y - transform.position.y) <= transform.localScale.y;
+
+            //if (isGrabbing && (!yRange || yRange && (collision.gameObject.transform.position.x - grabObj.transform.position.x) * scale.x > 0))
+            //{
+            //    //Debug.Log("Safe");
+            //    return;
+            //}
+            //if (!isPlayer)
+            //{
+            //    Debug.Log("Safe");
+            //    return;
+            //}
+            //Debug.Log("Out");
+            //isPlayer = false;
+
+            GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.4f);
+            StartCoroutine(Respawn());
+            //StartCoroutine(Test());
+        }
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
