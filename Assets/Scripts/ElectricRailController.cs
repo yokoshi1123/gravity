@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(TurnOn))]
+
 public class ElectricRailController : MonoBehaviour
 {
 
-    [SerializeField] private bool turnon;
+    private bool turnon;
+    [SerializeField] private TurnOn to;
 
     [SerializeField] private Sprite railoffTexture;
     [SerializeField] private List<Sprite> railonTextures = new();
@@ -25,6 +28,8 @@ public class ElectricRailController : MonoBehaviour
     private Vector2 baseScale;
 
     private bool isChanging = false;
+
+    
 
 
     //private Vector2 railposi;
@@ -51,10 +56,10 @@ public class ElectricRailController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        turnon  = to.GetTurnOn();
         rail.transform.localPosition = new Vector2((edge1.transform.localPosition.x + edge2.transform.localPosition.x) * 0.5f, edge1.transform.localPosition.y);
         rail.transform.localScale = new Vector2((Mathf.Abs(edge1.transform.localPosition.x - edge2.transform.localPosition.x)), baseScale.y);
-        Debug.Log(edge1.transform.localPosition.x - edge2.transform.localPosition.x);
+        //Debug.Log(edge1.transform.localPosition.x - edge2.transform.localPosition.x);
 
         if (turnon)
         {
