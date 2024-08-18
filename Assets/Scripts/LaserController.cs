@@ -22,6 +22,7 @@ public class LaserController : MonoBehaviour
     private Vector3 basePos;
 
     private BoxCollider2D beamCollider;
+    [SerializeField] private BoxCollider2D beamCollider2;
 
     [SerializeField] private GameObject machine;
 
@@ -52,8 +53,8 @@ public class LaserController : MonoBehaviour
 
     void Update()
     {
-
         beamCollider.enabled = false;
+        beamCollider2.enabled = false;
         if (beamRenderer.sprite != null)
         {        
             if (isVertical)
@@ -79,7 +80,7 @@ public class LaserController : MonoBehaviour
                 if (hit.collider != null) // && !hit.collider.CompareTag("Player"))
                 {
                     hitObj = hit.collider.transform;
-                    //Debug.Log(hit.collider.name);
+                    Debug.Log(hit.collider.name);
                     //Debug.Log(hitObj.position);
                     transform.position = new Vector2((basePos.x + hitObj.position.x + Mathf.Sign(machine.transform.localScale.x) * hitObj.localScale.x * 0.5f) * 0.5f, basePos.y);
                     transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitObj.position.x) - hitObj.localScale.x * 0.5f - 0.05f, transform.localScale.y); //, beamTransform.localScale.z);
@@ -87,6 +88,7 @@ public class LaserController : MonoBehaviour
             }
 
             beamCollider.enabled = true;
+            beamCollider2.enabled = true;
         }
     }
 
@@ -120,8 +122,44 @@ public class LaserController : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
+        StartCoroutine(LaserWait());
+        //beamCollider.enabled = false;
+        //if (beamRenderer.sprite != null)
+        //{        
+        //    if (isVertical)
+        //    {
+        //        //Debug.DrawRay(basePos, Vector2.down * machine.transform.localScale.y * RAYDISTANCE, Color.green, 0.015f);
+        //        int layerMask = ~(1 << 2 | 1 << 7);
+        //        ////Debug.Log(layerMask);
+        //        hit = Physics2D.Raycast(basePos, Vector2.down * machine.transform.localScale.y, RAYDISTANCE, layerMask);
+        //        if (hit.collider != null) // && !hit.collider.CompareTag("Player"))
+        //        {
+        //            hitObj = hit.collider.transform;
+        //            Debug.Log(hit.collider.name);
+        //            //Debug.Log(hitObj.position.y + Mathf.Sign(machine.transform.localScale.y) * hitObj.localScale.y * 0.5f); // (basePos.x + hitObj.position.y + 9) * 0.5f); // + Mathf.Sign(machine.transform.localScale.y) * hitObj.localScale.y * 0.5f) * 0.5f);
+        //            transform.position = new Vector2(basePos.x, (basePos.y + hitObj.position.y + Mathf.Sign(machine.transform.localScale.y) * hitObj.localScale.y * 0.5f) * 0.5f);
+        //            transform.localScale = new Vector2(Mathf.Abs(basePos.y - hitObj.position.y) - hitObj.localScale.y * 0.5f - 0.05f, transform.localScale.y); //, beamTransform.localScale.z);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //Debug.DrawRay(basePos, Vector2.left * RAYDISTANCE, Color.green, 0.015f);
+        //        int layerMask = ~(1 << 2 | 1 << 6);
+        //        hit = Physics2D.Raycast(basePos, Vector2.left * machine.transform.localScale.x, RAYDISTANCE, layerMask);
+        //        if (hit.collider != null) // && !hit.collider.CompareTag("Player"))
+        //        {
+        //            hitObj = hit.collider.transform;
+        //            //Debug.Log(hit.collider.name);
+        //            //Debug.Log(hitObj.position);
+        //            transform.position = new Vector2((basePos.x + hitObj.position.x + Mathf.Sign(machine.transform.localScale.x) * hitObj.localScale.x * 0.5f) * 0.5f, basePos.y);
+        //            transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitObj.position.x) - hitObj.localScale.x * 0.5f - 0.05f, transform.localScale.y); //, beamTransform.localScale.z);
+        //        }
+        //    }
+
+        //    beamCollider.enabled = true;
+        //}
         //if (!collision.gameObject.CompareTag("Player") || collision.gameObject.GetComponent<PlayerController>().GetIsGrabbing())
         //{
         //    //StopCoroutine(LaserCycle());
@@ -150,6 +188,7 @@ public class LaserController : MonoBehaviour
         //    Debug.Log("Safe");
         //    collision.gameObject.GetComponentInParent<PlayerController>().SetIsPlayer(false);
         //}
+
     }
 
     //private void OnCollisionExit2D(Collision2D collision)
@@ -159,4 +198,12 @@ public class LaserController : MonoBehaviour
     //        collision.gameObject.GetComponent<PlayerController>().SetIsPlayer(false);
     //    }
     //}
+
+    private IEnumerator LaserWait()
+    {
+        beamCollider.enabled = false;
+        beamCollider2.enabled = false;
+        Debug.Log("Hit");
+        yield return new WaitForSeconds(1f);
+    }
 }

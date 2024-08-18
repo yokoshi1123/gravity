@@ -304,6 +304,11 @@ public class PlayerController : MonoBehaviour
             //}
             //Debug.Log("Out");
             //isPlayer = false;
+
+            if (isGrabbing && scale.x * (collision.transform.position.x - transform.position.x) > 0)
+            {
+                return;
+            }
             
             GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.4f);
             StartCoroutine(Respawn());

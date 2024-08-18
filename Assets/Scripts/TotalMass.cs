@@ -104,13 +104,22 @@ public class TotalMass : MonoBehaviour
     {
         otherTM = other.gameObject.GetComponent<TotalMass>();
         otherPosition = other.transform.position;
+        //if (this.gameObject.name == "Player")
+        //{
+        //   Debug.Log("Collided with " + other.gameObject.name);
+        //}
 
         try
         {
-            if (otherTM != null && ((otherPosition.y - myPosition.y) * Mathf.Sign(GetComponent<Rigidbody2D>().gravityScale) > 0) && GetComponent<Rigidbody2D>().gravityScale * other.gameObject.GetComponent<Rigidbody2D>().gravityScale > 0 && !otherObjs.Contains(other.gameObject) && !otherTM.GetIsAdded())
+            if (otherTM != null && ((otherPosition.y - myPosition.y) * Mathf.Sign(GetComponent<Rigidbody2D>().gravityScale) > 0) && GetComponent<Rigidbody2D>().gravityScale * other.gameObject.GetComponent<Rigidbody2D>().gravityScale > 0 && !otherObjs.Contains(other.gameObject) && (this.gameObject.name == "Player" || !otherTM.GetIsAdded()))
             {
+                //if (this.gameObject.name == "Player" && !GetComponent<PlayerController>().GetIsGrabbing())
+                //{ 
+                //    return;
+                //}
                 otherObjs.Add(other.gameObject);
                 otherTM.SetIsAdded(true);
+                Debug.Log(this.gameObject.name + " : " + other.gameObject.name + " added : Try");
             }
         }
         catch
@@ -119,7 +128,7 @@ public class TotalMass : MonoBehaviour
             {
                 otherObjs.Add(other.gameObject);
                 otherTM.SetIsAdded(true);
-                //Debug.Log(other.gameObject.name + " is added : C");
+                Debug.Log(this.gameObject.name + " : " + other.gameObject.name + " added : Catch");
             }
         }
         //if (noRb)
@@ -146,12 +155,13 @@ public class TotalMass : MonoBehaviour
                 totalMass -= otherTM.GetMass();
                 addedObjs.Remove(other.gameObject.name);
                 otherTM.SetIsAdded(false);
-                //Debug.Log("Removed : " + totalMass);
+                Debug.Log(this.gameObject.name + " : removed");
             }
             otherObjs.Remove(other.gameObject);
 
         }
     }
+
 
     //private void OnTriggerEnter2D(Collider2D other)
     //{
