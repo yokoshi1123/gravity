@@ -31,6 +31,8 @@ public class ElectricRailController : MonoBehaviour
 
     
 
+    
+
 
     //private Vector2 railposi;
     //private Vector2 railscale;
@@ -42,14 +44,14 @@ public class ElectricRailController : MonoBehaviour
         edge1Renderer = edge1.GetComponent<SpriteRenderer>();
         edge2Renderer = edge2.GetComponent<SpriteRenderer>();
         railRenderer = rail.GetComponent<SpriteRenderer>();
-        baseScale = rail.transform.localScale;
+        baseScale = rail.GetComponent<BoxCollider2D>().size;
     }
 
     void Start()
     {
 
         //edge2のローカルy座標をedge1のy座標とする。
-        edge2.transform.localPosition = new Vector2(edge2.transform.localPosition.x, edge1.transform.localPosition.y);
+        edge2.transform.localPosition = new Vector3(edge2.transform.localPosition.x, edge1.transform.localPosition.y, edge1.transform.localPosition.z);
         
     }
 
@@ -58,7 +60,7 @@ public class ElectricRailController : MonoBehaviour
     {
         turnon  = to.GetTurnOn();
         rail.transform.localPosition = new Vector2((edge1.transform.localPosition.x + edge2.transform.localPosition.x) * 0.5f, edge1.transform.localPosition.y);
-        rail.transform.localScale = new Vector2((Mathf.Abs(edge1.transform.localPosition.x - edge2.transform.localPosition.x)), baseScale.y);
+        rail.GetComponent<BoxCollider2D>().size = new Vector2((Mathf.Abs(edge1.transform.localPosition.x - edge2.transform.localPosition.x)), baseScale.y);
         //Debug.Log(edge1.transform.localPosition.x - edge2.transform.localPosition.x);
 
         if (turnon)
@@ -84,6 +86,7 @@ public class ElectricRailController : MonoBehaviour
     private IEnumerator RailOnCycle()
     {
         isChanging = true;
+        railRenderer.size = new Vector2((Mathf.Abs(edge1.transform.localPosition.x - edge2.transform.localPosition.x)), 2.0f);
         if (turnon)
         {
             railRenderer.sprite = railonTextures[num];
