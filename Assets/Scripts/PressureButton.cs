@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,15 +15,18 @@ public class PressureButton : MonoBehaviour
     private Vector2 myPosition;
     private Vector2 otherPosition = Vector2.zero;
 
-    private TotalMass otherTM;
+    //private TotalMass otherTM;
+    private TotalWeight otherTW;
+
+    //[SerializeField]
+    //private float totalMass;
 
     [SerializeField]
-    private float totalMass;
+    private float totalWeight;
 
-    private float DEFAULTMASS = 0f;
-    private float oldMass;
+    //private const float DEFAULTMASS = 0f;
+    private const float DEFAULTWEIGHT = 0f;
 
-    private Vector2 defaultPosition;
     private BoxCollider2D bc2D;
 
     [SerializeField] private TurnOn to;
@@ -31,12 +35,10 @@ public class PressureButton : MonoBehaviour
     {
         myPosition = transform.position;
 
-        defaultPosition = transform.position;
-
         bc2D = GetComponent<BoxCollider2D>();
 
-        totalMass = DEFAULTMASS;
-        oldMass = DEFAULTMASS;
+        //totalMass = DEFAULTMASS;
+        totalWeight = DEFAULTWEIGHT;
     }
     private void Update()
     {
@@ -44,21 +46,26 @@ public class PressureButton : MonoBehaviour
 
         foreach (GameObject other in otherObjs)
         {
-            otherTM = other.GetComponent<TotalMass>();
+            //otherTM = other.GetComponent<TotalMass>();
+            otherTW = other.GetComponent<TotalWeight>();
             if (!addedObjs.ContainsKey(other.name))
             {
-                totalMass += otherTM.GetMass();
-                addedObjs.Add(other.name, otherTM.GetMass());
-
+                //totalMass += otherTM.GetMass();
+                //addedObjs.Add(other.name, otherTM.GetMass());
+                totalWeight += otherTW.GetTWeight();
+                addedObjs.Add(other.name, otherTW.GetTWeight());
             }
-            else if (addedObjs.ContainsKey(other.name) && otherTM.GetMass() != addedObjs[other.name])
+            else if (addedObjs.ContainsKey(other.name) && otherTW.GetTWeight() /*otherTM.GetMass()*/ != addedObjs[other.name])
             {
-                totalMass += otherTM.GetMass() - addedObjs[other.name];
-                addedObjs[other.name] = otherTM.GetMass();
+                //totalMass += otherTM.GetMass() - addedObjs[other.name];
+                //addedObjs[other.name] = otherTM.GetMass();
+                totalWeight += otherTW.GetTWeight() - addedObjs[other.name];
+                addedObjs[other.name] = otherTW.GetTWeight();
             }
         }
 
-        pressure = totalMass;
+        //pressure = totalMass;
+        pressure = totalWeight;
         if (!to.GetTurnOn()/*isPressed*/ && pressure >= onValue)
         {
             bc2D.enabled = true;
@@ -81,48 +88,61 @@ public class PressureButton : MonoBehaviour
         //    Debug.Log(addedObj);
         //}
     }
-    public float GetMass()
-    {
-        return totalMass;
-    }
-    public float GetDefaultMass()
-    {
-        return DEFAULTMASS;
-    }
+
+    //public float GetMass()
+    //{
+    //    return totalMass;
+    //}
+    //public float GetDefaultMass()
+    //{
+    //    return DEFAULTMASS;
+    //}
 
     private void OnCollisionStay2D(Collision2D other)
     {
-        otherTM = other.gameObject.GetComponent<TotalMass>();
+        //otherTM = other.gameObject.GetComponent<TotalMass>();
+        otherTW = other.gameObject.GetComponent<TotalWeight>();
         otherPosition = other.transform.position;
 
-        if (otherTM != null && (otherPosition.y - myPosition.y > 0) && !otherObjs.Contains(other.gameObject) && !otherTM.GetIsAdded()) // (myPosition.y <= otherPosition.y)
+        //if (otherTM != null && (otherPosition.y - myPosition.y > 0) && !otherObjs.Contains(other.gameObject) && !otherTM.GetIsAdded()) // (myPosition.y <= otherPosition.y)
+        //{
+        //    if (other.gameObject.name == "Player" && other.gameObject.GetComponent<PlayerController>().GetIsGrabbing())
+        //    {
+        //        Debug.Log("Grabbing");
+        //        return;
+        //    }
+        //    otherObjs.Add(other.gameObject);
+        //    //otherTM.SetIsAdded(true);
+        //    //Debug.Log(other.gameObject.name + " is added : C");
+        //}
+
+        if (otherTW != null && otherPosition.y > myPosition.y && !otherObjs.Contains(other.gameObject) && !otherTW.GetIsAdded())
         {
-            if (other.gameObject.name == "Player" && other.gameObject.GetComponent<PlayerController>().GetIsGrabbing())
-            {
-                Debug.Log("Grabbing");
-                return;
-            }
             otherObjs.Add(other.gameObject);
-            //otherTM.SetIsAdded(true);
-            //Debug.Log(other.gameObject.name + " is added : C");
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        otherTM = other.gameObject.GetComponent<TotalMass>();
+        //otherTM = other.gameObject.GetComponent<TotalMass>();
+        otherTW = other.gameObject.GetComponent<TotalWeight>();
         otherPosition = other.transform.position;
 
-        if (otherTM != null && (otherPosition.y - myPosition.y > 0) && !otherObjs.Contains(other.gameObject) && !otherTM.GetIsAdded()) // (myPosition.y <= otherPosition.y)
+        //if (otherTM != null && (otherPosition.y - myPosition.y > 0) && !otherObjs.Contains(other.gameObject) && !otherTM.GetIsAdded()) // (myPosition.y <= otherPosition.y)
+        //{
+        //    if (other.gameObject.name == "Player" && other.gameObject.GetComponent<PlayerController>().GetIsGrabbing())
+        //    {
+        //        Debug.Log("Grabbing");
+        //        return;
+        //    }
+        //    otherObjs.Add(other.gameObject);
+        //    //otherTM.SetIsAdded(true);
+        //    //Debug.Log(other.gameObject.name + " is added : T");
+        //}
+
+        if (otherTW != null && otherPosition.y > myPosition.y && !otherObjs.Contains(other.gameObject) && !otherTW.GetIsAdded())
         {
-            if (other.gameObject.name == "Player" && other.gameObject.GetComponent<PlayerController>().GetIsGrabbing())
-            {
-                Debug.Log("Grabbing");
-                return;
-            }
             otherObjs.Add(other.gameObject);
-            //otherTM.SetIsAdded(true);
-            //Debug.Log(other.gameObject.name + " is added : T");
         }
     }
 
@@ -132,8 +152,10 @@ public class PressureButton : MonoBehaviour
         {
             if (addedObjs.ContainsKey(other.gameObject.name))
             {
-                otherTM = other.gameObject.GetComponent<TotalMass>();
-                totalMass -= otherTM.GetMass();
+                //otherTM = other.gameObject.GetComponent<TotalMass>();
+                otherTW = other.gameObject.GetComponent<TotalWeight>();
+                //totalMass -= otherTM.GetMass();
+                totalWeight -= otherTW.GetTWeight();
                 addedObjs.Remove(other.gameObject.name);
                 //otherTM.SetIsAdded(false);
                 //Debug.Log(other.gameObject.name + " is removed");
@@ -195,7 +217,7 @@ public class PressureButton : MonoBehaviour
 
     [SerializeField] private float pressure = 0f;
     [SerializeField] private float onValue = 10f;
-    private bool isPressed = false;
+    //private bool isPressed = false;
 
     //void Awake()
     //{
@@ -220,8 +242,8 @@ public class PressureButton : MonoBehaviour
     //        isPressed = false;
     //    }
     //}
-    public bool GetIsPressed()
-    {
-        return isPressed;
-    }
+    //public bool GetIsPressed()
+    //{
+    //    return isPressed;
+    //}
 }
