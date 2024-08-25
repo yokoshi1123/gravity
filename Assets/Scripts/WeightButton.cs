@@ -1,42 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-[RequireComponent(typeof(Rigidbody2D))]
-public class TotalWeight : MonoBehaviour
+public class WeightButton : MonoBehaviour
 {
-    [SerializeField]
-    protected List<GameObject> otherObjs = new();
+    private SpriteRenderer buttonRenderer;
+    
+    [SerializeField] private List<GameObject> otherObjs = new();
     private readonly Dictionary<string, float> addedObjs = new();
 
-    private Rigidbody2D rb;
-    
-    [SerializeField] private float totalWeight;
-    private float oldWeight;
+    private TotalWeight otherTW;
 
-    [SerializeField] private bool isAdded = false;
+    [SerializeField]
+    private float totalWeight = 0f;
 
-    private Vector2 defaultPosition;
+    private const float DEFAULTWEIGHT = 0f;
+
+    //private BoxCollider2D bc2D;
+
+    [SerializeField] private TurnOn to;
+
+    //[SerializeField] private float weight = 0f;
+    [SerializeField] private float onValue = 10f;
+
+    [SerializeField] private TextMeshProUGUI weightText;
+    [SerializeField] private TextMeshProUGUI onValueText;
+
+    [SerializeField] private Sprite offSprite;
+    [SerializeField] private Sprite onSprite;
 
     // Start is called before the first frame update
     void Start()
     {
-        defaultPosition = transform.localPosition;
-        rb = GetComponent<Rigidbody2D>();
-        oldWeight = rb.mass * rb.gravityScale;
-        totalWeight = oldWeight;;
+        totalWeight = DEFAULTWEIGHT;
+
+        buttonRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (oldWeight != rb.mass * rb.gravityScale)
-        {
-            totalWeight += rb.mass * rb.gravityScale - oldWeight;
-            oldWeight = rb.mass * rb.gravityScale;
-        }
-
         if (otherObjs.Count > 0)
         {
             foreach (GameObject otherObj in otherObjs)
@@ -61,59 +67,46 @@ public class TotalWeight : MonoBehaviour
         }
         else
         {
-            totalWeight = oldWeight;
+            totalWeight = 0f;
+        }
+
+        weightText.text = totalWeight.ToString();
+        onValueText.text = onValue.ToString();
+        if (totalWeight >= onValue)
+        {
+            to.SetTurnOn(true);
+            buttonRenderer.sprite = onSprite;
+        }
+        else
+        {
+            to.SetTurnOn(false);
+            buttonRenderer.sprite = offSprite;
         }
     }
-    public bool GetIsAdded()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        return isAdded;
-    }
-    public void SetIsAdded(bool value)
-    {
-        isAdded = value;
-    }
-    public float GetTWeight()
-    {
-        return totalWeight;
-    }
-    public void SetTWeight(float value)
-    {
-        totalWeight = value;
-    }
+        otherTW = other.gameObject.GetComponent<TotalWeight>();
 
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        TotalWeight otherTW = other.gameObject.GetComponent<TotalWeight>();
-
-        if (otherTW != null && (other.transform.position.y - transform.position.y) * other.gameObject.GetComponent<Rigidbody2D>().gravityScale > 0 && !otherObjs.Contains(other.gameObject))
+        if (otherTW != null && !otherObjs.Contains(other.gameObject))
         {
             otherObjs.Add(other.gameObject);
-        }
-
-        if (!this.gameObject.name.Contains("Player") && other.gameObject.CompareTag("Abyss"))
-        {
-            StartCoroutine(Respawn());
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         if (otherObjs.Contains(other.gameObject))
-        {            
+        {
             if (addedObjs.ContainsKey(other.gameObject.name))
             {
-                TotalWeight otherTW = other.gameObject.GetComponent<TotalWeight>();
+                otherTW = other.gameObject.GetComponent<TotalWeight>();
                 totalWeight -= otherTW.GetTWeight();
                 addedObjs.Remove(other.gameObject.name);
                 otherTW.SetIsAdded(false);
+                //Debug.Log(other.gameObject.name + " is removed");
             }
             otherObjs.Remove(other.gameObject);
+
         }
-    }
-    public IEnumerator Respawn()
-    {
-        yield return null;
-        transform.position = defaultPosition;
-        rb.velocity = Vector2.zero;
     }
 }

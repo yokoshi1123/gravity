@@ -16,7 +16,7 @@ public class LaserController : MonoBehaviour
     private const int TRANSITION = 17;
 
     private RaycastHit2D hit;
-    private Transform hitObj;
+    //private Transform hitObj;
     private const float RAYDISTANCE = 50f;
 
     private Vector3 basePos;
@@ -60,13 +60,13 @@ public class LaserController : MonoBehaviour
             if (isVertical)
             {
                 //Debug.DrawRay(basePos, Vector2.down * machine.transform.localScale.y * RAYDISTANCE, Color.green, 0.015f);
-                int layerMask = ~(1 << 2 | 1 << 7);
+                int layerMask = ~(1 << 2 | 1 << 7 | 1 << 8);
                 //Debug.Log(layerMask);
                 hit = Physics2D.Raycast(basePos, Vector2.down * machine.transform.localScale.y, RAYDISTANCE, layerMask);
                 if (hit.collider != null)
                 {
                     Vector2 hitPos = hit.collider.ClosestPoint(basePos);
-                    Debug.Log(hit.collider.gameObject.name + " : " + hitPos);
+                    //Debug.Log(hit.collider.gameObject.name + " : " + hitPos + " / " + hit.collider.transform.position);
                     transform.position = new Vector2(basePos.x, (basePos.y + hitPos.y) * 0.5f);
                     //transform.localScale = new Vector2(Mathf.Abs(basePos.y - hitPos.y), transform.localScale.y);
                     beamRenderer.size = new Vector2(Mathf.Abs(basePos.y - hitPos.y), beamRenderer.size.y);
@@ -93,12 +93,12 @@ public class LaserController : MonoBehaviour
             else
             {
                 //Debug.DrawRay(basePos, Vector2.left * RAYDISTANCE, Color.green, 0.015f);
-                int layerMask = ~(1 << 2 | 1 << 6);
+                int layerMask = ~(1 << 2 | 1 << 6 | 1 << 8);
                 hit = Physics2D.Raycast(basePos, Vector2.left * machine.transform.localScale.x, RAYDISTANCE, layerMask);
                 if (hit.collider != null)
                 {
                     Vector2 hitPos = hit.collider.ClosestPoint(basePos);
-                    Debug.Log(hit.collider.name + " : " + hitPos);
+                    //Debug.Log(hit.collider.name + " : " + hitPos);
                     transform.position = new Vector2((basePos.x + hitPos.x) * 0.5f, basePos.y);
                     //transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitPos.x), transform.localScale.y);
                     beamRenderer.size = new Vector2(Mathf.Abs(basePos.x - hitPos.x), beamRenderer.size.y);

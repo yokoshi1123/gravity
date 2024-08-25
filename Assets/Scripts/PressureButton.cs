@@ -31,6 +31,9 @@ public class PressureButton : MonoBehaviour
 
     [SerializeField] private TurnOn to;
 
+    [SerializeField] private float pressure = 0f;
+    [SerializeField] private float onValue = 10f;
+
     private void Awake()
     {
         myPosition = transform.position;
@@ -222,8 +225,6 @@ public class PressureButton : MonoBehaviour
     //private BoxCollider2D bc2D;
     //private TotalMass totalMass;
 
-    [SerializeField] private float pressure = 0f;
-    [SerializeField] private float onValue = 10f;
     //private bool isPressed = false;
 
     //void Awake()

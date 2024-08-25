@@ -400,7 +400,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             isJumping = true;
-            //Debug.Log("In the air");
+            Debug.Log("In the air : T");
         }
 
         if (collision.CompareTag("Platform"))
@@ -421,7 +421,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             isJumping = true;
-            //Debug.Log("In the air");
+            Debug.Log("In the air : C");
         }
 
         if (collision.gameObject.CompareTag("Platform"))
