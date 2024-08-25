@@ -44,24 +44,31 @@ public class PressureButton : MonoBehaviour
     {
         myPosition = transform.position;
 
-        foreach (GameObject other in otherObjs)
+        if (otherObjs.Count > 0)
         {
-            //otherTM = other.GetComponent<TotalMass>();
-            otherTW = other.GetComponent<TotalWeight>();
-            if (!addedObjs.ContainsKey(other.name))
+            foreach (GameObject other in otherObjs)
             {
-                //totalMass += otherTM.GetMass();
-                //addedObjs.Add(other.name, otherTM.GetMass());
-                totalWeight += otherTW.GetTWeight();
-                addedObjs.Add(other.name, otherTW.GetTWeight());
+                //otherTM = other.GetComponent<TotalMass>();
+                otherTW = other.GetComponent<TotalWeight>();
+                if (!addedObjs.ContainsKey(other.name))
+                {
+                    //totalMass += otherTM.GetMass();
+                    //addedObjs.Add(other.name, otherTM.GetMass());
+                    totalWeight += otherTW.GetTWeight();
+                    addedObjs.Add(other.name, otherTW.GetTWeight());
+                }
+                else if (addedObjs.ContainsKey(other.name) && otherTW.GetTWeight() /*otherTM.GetMass()*/ != addedObjs[other.name])
+                {
+                    //totalMass += otherTM.GetMass() - addedObjs[other.name];
+                    //addedObjs[other.name] = otherTM.GetMass();
+                    totalWeight += otherTW.GetTWeight() - addedObjs[other.name];
+                    addedObjs[other.name] = otherTW.GetTWeight();
+                }
             }
-            else if (addedObjs.ContainsKey(other.name) && otherTW.GetTWeight() /*otherTM.GetMass()*/ != addedObjs[other.name])
-            {
-                //totalMass += otherTM.GetMass() - addedObjs[other.name];
-                //addedObjs[other.name] = otherTM.GetMass();
-                totalWeight += otherTW.GetTWeight() - addedObjs[other.name];
-                addedObjs[other.name] = otherTW.GetTWeight();
-            }
+        }
+        else
+        {
+            totalWeight = 0f;
         }
 
         //pressure = totalMass;

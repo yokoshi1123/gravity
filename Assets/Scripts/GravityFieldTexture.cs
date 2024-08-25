@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GravityFieldTexture : MonoBehaviour
 {
-    private GravityManager gravityManager;
+    [SerializeField] private GravityManager gravityManager;
     private SpriteRenderer gFieldTexture;
 
     [Serializable] private struct TextureSet

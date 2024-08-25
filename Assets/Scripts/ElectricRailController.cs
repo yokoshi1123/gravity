@@ -61,6 +61,7 @@ public class ElectricRailController : MonoBehaviour
         turnon  = to.GetTurnOn();
         rail.transform.localPosition = new Vector2((edge1.transform.localPosition.x + edge2.transform.localPosition.x) * 0.5f, edge1.transform.localPosition.y);
         rail.GetComponent<BoxCollider2D>().size = new Vector2((Mathf.Abs(edge1.transform.localPosition.x - edge2.transform.localPosition.x)), baseScale.y);
+
         //Debug.Log(edge1.transform.localPosition.x - edge2.transform.localPosition.x);
 
         if (turnon)

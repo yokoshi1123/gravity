@@ -9,7 +9,6 @@ public class Shutter : MonoBehaviour
     [SerializeField] private GameObject ShutterCollider;
     [SerializeField] private Animator animator;
 
-    [SerializeField] private PressureButton pButton;
     //[SerializeField] private GameObject Switch;
 
     private bool turnOn = false;
@@ -26,7 +25,6 @@ public class Shutter : MonoBehaviour
     void Update()
     {
         //turnOn = Switch.turnOn;
-        //turnOn = pButton.GetIsPressed();
         turnOn = to.GetTurnOn();
         animator.SetBool("turnOn", turnOn);
 

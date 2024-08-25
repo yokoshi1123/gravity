@@ -14,10 +14,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private BoxCollider2D grabCollider;
 
     private GravityManager gravityManager;
-
-    [SerializeField] private GameObject pauseButton;
-
     public RespawnManager respawnManager;
+
+    public Vector2 respawnPoint = new(0, 2);
+
+    /*[SerializeField] */
+    private GameObject pauseButton;
 
     //private TotalMass totalMass;
     private TotalWeight totalWeight;
@@ -46,10 +48,11 @@ public class PlayerController : MonoBehaviour
     //private float grabMass;
     [SerializeField] private bool isPlayer = false;
 
-    public Vector2 respawnPoint = new(0, 2);
-
     private MoveObjectWithRoute movingFloor;
     private Vector2 mFloorVelocity;
+
+    [SerializeField] private BoxCollider2D pushBc;
+    //[SerializeField] private BoxCollider2D footBc;
 
     [SerializeField] private string sceneName;
 
@@ -58,12 +61,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioClip respawnSE;
     [SerializeField] private AudioClip warpSE;
 
-    [SerializeField] private BoxCollider2D pushBc;
-    //[SerializeField] private BoxCollider2D footBc;
-
     void Awake()
     {
         gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
+        respawnManager = GameObject.Find("RespawnManager").GetComponent<RespawnManager>();
+        pauseButton = GameObject.Find("/Canvas/PauseButton");
         rb = GetComponent<Rigidbody2D>();
         //totalMass = GetComponent<TotalMass>();
         totalWeight = GetComponent<TotalWeight>();
@@ -121,7 +123,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
-                Debug.Log("Stop walking");
+                //Debug.Log("Stop walking");
                 //footBc.enabled = true;
             }
 
@@ -180,6 +182,7 @@ public class PlayerController : MonoBehaviour
                 //grabObj.transform.position = new Vector2(grabPos.x + 0.1f * scale.x, grabPos.y);
                 grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
                 transform.position += new Vector3(-0.1f * scale.x, 0f, 0f);
+                grabObj.transform.position += new Vector3(0, 0.02f * scale.y, 0);
                 grabObj.transform.SetParent(transform);
                 //grabObj.transform.position = new Vector2(grabPos.x, grabPos.y + 0.08f * scale.y);
                 //Debug.Log(grabObj.name + grabObj.transform.localScale);
@@ -217,6 +220,7 @@ public class PlayerController : MonoBehaviour
             //grabPos = grabObj.transform.position;
             //grabObj.transform.position = new Vector2(grabPos.x - 0.1f * scale.x, grabPos.y);
             grabObj.transform.SetParent(null);
+            grabObj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             grabObj = null;
             transform.position += new Vector3(0.1f * scale.x, 0f, 0f);
             pushBc.enabled = false;
@@ -235,7 +239,7 @@ public class PlayerController : MonoBehaviour
     {
         isPlayer = value;
     }
-    private IEnumerator Respawn()
+    public IEnumerator Respawn()
     {
         pauseButton.SetActive(false);
         Time.timeScale = 0;
@@ -248,23 +252,23 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(destroyGF);
         }
+        if (isGrabbing)
+        {
+            Grab();
+        }
         rb.velocity = Vector2.zero;
         respawnManager.respawn = true;
         transform.position = respawnPoint;
         respawnManager.resAnimation = true;
-        if (isGrabbing)
-        {
-           Grab();
-        }
 
-        if(respawnManager.respawn)
-        {
-            Debug.Log("respawn");
-        }
-        if (respawnManager.resAnimation)
-        {
-            Debug.Log("resAnimation");
-        }
+        //if(respawnManager.respawn)
+        //{
+        //    Debug.Log("respawn");
+        //}
+        //if (respawnManager.resAnimation)
+        //{
+        //    Debug.Log("resAnimation");
+        //}
 
         int i = 0;
 
@@ -311,26 +315,7 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Toxic"))
         {
-            //bool yRange = Mathf.Abs(collision.gameObject.transform.position.y - transform.position.y) <= transform.localScale.y;
-
-            //if (isGrabbing && (!yRange || yRange && (collision.gameObject.transform.position.x - grabObj.transform.position.x) * scale.x > 0))
-            //{
-            //    //Debug.Log("Safe");
-            //    return;
-            //}
-            //if (!isPlayer)
-            //{
-            //    Debug.Log("Safe");
-            //    return;
-            //}
-            //Debug.Log("Out");
-            //isPlayer = false;
-
-            if (isGrabbing && scale.x * (collision.transform.position.x - transform.position.x) > 0)
-            {
-                return;
-            }
-            
+            Debug.Log(collision.gameObject.name);
             GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.4f);
             StartCoroutine(Respawn());
             //StartCoroutine(Test());
@@ -357,21 +342,15 @@ public class PlayerController : MonoBehaviour
         }
 
         if (collision.gameObject.CompareTag("Toxic"))
-        {
-            //bool yRange = Mathf.Abs(collision.gameObject.transform.position.y - transform.position.y) <= transform.localScale.y;
-
-            //if (isGrabbing && (!yRange || yRange && (collision.gameObject.transform.position.x - grabObj.transform.position.x) * scale.x > 0))
-            //{
-            //    //Debug.Log("Safe");
-            //    return;
-            //}
-            //if (!isPlayer)
-            //{
-            //    Debug.Log("Safe");
-            //    return;
-            //}
-            //Debug.Log("Out");
-            //isPlayer = false;
+        {           
+            Vector2 hitPos = collision.ClosestPoint(grabPoint.position);
+            //Debug.Log(hitPos);
+            if (isGrabbing && (hitPos.x - transform.position.x) * scale.x > 0.65f)
+            {
+                //Debug.Log("Safe");
+                return;
+            }
+            //Debug.Log(collision.gameObject.name);
 
             GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.4f);
             StartCoroutine(Respawn());
@@ -390,12 +369,6 @@ public class PlayerController : MonoBehaviour
                 //totalMass.SetMass(-rb.mass, true);
                 //rb.mass = OBJ_MASS * Mathf.Abs(magnification);
                 //totalMass.SetMass(rb.mass, true);
-
-                if (isGrabbing)
-                {
-                    //rb.mass += grabMass;
-                    //totalMass.SetMass(grabMass, true);
-                }
                 //Debug.Log(magnification + ": " + totalMass.GetMass());
                 oldMag = magnification;
             }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 829942225975164133}
   - component: {fileID: 829942225975164132}
   - component: {fileID: 7979432224216043355}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: LaserMachine_V
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,7 +167,6 @@ GameObject:
   m_Component:
   - component: {fileID: 829942227024005704}
   - component: {fileID: 829942227024005710}
-  - component: {fileID: 829942227024005711}
   - component: {fileID: 1677574758336030898}
   - component: {fileID: 3223119532254331743}
   m_Layer: 6
@@ -185,8 +184,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 829942227024005707}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalPosition: {x: -1, y: 0, z: 0.1}
+  m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 829942225975164133}
@@ -240,36 +239,10 @@ SpriteRenderer:
   m_DrawMode: 2
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 1
+  m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &829942227024005711
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 829942227024005707}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 2
-    adaptiveTiling: 1
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.125}
-  m_EdgeRadius: 0
 --- !u!61 &1677574758336030898
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -277,7 +250,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 829942227024005707}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -294,7 +267,7 @@ BoxCollider2D:
     adaptiveTiling: 1
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9, y: 0.15}
+  m_Size: {x: 1, y: 0.002}
   m_EdgeRadius: 0
 --- !u!114 &3223119532254331743
 MonoBehaviour:
@@ -313,7 +286,6 @@ MonoBehaviour:
   ONDURATION: 2
   OFFDURATION: 3
   ONTEXTURE: 14
-  beamCollider2: {fileID: 1677574758336030898}
   machine: {fileID: 829942225975164135}
   machineTextures:
   - {fileID: 21300000, guid: eb7e66390ddbad4419a51d40a0b1cbfa, type: 3}

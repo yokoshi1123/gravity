@@ -44,6 +44,7 @@ public class RespawnUpdater : MonoBehaviour
         }
         else
         {
+            transform.position += new Vector3(0, 0, -transform.position.z + 0.1f);
             //animator.SetBool("resAnimation", resAnimation);
         }
 

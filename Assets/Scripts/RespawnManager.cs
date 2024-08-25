@@ -26,13 +26,13 @@ public class RespawnManager : MonoBehaviour
 
 
 
-    [SerializeField] private GameObject PlayerAvatar;
+    /*[SerializeField]*/ private GameObject PlayerAvatar;
 
 
     // Start is called before the first frame update
     void Start()
     {
-       
+        PlayerAvatar = GameObject.Find("/Player 1/Avatar");
     }
 
     // Update is called once per frame
