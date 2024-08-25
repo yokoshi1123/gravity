@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TouchButton : MonoBehaviour
 {
-    [SerializeField] private TurnOn to;
+    [SerializeField] private List<TurnOn> to = new();
     [SerializeField] private Sprite OffTexture;
     [SerializeField] private Sprite OnTexture;
 
@@ -23,7 +23,7 @@ public class TouchButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        turnon = to.GetTurnOn();
+        turnon = to[0].GetTurnOn();
 
         if(turnon)
         {
@@ -40,12 +40,18 @@ public class TouchButton : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Movable"))
         {
-            to.SetTurnOn(true);
+            for(int i = 0; i < to.Count; i++)
+            {
+                to[i].SetTurnOn(true);
+            }
         }
     }
 
     private void OnCollisionExit2D(Collision2D other)
     {
-        to.SetTurnOn(false);
+        for (int i = 0; i < to.Count; i++)
+        {
+            to[i].SetTurnOn(false);
+        }
     }
 }
