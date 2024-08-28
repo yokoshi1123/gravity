@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour
             if (movingFloor != null && !isWalking && !isJumping)
             {
                 mFloorVelocity = movingFloor.GetMFloorVelocity();
-                //Debug.Log(mFloorVelocity);
+                Debug.Log(mFloorVelocity);
                 rb.velocity += mFloorVelocity;
             }
 
@@ -334,22 +334,25 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Platform") && transform.position.y > collision.gameObject.transform.position.y + 2f)
-        {
-            isJumping = false;
-            movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
+        if (collision.CompareTag("Platform"))
+        {            
+            if (transform.position.y > collision.gameObject.transform.position.y)
+            {
+                isJumping = false;
+                movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
+            }   
             //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
         }
 
         if (collision.gameObject.CompareTag("Toxic"))
         {           
-            Vector2 hitPos = collision.ClosestPoint(grabPoint.position);
-            //Debug.Log(hitPos);
-            if (isGrabbing && (hitPos.x - transform.position.x) * scale.x > 0.65f)
-            {
-                //Debug.Log("Safe");
-                return;
-            }
+            //Vector2 hitPos = collision.ClosestPoint(grabPoint.position);
+            ////Debug.Log(hitPos);
+            //if (isGrabbing && (hitPos.x - transform.position.x) * scale.x > 0.65f)
+            //{
+            //    //Debug.Log("Safe");
+            //    return;
+            //}
             //Debug.Log(collision.gameObject.name);
 
             GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.4f);
@@ -381,6 +384,16 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
         }
 
+        if (collision.CompareTag("Platform"))
+        {
+            if (transform.position.y > collision.gameObject.transform.position.y)
+            {
+                isJumping = false;
+                movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
+            }
+            //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
+        }
+
         //if (collision.CompareTag("Platform") && transform.position.y > collision.gameObject.transform.position.y + 2f)
         //{
         //    isJumping = false;
@@ -400,7 +413,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             isJumping = true;
-            Debug.Log("In the air : T");
+            //Debug.Log("In the air : T");
         }
 
         if (collision.CompareTag("Platform"))
@@ -409,24 +422,24 @@ public class PlayerController : MonoBehaviour
         }       
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("GravityField") && !isPlayer /*!isGCollider*/) // 重力場から出たとき、デフォルトに戻す
-        {
-            (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
-            gravityDirection = 1;
-            //rb.mass = OBJ_MASS;
-            oldMag = 1f;
-        }
-        else
-        {
-            isJumping = true;
-            Debug.Log("In the air : C");
-        }
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("GravityField") && !isPlayer /*!isGCollider*/) // 重力場から出たとき、デフォルトに戻す
+    //    {
+    //        (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
+    //        gravityDirection = 1;
+    //        //rb.mass = OBJ_MASS;
+    //        oldMag = 1f;
+    //    }
+    //    else
+    //    {
+    //        isJumping = true;
+    //        Debug.Log("In the air : C");
+    //    }
 
-        if (collision.gameObject.CompareTag("Platform"))
-        {
-            movingFloor = null;
-        }
-    }
+    //    if (collision.gameObject.CompareTag("Platform"))
+    //    {
+    //        movingFloor = null;
+    //    }
+    //}
 }

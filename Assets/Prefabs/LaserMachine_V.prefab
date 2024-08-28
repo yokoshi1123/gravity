@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 829942225975164133}
   - component: {fileID: 829942225975164132}
   - component: {fileID: 7979432224216043355}
+  - component: {fileID: 6276202202163092138}
+  - component: {fileID: 5622107756104979119}
+  - component: {fileID: 2021822813352477414}
   m_Layer: 0
   m_Name: LaserMachine_V
   m_TagString: Untagged
@@ -158,6 +161,55 @@ PolygonCollider2D:
       - {x: 0.55078125, y: -1}
       - {x: 1, y: -1}
       - {x: 1, y: 1}
+--- !u!114 &6276202202163092138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829942225975164135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f92ed9d524dceb04ab38149c20ee0bf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnOn: 0
+--- !u!95 &5622107756104979119
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829942225975164135}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b6a838e07de1ca045bd78db108065ddd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2021822813352477414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829942225975164135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2346dd35c2245c9478411cea48148486, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OFFSET: 1
+  ONDURATION: 2
+  OFFDURATION: 3
 --- !u!1 &829942227024005707
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,10 +335,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isVertical: 1
-  OFFSET: 1
-  ONDURATION: 2
-  OFFDURATION: 3
-  ONTEXTURE: 14
   machine: {fileID: 829942225975164135}
   machineTextures:
   - {fileID: 21300000, guid: eb7e66390ddbad4419a51d40a0b1cbfa, type: 3}
@@ -306,7 +354,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 81679cc25d70b1e4187ca852d0b29c02, type: 3}
   - {fileID: 21300000, guid: b4de98b410029c546abbd83367b326a8, type: 3}
   - {fileID: 21300000, guid: 35d4d7a1310da594aa9c3c5aa5a7633a, type: 3}
-  - {fileID: 21300000, guid: eb7e66390ddbad4419a51d40a0b1cbfa, type: 3}
   beamTextures:
   - {fileID: 21300000, guid: 21880a45cc890344b8e936a28e241bb7, type: 3}
   - {fileID: 21300000, guid: 9820ef9143946944b9eea93b3e827701, type: 3}

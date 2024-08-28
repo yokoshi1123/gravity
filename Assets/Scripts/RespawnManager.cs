@@ -46,6 +46,7 @@ public class RespawnManager : MonoBehaviour
         
         if (respawn)
         {
+            Debug.Log("respawn");
             PlayerAvatar.SetActive(false);
             canMove = false;
             //Debug.Log("è¡Ç¶ÇÈ");

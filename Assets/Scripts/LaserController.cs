@@ -5,15 +5,17 @@ using UnityEngine;
 
 public class LaserController : MonoBehaviour
 {
-    [SerializeField] private bool isVertical = false;
+    private TurnOn to;
     
-    [SerializeField] private float OFFSET = 1f;
-    [SerializeField] private float ONDURATION = 2f;
-    [SerializeField] private float OFFDURATION = 3f;
+    [SerializeField] private bool isVertical = false;
 
-    [SerializeField] private float ONTEXTURE = 14;
+    /*[SerializeField]*/ private float OFFSET = 1f;
+    /*[SerializeField]*/ private float ONDURATION = 2f;
+    /*[SerializeField]*/ private float OFFDURATION = 3f;
 
-    private const int TRANSITION = 17;
+    /*[SerializeField]*/ private float ONTEXTURE = 14;
+
+    private int TRANSITION = 17;
 
     private RaycastHit2D hit;
     //private Transform hitObj;
@@ -35,7 +37,10 @@ public class LaserController : MonoBehaviour
     //private IEnumerator cycleEra;
 
     void Awake()
-    {       
+    {
+        to = GetComponent<TurnOn>();
+
+        TRANSITION = machineTextures.Count;
         basePos = transform.position;
         //Debug.Log(basePos);
         //beamCollider = GetComponent<BoxCollider2D>();
@@ -44,11 +49,42 @@ public class LaserController : MonoBehaviour
         //machineRenderer.sprite = machineTextures[4];
         
         beamRenderer = GetComponent<SpriteRenderer>();
+
+        if (isVertical)
+        {
+            int layerMask = ~(1 << 2 | 1 << 7 | 1 << 8);
+            hit = Physics2D.Raycast(basePos, Vector2.down * machine.transform.localScale.x, RAYDISTANCE, layerMask);
+            if (hit.collider != null)
+            {
+                Vector2 hitPos = hit.collider.ClosestPoint(basePos);
+                transform.position = new Vector2(basePos.x, (basePos.y + hitPos.y) * 0.5f);
+                beamRenderer.size = new Vector2(Mathf.Abs(basePos.y - hitPos.y), beamRenderer.size.y);
+                if (hit.collider.gameObject.CompareTag("Player"))
+                {
+                    StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
+                }
+            }
+        }
+        else
+        {
+            int layerMask = ~(1 << 2 | 1 << 6 | 1 << 8);
+            hit = Physics2D.Raycast(basePos, Vector2.left * machine.transform.localScale.x, RAYDISTANCE, layerMask);
+            if (hit.collider != null)
+            {
+                Vector2 hitPos = hit.collider.ClosestPoint(basePos);
+                transform.position = new Vector2((basePos.x + hitPos.x) * 0.5f, basePos.y);
+                beamRenderer.size = new Vector2(Mathf.Abs(basePos.x - hitPos.x), beamRenderer.size.y);
+                if (hit.collider.gameObject.CompareTag("Player"))
+                {
+                    StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
+                }
+            }
+        }
     }
 
     void Start()
     {
-        StartCoroutine(LaserCycle());
+        //StartCoroutine(LaserCycle());
     }
 
     void Update()
@@ -62,7 +98,7 @@ public class LaserController : MonoBehaviour
                 //Debug.DrawRay(basePos, Vector2.down * machine.transform.localScale.y * RAYDISTANCE, Color.green, 0.015f);
                 int layerMask = ~(1 << 2 | 1 << 7 | 1 << 8);
                 //Debug.Log(layerMask);
-                hit = Physics2D.Raycast(basePos, Vector2.down * machine.transform.localScale.y, RAYDISTANCE, layerMask);
+                hit = Physics2D.Raycast(basePos, Vector2.down * machine.transform.localScale.x, RAYDISTANCE, layerMask);
                 if (hit.collider != null)
                 {
                     Vector2 hitPos = hit.collider.ClosestPoint(basePos);
@@ -75,19 +111,6 @@ public class LaserController : MonoBehaviour
                         //Debug.Log(":(");
                         StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
                     }
-
-                    //if (hit.collider.gameObject.CompareTag("Player"))
-                    //{
-                    //    Debug.Log(":(");
-                    //    transform.position = new Vector2(basePos.x, (basePos.y + hitPos.y) * 0.5f);
-                    //    transform.localScale = new Vector2(Mathf.Abs(basePos.y - hitPos.y) + 0.01f, transform.localScale.y);
-                    //}
-                    //else
-                    //{
-                    //    //Debug.Log(":)");
-                    //    transform.position = new Vector2(basePos.x, (basePos.y + hitPos.y) * 0.5f + 0.01f * transform.localScale.y);
-                    //    transform.localScale = new Vector2(Mathf.Abs(basePos.y - hitPos.y) - 0.05f, transform.localScale.y);
-                    //}
                 }
             }
             else
@@ -106,19 +129,6 @@ public class LaserController : MonoBehaviour
                     {
                         StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
                     }
-
-                    //transform.position = new Vector2((basePos.x + hitPos.x) * 0.5f + 0.01f * transform.localScale.y, basePos.y);
-                    //transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitPos.x) - 0.05f, transform.localScale.y);
-                    //if (hit.collider.gameObject.CompareTag("Player"))
-                    //{
-                    //    transform.position = new Vector2((basePos.x + hitPos.x) * 0.5f, basePos.y);
-                    //    transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitPos.x), transform.localScale.y);
-                    //}
-                    //else
-                    //{
-                    //    transform.position = new Vector2((basePos.x + hitPos.x) * 0.5f + 0.01f * transform.localScale.y, basePos.y);
-                    //    transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitPos.x) - 0.05f, transform.localScale.y);
-                    //}
                 }
             }
 
@@ -126,43 +136,6 @@ public class LaserController : MonoBehaviour
         }
     }
 
-    //private void OnTriggerEnter2D(Collider2D other)
-    //{
-    //    //if (!other.CompareTag("Player"))
-    //    //{
-    //    //    beamCollider.enabled = false;
-    //    //}
-    //    if (isVertical)
-    //    {
-    //        Vector2 hitPos = other.ClosestPoint(basePos);
-    //        if (hit.collider.gameObject.CompareTag("Player"))
-    //        {
-    //            Debug.Log(":(");
-    //            transform.position = new Vector2(basePos.x, (basePos.y + hitPos.y) * 0.5f);
-    //            transform.localScale = new Vector2(Mathf.Abs(basePos.y - hitPos.y) + 0.01f, transform.localScale.y);
-    //        }
-    //        else
-    //        {
-    //            //Debug.Log(":)");
-    //            transform.position = new Vector2(basePos.x, (basePos.y + hitPos.y) * 0.5f + 0.01f * transform.localScale.y);
-    //            transform.localScale = new Vector2(Mathf.Abs(basePos.y - hitPos.y) - 0.05f, transform.localScale.y);
-    //        }
-    //    }
-    //    else
-    //    {
-    //        Vector2 hitPos = hit.collider.ClosestPoint(basePos);
-    //        if (hit.collider.gameObject.CompareTag("Player"))
-    //        {
-    //            transform.position = new Vector2((basePos.x + hitPos.x) * 0.5f, basePos.y);
-    //            transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitPos.x), transform.localScale.y);
-    //        }
-    //        else
-    //        {
-    //            transform.position = new Vector2((basePos.x + hitPos.x) * 0.5f + 0.01f * transform.localScale.y, basePos.y);
-    //            transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitPos.x) - 0.05f, transform.localScale.y);
-    //        }
-    //    }
-    //}
     private IEnumerator LaserCycle()
     {
         yield return new WaitForSeconds(OFFSET);
@@ -176,7 +149,7 @@ public class LaserController : MonoBehaviour
                 }
                 yield return new WaitForSeconds(ONDURATION / ONTEXTURE);
                 machineRenderer.sprite = machineTextures[i];
-                //Debug.Log(i);
+                Debug.Log(i);
             }
             beamRenderer.sprite = beamTextures[5];
             yield return new WaitForSeconds(ONDURATION);
@@ -186,7 +159,7 @@ public class LaserController : MonoBehaviour
                 yield return new WaitForSeconds(ONDURATION / ONTEXTURE);
                 machineRenderer.sprite = machineTextures[i];
                 beamRenderer.sprite = beamTextures[TRANSITION - i];
-                //Debug.Log(i);
+                Debug.Log(i);
             }
             beamRenderer.sprite = null;
             yield return new WaitForSeconds(OFFDURATION);

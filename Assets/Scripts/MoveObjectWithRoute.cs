@@ -40,8 +40,9 @@ public class MoveObjectWithRoute : MonoBehaviour
             mFloorVelocity = (rb.position - oldPosition) / Time.deltaTime;
             if (mFloorVelocity.y > 0)
             {
-                mFloorVelocity.y = 0;
+                mFloorVelocity.y = -speed;
             }
+            Debug.Log(mFloorVelocity);
             oldPosition = rb.position;
 
             // í èÌêiçs

@@ -74,7 +74,7 @@ public class RespawnUpdater : MonoBehaviour
             resManager.GetComponent<RespawnManager>().respawnchanged = true;
 
             animator.SetBool("change", change);
-            collision.gameObject.GetComponent<PlayerController>().respawnPoint = transform.position;
+            collision.gameObject.GetComponent<PlayerController>().respawnPoint = transform.position + new Vector3(0, 0.99f, 0);
             SE.SetActive(true);
             resManager.GetComponent<RespawnManager>().changePosi++;
 
@@ -94,12 +94,13 @@ public class RespawnUpdater : MonoBehaviour
 
     public void RespawnAnimation1End()
     {
-        //Debug.Log("Animation1 End");
+        Debug.Log("Animation1 End");
         resManager.GetComponent<RespawnManager>().respawning1 = true;
     }
 
     public void RespawnAnimation2End()
     {
+        Debug.Log("Animation2 End");
         transform.position += new Vector3(0, 0, -transform.position.z + 1.0f);
         resManager.GetComponent<RespawnManager>().respawning2 = true;
     }
