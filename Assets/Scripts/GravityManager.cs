@@ -88,7 +88,11 @@ public class GravityManager : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            GameObject.FindWithTag("GravityField").GetComponent<BoxCollider2D>().enabled = true;
+            try
+            {
+                GameObject.FindWithTag("GravityField").GetComponent<BoxCollider2D>().enabled = true;
+            }
+            catch { }
         }
 
         // â∫ÉLÅ[/SÉLÅ[Ç≈gravityScaleÇÃïœçX
@@ -162,7 +166,7 @@ public class GravityManager : MonoBehaviour
     }
     private IEnumerator WaitAndDestroy()
     {
-        yield return new WaitForSecondsRealtime(5); // 5ïbíxâÑ
+        yield return new WaitForSecondsRealtime(5f); // 5ïbíxâÑ
         destroyGF = GameObject.FindWithTag("GravityField");
         if (destroyGF != null)
         {

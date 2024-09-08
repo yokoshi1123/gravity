@@ -32,7 +32,7 @@ public class RespawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PlayerAvatar = GameObject.Find("/Player 1/Avatar");
+        PlayerAvatar = GameObject.FindWithTag("Player").transform.GetChild(0).gameObject;
     }
 
     // Update is called once per frame
@@ -46,7 +46,7 @@ public class RespawnManager : MonoBehaviour
         
         if (respawn)
         {
-            Debug.Log("respawn");
+            //Debug.Log("respawn");
             PlayerAvatar.SetActive(false);
             canMove = false;
             //Debug.Log("è¡Ç¶ÇÈ");

@@ -6,7 +6,8 @@ using UnityEngine;
 public class Shutter : MonoBehaviour
 {
 
-    /*[SerializeField] */private GameObject shutterCollider;
+    [SerializeField]
+    private GameObject shutterCollider;
     /*[SerializeField] */private Animator animator;
 
     //[SerializeField] private GameObject Switch;
@@ -21,7 +22,7 @@ public class Shutter : MonoBehaviour
 
     void Awake()
     {
-        shutterCollider = GameObject.Find("/" + this.name + "/Collider");
+        shutterCollider = transform.GetChild(0).gameObject; // GameObject.Find("/" + this.name + "/Collider");
         animator = GetComponent<Animator>();
         
         to = GetComponent<TurnOn>();

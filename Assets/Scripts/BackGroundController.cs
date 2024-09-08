@@ -12,16 +12,16 @@ public class BackGroundController : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("Player 1").transform;
+        player = GameObject.FindWithTag("Player").transform;
         //Debug.Log(xMin + "," + xMax +"," + yMin + "," +yMax);
-        transform.position = new Vector2(Mathf.Max(xMin, player.position.x + 10f), Mathf.Max(yMin, player.position.y + 2.0f));
+        transform.position = new Vector2(Mathf.Max(xMin, player.position.x + 6f), Mathf.Max(yMin, player.position.y + 6f));
         transform.position = new Vector2(Mathf.Min(xMax, transform.position.x), Mathf.Min(yMax, transform.position.y));
     }
 
 
     void Update()
     {
-        transform.position = new Vector2(Mathf.Max(xMin, player.position.x + 10f), Mathf.Max(yMin, player.position.y + 2.0f));
+        transform.position = new Vector2(Mathf.Max(xMin, player.position.x + 6f), Mathf.Max(yMin, player.position.y + 6f));
         transform.position = new Vector2(Mathf.Min(xMax, transform.position.x), Mathf.Min(yMax, transform.position.y));
     }
 }

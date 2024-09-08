@@ -47,7 +47,7 @@ public class DisappearingFloor : MonoBehaviour
                 yield return new WaitForSeconds(0.1f);
             }
             //Debug.Log("OFf -> ON");
-            myRenderer.color = myRenderer.color + new Color(0, 0, 0, -myRenderer.color.a + 1f);
+            myRenderer.color += new Color(0, 0, 0, -myRenderer.color.a + 1f);
             myCollider.enabled = true;
         }
     }

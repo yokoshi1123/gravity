@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour
             if (movingFloor != null && !isWalking && !isJumping)
             {
                 mFloorVelocity = movingFloor.GetMFloorVelocity();
-                Debug.Log(mFloorVelocity);
+                //Debug.Log(mFloorVelocity);
                 rb.velocity += mFloorVelocity;
             }
 
@@ -172,7 +172,7 @@ public class PlayerController : MonoBehaviour
             //{
             //    Debug.Log(hit.collider.name + ", " + hit.collider.transform.position.y + ", " + grabPoint.position.y);
             //}
-            if (hit.collider != null && hit.collider.CompareTag("Movable") && hit.collider.transform.position.y >= grabPoint.position.y)
+            if (hit.collider != null && hit.collider.CompareTag("Movable") && (hit.collider.transform.position.y - grabPoint.position.y) * scale.y >= 0)
             {
                 //Debug.Log("Grabbed");
                 grabObj = (hit.collider.name.Contains("BOX")) ? hit.collider.gameObject : hit.collider.transform.parent.gameObject;
@@ -327,6 +327,13 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(Respawn());
         }
 
+        if (collision.gameObject.CompareTag("Platform") && transform.position.y > collision.gameObject.transform.position.y)
+        {
+            Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y);
+            isJumping = false;
+            movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
+        }
+
         if (collision.gameObject.CompareTag("Movable") && isJumping)
         { 
         }
@@ -334,16 +341,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Platform"))
-        {            
-            if (transform.position.y > collision.gameObject.transform.position.y)
-            {
-                isJumping = false;
-                movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
-            }   
-            //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
-        }
-
+        
         if (collision.gameObject.CompareTag("Toxic"))
         {           
             //Vector2 hitPos = collision.ClosestPoint(grabPoint.position);
@@ -384,15 +382,15 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
         }
 
-        if (collision.CompareTag("Platform"))
-        {
-            if (transform.position.y > collision.gameObject.transform.position.y)
-            {
-                isJumping = false;
-                movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
-            }
-            //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
-        }
+        //if (collision.CompareTag("Platform"))
+        //{
+        //    if (transform.position.y > collision.gameObject.transform.position.y)
+        //    {
+        //        isJumping = false;
+        //        movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
+        //    }
+        //    //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
+        //}
 
         //if (collision.CompareTag("Platform") && transform.position.y > collision.gameObject.transform.position.y + 2f)
         //{

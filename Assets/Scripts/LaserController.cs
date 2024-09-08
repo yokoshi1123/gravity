@@ -5,17 +5,17 @@ using UnityEngine;
 
 public class LaserController : MonoBehaviour
 {
-    private TurnOn to;
+    //private TurnOn to;
     
     [SerializeField] private bool isVertical = false;
 
-    /*[SerializeField]*/ private float OFFSET = 1f;
-    /*[SerializeField]*/ private float ONDURATION = 2f;
-    /*[SerializeField]*/ private float OFFDURATION = 3f;
+    //[SerializeField] private float OFFSET = 1f;
+    //[SerializeField] private float ONDURATION = 2f;
+    //[SerializeField] private float OFFDURATION = 3f;
 
-    /*[SerializeField]*/ private float ONTEXTURE = 14;
+    //[SerializeField] private float ONTEXTURE = 14;
 
-    private int TRANSITION = 17;
+    //private int TRANSITION = 17;
 
     private RaycastHit2D hit;
     //private Transform hitObj;
@@ -28,24 +28,24 @@ public class LaserController : MonoBehaviour
 
     [SerializeField] private GameObject machine;
 
-    private SpriteRenderer machineRenderer;
+    //private SpriteRenderer machineRenderer;
     private SpriteRenderer beamRenderer;
 
-    [SerializeField] private List<Sprite> machineTextures = new();
-    [SerializeField] private List <Sprite> beamTextures = new();
+    //[SerializeField] private List<Sprite> machineTextures = new();
+    //[SerializeField] private List <Sprite> beamTextures = new();
 
     //private IEnumerator cycleEra;
 
     void Awake()
     {
-        to = GetComponent<TurnOn>();
+        //to = GetComponent<TurnOn>();
 
-        TRANSITION = machineTextures.Count;
+        //TRANSITION = machineTextures.Count;
         basePos = transform.position;
         //Debug.Log(basePos);
         //beamCollider = GetComponent<BoxCollider2D>();
 
-        machineRenderer = machine.GetComponent<SpriteRenderer>();
+        //machineRenderer = machine.GetComponent<SpriteRenderer>();
         //machineRenderer.sprite = machineTextures[4];
         
         beamRenderer = GetComponent<SpriteRenderer>();
@@ -82,10 +82,10 @@ public class LaserController : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        //StartCoroutine(LaserCycle());
-    }
+    //void Start()
+    //{
+    //    StartCoroutine(LaserCycle());
+    //}
 
     void Update()
     {
@@ -136,33 +136,33 @@ public class LaserController : MonoBehaviour
         }
     }
 
-    private IEnumerator LaserCycle()
-    {
-        yield return new WaitForSeconds(OFFSET);
-        while (true)
-        {
-            for (int i = 0; i < ONTEXTURE; i++)
-            {
-                if (i == ONTEXTURE - 1)
-                {
-                    beamRenderer.sprite = beamTextures[6];
-                }
-                yield return new WaitForSeconds(ONDURATION / ONTEXTURE);
-                machineRenderer.sprite = machineTextures[i];
-                Debug.Log(i);
-            }
-            beamRenderer.sprite = beamTextures[5];
-            yield return new WaitForSeconds(ONDURATION);
-            beamRenderer.sprite = beamTextures[4];
-            for (int i = (int)ONTEXTURE; i < TRANSITION; i++)
-            {
-                yield return new WaitForSeconds(ONDURATION / ONTEXTURE);
-                machineRenderer.sprite = machineTextures[i];
-                beamRenderer.sprite = beamTextures[TRANSITION - i];
-                Debug.Log(i);
-            }
-            beamRenderer.sprite = null;
-            yield return new WaitForSeconds(OFFDURATION);
-        }
-    }
+    //private IEnumerator LaserCycle()
+    //{
+    //    yield return new WaitForSeconds(OFFSET);
+    //    while (true)
+    //    {
+    //        for (int i = 0; i < ONTEXTURE; i++)
+    //        {
+    //            if (i == ONTEXTURE - 1)
+    //            {
+    //                beamRenderer.sprite = beamTextures[6];
+    //            }
+    //            yield return new WaitForSeconds(ONDURATION / ONTEXTURE);
+    //            machineRenderer.sprite = machineTextures[i];
+    //            Debug.Log(i);
+    //        }
+    //        beamRenderer.sprite = beamTextures[5];
+    //        yield return new WaitForSeconds(ONDURATION);
+    //        beamRenderer.sprite = beamTextures[4];
+    //        for (int i = (int)ONTEXTURE; i < TRANSITION; i++)
+    //        {
+    //            yield return new WaitForSeconds(ONDURATION / ONTEXTURE);
+    //            machineRenderer.sprite = machineTextures[i];
+    //            beamRenderer.sprite = beamTextures[TRANSITION - i];
+    //            Debug.Log(i);
+    //        }
+    //        beamRenderer.sprite = null;
+    //        yield return new WaitForSeconds(OFFDURATION);
+    //    }
+    //}
 }

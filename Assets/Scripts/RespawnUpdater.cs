@@ -17,7 +17,7 @@ public class RespawnUpdater : MonoBehaviour
 
     //public bool respawned = false;
     private GameObject resManager;
-    private Vector3 posi;
+    //private Vector3 posi;
     //private Transform myTransform;
 
     private int resposi;
@@ -66,7 +66,7 @@ public class RespawnUpdater : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.CompareTag("Player"))
         {
             change = true;
             //current = true;
