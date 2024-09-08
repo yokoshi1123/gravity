@@ -188,6 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38be59fe5b59d8e468f6a448655c3f74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shutterCollider: {fileID: 3996810923048113649}
 --- !u!1 &3996810923048113649
 GameObject:
   m_ObjectHideFlags: 0
