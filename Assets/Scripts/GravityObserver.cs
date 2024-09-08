@@ -34,6 +34,11 @@ public class GravityObserver : MonoBehaviour
         }
     }*/
 
+    public float GetMass()
+    {
+        return OBJ_MASS;
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("GravityField")) // d—Íê’†‚É‚ ‚é‚Æ‚«AgravityManager‚Å‚Ì•ÏX‚ğ“Ç‚İ‚Ş
