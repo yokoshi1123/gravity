@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class RespawnManager : MonoBehaviour
@@ -51,6 +52,18 @@ public class RespawnManager : MonoBehaviour
             canMove = false;
             //Debug.Log("è¡Ç¶ÇÈ");
             respawn=false;
+
+            GameObject[] movableObjs = GameObject.FindGameObjectsWithTag("Movable");
+            foreach (GameObject obj in movableObjs)
+            { 
+                Debug.Log(obj.name);
+                try
+                {
+                    StartCoroutine(obj.GetComponent<TotalWeight>().Respawn());
+                }
+                catch { }
+            }
+            movableObjs = null;
         }
         
         if (respawning1 || (changePosi==0))
