@@ -30,6 +30,7 @@ public class LaserController : MonoBehaviour
 
     //private SpriteRenderer machineRenderer;
     private SpriteRenderer beamRenderer;
+    private GameObject beamEffect;
 
     //[SerializeField] private List<Sprite> machineTextures = new();
     //[SerializeField] private List <Sprite> beamTextures = new();
@@ -49,6 +50,7 @@ public class LaserController : MonoBehaviour
         //machineRenderer.sprite = machineTextures[4];
         
         beamRenderer = GetComponent<SpriteRenderer>();
+        beamEffect = transform.parent.gameObject.transform.GetChild(2).gameObject;
 
         if (isVertical)
         {
@@ -106,6 +108,7 @@ public class LaserController : MonoBehaviour
                     transform.position = new Vector2(basePos.x, (basePos.y + hitPos.y) * 0.5f);
                     //transform.localScale = new Vector2(Mathf.Abs(basePos.y - hitPos.y), transform.localScale.y);
                     beamRenderer.size = new Vector2(Mathf.Abs(basePos.y - hitPos.y), beamRenderer.size.y);
+                    beamEffect.transform.position = hitPos;
                     if (hit.collider.gameObject.CompareTag("Player"))
                     {
                         //Debug.Log(":(");
@@ -125,6 +128,7 @@ public class LaserController : MonoBehaviour
                     transform.position = new Vector2((basePos.x + hitPos.x) * 0.5f, basePos.y);
                     //transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitPos.x), transform.localScale.y);
                     beamRenderer.size = new Vector2(Mathf.Abs(basePos.x - hitPos.x), beamRenderer.size.y);
+                    beamEffect.transform.position = hitPos;
                     if (hit.collider.gameObject.CompareTag("Player"))
                     {
                         StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());

@@ -63,7 +63,6 @@ public class RespawnManager : MonoBehaviour
                 }
                 catch { }
             }
-            movableObjs = null;
         }
         
         if (respawning1 || (changePosi==0))

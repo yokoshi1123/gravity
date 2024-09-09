@@ -7,54 +7,65 @@ using UnityEngine;
 public class GravityFieldTexture : MonoBehaviour
 {
     [SerializeField] private GravityManager gravityManager;
-    private SpriteRenderer gFieldTexture;
+    [SerializeField] private SpriteRenderer gFieldTexture;
 
     [Serializable] private struct TextureSet
     {
         public Sprite[] textures;
     }
 
-
     [SerializeField] TextureSet[] textureSets;
 
     private bool isChanging = false;
 
-    private int gPattern;
+    [SerializeField] private int gPattern = 3;
     private int num = 0;
+
+    [SerializeField] private bool isFixed = false;
     
     // Start is called before the first frame update
     void Awake()
     {
-        gravityManager = GetComponent<GravityManager>();
-        //StartCoroutine(ChangeTexture());
+        //gravityManager = GetComponent<GravityManager>();
+        gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
+        gFieldTexture = GetComponent<SpriteRenderer>();
+        StartCoroutine(ChangeTexture());
     }
 
     // Update is called once per frame
 
     void Update()
     {
-        gPattern = gravityManager.GetGScale();
-        try
+        if (!isFixed)
         {
-            gFieldTexture = GameObject.FindWithTag("GravityField").GetComponent<SpriteRenderer>();
+            gPattern = gravityManager.GetGScale();
         }
-        catch
-        {
-            gFieldTexture = null;
-        }
-        if (gFieldTexture != null && !isChanging)
-        {
-            StartCoroutine(ChangeTexture());
-        }
+
+        //try
+        //{
+        //    gFieldTexture = GameObject.FindWithTag("GravityField").GetComponent<SpriteRenderer>();
+        //}
+        //catch
+        //{
+        //    gFieldTexture = null;
+        //}
+        //if (gFieldTexture != null && !isChanging)
+        //{
+        //    StartCoroutine(ChangeTexture());
+        //}
     }
 
     private IEnumerator ChangeTexture()
     {
-        isChanging = true;
-        num = (num + 16001) % 16;
-        //Debug.Log(gPattern + "," + num);
-        gFieldTexture.sprite = textureSets[gPattern].textures[num];
-        yield return new WaitForSecondsRealtime(0.1f);
-        isChanging = false;
+        //isChanging = true;
+        while (true) 
+        {
+            num = (num + 16001) % 16;
+            //Debug.Log(gPattern + "," + num);
+            gFieldTexture.sprite = textureSets[gPattern].textures[num];
+            yield return new WaitForSecondsRealtime(0.1f);
+            //isChanging = false;
+        }
+
     }
 }

@@ -64,6 +64,15 @@ AnimationClip:
     path: Beam
     classID: 212
     script: {fileID: 0}
+  - curve:
+    - time: 0
+      value: {fileID: 0}
+    - time: 1.3
+      value: {fileID: 21300000, guid: 2c3b4041620e76e48bab090e73bf46b0, type: 3}
+    attribute: m_Sprite
+    path: Effect
+    classID: 212
+    script: {fileID: 0}
   m_SampleRate: 60
   m_WrapMode: 0
   m_Bounds:
@@ -80,6 +89,13 @@ AnimationClip:
       isPPtrCurve: 1
     - serializedVersion: 2
       path: 295698786
+      attribute: 0
+      script: {fileID: 0}
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
+    - serializedVersion: 2
+      path: 2982974660
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -104,6 +120,8 @@ AnimationClip:
     - {fileID: 0}
     - {fileID: 21300000, guid: f775c2afe95321a4f88b30366587ecdd, type: 3}
     - {fileID: 21300000, guid: 148b674453ab1374bb657f0ca3be9bc4, type: 3}
+    - {fileID: 0}
+    - {fileID: 21300000, guid: 2c3b4041620e76e48bab090e73bf46b0, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

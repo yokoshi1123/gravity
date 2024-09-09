@@ -32,6 +32,8 @@ public class GravityManager : MonoBehaviour
 
     private IEnumerator routine;
 
+    [SerializeField] private bool emergency = false;
+
     void Awake()
     {
         moveSpeed = M_SPEED;
@@ -42,74 +44,78 @@ public class GravityManager : MonoBehaviour
     }
     void Update()
     {
-        GameObject gravityField = (GameObject)Resources.Load("GravityField"); //"Square");//
-
-        if (Input.GetMouseButtonDown(0)) // マウスの左ボタンを押した時の座標を取得
-        { 
-            startMPosition = Input.mousePosition;
-            // スクリーン座標からワールド座標に変換
-            startMPosition = Camera.main.ScreenToWorldPoint(new Vector3(startMPosition.x, startMPosition.y, CAMERAZPOSITION)); 
-            // Debug.Log("Start:(" + startMPosition.x + ", " + startMPosition.y + ")");
-
-        }
-
-        if (Input.GetMouseButton(0)) // マウスの左ボタンを離した時の座標を取得
+        if (!emergency)
         {
-            endMPosition = Input.mousePosition;
-            // スクリーン座標からワールド座標に変換
-            endMPosition = Camera.main.ScreenToWorldPoint(new Vector3(endMPosition.x, endMPosition.y, CAMERAZPOSITION));
-            // Debug.Log("End:(" + endMPosition.x + ", " + endMPosition.y + ")");
+            GameObject gravityField = (GameObject)Resources.Load("GravityField"); //"Square");//
 
-            Vector2 startMPosition2 = startMPosition;
-            Vector2 endMPosition2 = endMPosition;
+            if (Input.GetMouseButtonDown(0)) // マウスの左ボタンを押した時の座標を取得
+            { 
+                startMPosition = Input.mousePosition;
+                // スクリーン座標からワールド座標に変換
+                startMPosition = Camera.main.ScreenToWorldPoint(new Vector3(startMPosition.x, startMPosition.y, CAMERAZPOSITION)); 
+                // Debug.Log("Start:(" + startMPosition.x + ", " + startMPosition.y + ")");
 
-            // 既にGravityFieldのクローンがあれば削除
-            destroyGF = GameObject.FindWithTag("GravityField");
-            if (destroyGF != null)
-            {
-                Destroy(destroyGF);
-                StopCoroutine(routine);
-                routine = null;
             }
-            // GravityFieldのクローンを作成
-            GameObject gField = (GameObject)Instantiate(gravityField, (startMPosition2 + endMPosition2) / 2, Quaternion.identity);
-            gField.transform.position = gField.transform.position + new Vector3(0, 0, -gField.transform.position.z - 0.1f);
-            // ドラッグしたサイズに拡大
-            //gField.transform.localScale = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
-            gField.GetComponent<SpriteRenderer>().size = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
-            gField.GetComponent<BoxCollider2D>().size = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
 
-            // 効果音
-            GetComponent<AudioSource>().Play();
-
-            routine = WaitAndDestroy();
-            StartCoroutine(routine);
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            try
+            if (Input.GetMouseButton(0)) // マウスの左ボタンを離した時の座標を取得
             {
-                GameObject.FindWithTag("GravityField").GetComponent<BoxCollider2D>().enabled = true;
+                endMPosition = Input.mousePosition;
+                // スクリーン座標からワールド座標に変換
+                endMPosition = Camera.main.ScreenToWorldPoint(new Vector3(endMPosition.x, endMPosition.y, CAMERAZPOSITION));
+                // Debug.Log("End:(" + endMPosition.x + ", " + endMPosition.y + ")");
+
+                Vector2 startMPosition2 = startMPosition;
+                Vector2 endMPosition2 = endMPosition;
+
+                // 既にGravityFieldのクローンがあれば削除
+                destroyGF = GameObject.FindWithTag("GravityField");
+                if (destroyGF != null)
+                {
+                    Destroy(destroyGF);
+                    StopCoroutine(routine);
+                    routine = null;
+                }
+                // GravityFieldのクローンを作成
+                GameObject gField = (GameObject)Instantiate(gravityField, (startMPosition2 + endMPosition2) / 2, Quaternion.identity);
+                gField.transform.position = gField.transform.position + new Vector3(0, 0, -gField.transform.position.z - 0.1f);
+                // ドラッグしたサイズに拡大
+                //gField.transform.localScale = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
+                gField.GetComponent<SpriteRenderer>().size = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
+                gField.GetComponent<BoxCollider2D>().size = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
+
+                // 効果音
+                GetComponent<AudioSource>().Play();
+
+                routine = WaitAndDestroy();
+                StartCoroutine(routine);
             }
-            catch { }
-        }
 
-        // 下キー/SキーでgravityScaleの変更
-        //if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-        //{
-        //    gScale = (gScale + 300001) % 3; // (gScale + 400001) % 4;
-        //    ChangeGravity();
-        //}
+            if (Input.GetMouseButtonUp(0))
+            {
+                try
+                {
+                    GameObject.FindWithTag("GravityField").GetComponent<BoxCollider2D>().enabled = true;
+                }
+                catch { }
+            }
 
-        if (Input.GetAxis("Mouse ScrollWheel") != 0 && isChangeable)
-        {
-            StartCoroutine(MouseWheelWait());
-            //Debug.Log(Input.GetAxis("Mouse ScrollWheel"));
-            mouseWheel -= (int)Input.GetAxis("Mouse ScrollWheel");
-            gScale = ((int)mouseWheel + 30000) % 3;      
-            ChangeGravity();
+            // 下キー/SキーでgravityScaleの変更
+            //if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+            //{
+            //    gScale = (gScale + 300001) % 3; // (gScale + 400001) % 4;
+            //    ChangeGravity();
+            //}
+
+            if (Input.GetAxis("Mouse ScrollWheel") != 0 && isChangeable)
+            {
+                StartCoroutine(MouseWheelWait());
+                //Debug.Log(Input.GetAxis("Mouse ScrollWheel"));
+                mouseWheel -= (int)Input.GetAxis("Mouse ScrollWheel");
+                gScale = ((int)mouseWheel + 30000) % 3;      
+                ChangeGravity();
+            }
         }
+        
     }
     void ChangeGravity()
     {
