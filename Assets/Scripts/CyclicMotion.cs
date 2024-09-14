@@ -24,7 +24,7 @@ public class CyclicMotion : MonoBehaviour
     {
         to = GetComponent<TurnOn>();
         animator = GetComponent<Animator>();
-        animator.SetBool("turnOn", to.GetTurnOn());
+        animator.SetBool("turnOn", false);
         
         StartCoroutine(Cycle());
     }
@@ -34,11 +34,27 @@ public class CyclicMotion : MonoBehaviour
         yield return new WaitForSeconds(OFFSET);
         while (true)
         {
-            animator.SetBool("turnOn", true);
-            yield return new WaitForSeconds(OFF2ON + ONDURATION);
-            animator.SetBool("turnOn", false);
-            yield return new WaitForSeconds(ON2OFF + OFFDURATION);
+            if (!to.GetTurnOn())
+            {
+                if (animator.GetBool("turnOn"))
+                {
+                    animator.SetBool("turnOn", false);
+                    yield return new WaitForSeconds(ON2OFF + OFFDURATION);
+                }
+                yield return null;
+            }
 
+            if (to.GetTurnOn())
+            {
+                animator.SetBool("turnOn", true);
+                yield return new WaitForSeconds(OFF2ON + ONDURATION);
+            }
+            if (to.GetTurnOn())
+            { 
+                animator.SetBool("turnOn", false);
+                yield return new WaitForSeconds(ON2OFF + OFFDURATION);
+            }
+            
         }
     }
 }

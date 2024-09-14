@@ -6,8 +6,9 @@ using UnityEngine;
 
 public class GravityFieldTexture : MonoBehaviour
 {
-    [SerializeField] private GravityManager gravityManager;
-    [SerializeField] private SpriteRenderer gFieldTexture;
+    [SerializeField] private bool isFixed = false;
+    /*[SerializeField]*/ private GravityManager gravityManager;
+    /*[SerializeField]*/ private SpriteRenderer gFieldTexture;
 
     [Serializable] private struct TextureSet
     {
@@ -16,12 +17,12 @@ public class GravityFieldTexture : MonoBehaviour
 
     [SerializeField] TextureSet[] textureSets;
 
-    private bool isChanging = false;
+    //private bool isChanging = false;
 
     [SerializeField] private int gPattern = 3;
     private int num = 0;
 
-    [SerializeField] private bool isFixed = false;
+
     
     // Start is called before the first frame update
     void Awake()
@@ -30,6 +31,11 @@ public class GravityFieldTexture : MonoBehaviour
         gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
         gFieldTexture = GetComponent<SpriteRenderer>();
         StartCoroutine(ChangeTexture());
+
+        if (isFixed)
+        {
+            GetComponent<BoxCollider2D>().size = new Vector2 (transform.localScale.x, 1) * GetComponent<SpriteRenderer>().size;
+        }
     }
 
     // Update is called once per frame
@@ -53,6 +59,11 @@ public class GravityFieldTexture : MonoBehaviour
         //{
         //    StartCoroutine(ChangeTexture());
         //}
+    }
+
+    public int GetGPattern()
+    {
+        return gPattern;
     }
 
     private IEnumerator ChangeTexture()

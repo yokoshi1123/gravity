@@ -56,7 +56,7 @@ public class RespawnManager : MonoBehaviour
             GameObject[] movableObjs = GameObject.FindGameObjectsWithTag("Movable");
             foreach (GameObject obj in movableObjs)
             { 
-                Debug.Log(obj.name);
+                //Debug.Log(obj.name);
                 try
                 {
                     StartCoroutine(obj.GetComponent<TotalWeight>().Respawn());

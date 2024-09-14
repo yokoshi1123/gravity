@@ -32,7 +32,7 @@ public class GravityManager : MonoBehaviour
 
     private IEnumerator routine;
 
-    [SerializeField] private bool emergency = false;
+    [SerializeField] private bool inEmergency = false;
 
     void Awake()
     {
@@ -44,7 +44,7 @@ public class GravityManager : MonoBehaviour
     }
     void Update()
     {
-        if (!emergency)
+        if (!inEmergency)
         {
             GameObject gravityField = (GameObject)Resources.Load("GravityField"); //"Square");//
 
@@ -114,10 +114,9 @@ public class GravityManager : MonoBehaviour
                 gScale = ((int)mouseWheel + 30000) % 3;      
                 ChangeGravity();
             }
-        }
-        
+        }   
     }
-    void ChangeGravity()
+    public void ChangeGravity()
     {
         // Debug.Log("gscale: " + gScale);
 
@@ -166,9 +165,19 @@ public class GravityManager : MonoBehaviour
     {
         return gScale;
     }
+
+    public void SetGScale(int value)
+    {
+        gScale = value;
+    }
     public float GetMagnification()
     {
         return magnification;
+    }
+
+    public bool GetInEmergency()
+    {
+        return inEmergency;
     }
     private IEnumerator WaitAndDestroy()
     {

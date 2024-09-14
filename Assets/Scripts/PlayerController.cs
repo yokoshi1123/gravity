@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private float magnification;
     private int gravityDirection;
     private float oldMag = 1f;
+    private bool inEmergency;
 
     private const float JUMPFORCE = 20.5f;
     [SerializeField] private float OBJ_MASS = 1f;
@@ -71,7 +72,9 @@ public class PlayerController : MonoBehaviour
         totalWeight = GetComponent<TotalWeight>();
         
         (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
-        gravityDirection = 1;
+        gravityDirection = (int)Mathf.Sign(magnification);
+        inEmergency = gravityManager.GetInEmergency();
+
         rb.mass = OBJ_MASS;
         respawnPoint = transform.position;
     }
@@ -248,7 +251,7 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1;
         pauseButton.SetActive(true);
         GameObject destroyGF = GameObject.FindWithTag("GravityField");
-        if (destroyGF != null)
+        if (destroyGF != null && !inEmergency)
         {
             Destroy(destroyGF);
         }
@@ -363,6 +366,11 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("GravityField") && (isPlayer /*!isGCollider*/ || gravityManager.GetMagnification() == -1f)) // 重力場中にあるとき、gravityManagerでの変更を読み込む
         {
             //Debug.Log("Stay");
+            if (inEmergency)
+            {
+                gravityManager.SetGScale(collision.GetComponent<GravityFieldTexture>().GetGPattern());
+                gravityManager.ChangeGravity();
+            }
             (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetValue();
             gravityDirection = (int)Mathf.Sign(magnification);
             if (magnification != oldMag)
@@ -403,11 +411,16 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("GravityField") && !isPlayer /*!isGCollider*/) // 重力場から出たとき、デフォルトに戻す
         {
+            Debug.Log("GField Exit");
             (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
             gravityDirection = 1;
             //rb.mass = OBJ_MASS;
             oldMag = 1f;
         }
+        //else if (collision.CompareTag("GravityField") && !isPlayer)
+        //{
+
+        //}
         else
         {
             isJumping = true;
