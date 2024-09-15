@@ -411,7 +411,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("GravityField") && !isPlayer /*!isGCollider*/) // 重力場から出たとき、デフォルトに戻す
         {
-            Debug.Log("GField Exit");
+            //Debug.Log("GField Exit");
             (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
             gravityDirection = 1;
             //rb.mass = OBJ_MASS;

@@ -39,7 +39,11 @@ public class GravityManager : MonoBehaviour
         moveSpeed = M_SPEED;
         gravityScale = G_SCALE;
         //gravityText.text = "èdóÕèÍÅF--";
-        gravityText = GameObject.Find("/Canvas/GravityText/GravityValue").GetComponent<TextMeshProUGUI>();
+        if (!inEmergency || inEmergency)
+        {
+            gravityText = GameObject.Find("/Canvas/GravityText/GravityValue").GetComponent<TextMeshProUGUI>();
+        }
+
         ChangeGravity();
     }
     void Update()
@@ -128,17 +132,19 @@ public class GravityManager : MonoBehaviour
             case 0: // x(-1.0)
                 gravityScale = G_SCALE * (-1.0f);
                 moveSpeed = M_SPEED;
-                gravityText.text = "-ÇP.ÇOG / îΩì]"; // string.Format("{ 0,6}","-1.0G") + " / îΩì]";//"èdóÕèÍÅF-1.0G / îΩì]";
+                if (!inEmergency || inEmergency) { gravityText.text = "-ÇP.ÇOG / îΩì]"; } // string.Format("{ 0,6}","-1.0G") + " / îΩì]";//"èdóÕèÍÅF-1.0G / îΩì]";
+                
                 break;
             case 1: // x0.5
                 gravityScale = G_SCALE * 0.5f;
-                moveSpeed = M_SPEED * 0.75f; 
-                gravityText.text = "ÇO.ÇTG / Å@åy"; // string.Format("{0,6}","0.5G") + " / Å@åy"; //"èdóÕèÍÅF0.5G / åy";
+                moveSpeed = M_SPEED * 0.75f;
+                if (!inEmergency || inEmergency) { gravityText.text = "ÇO.ÇTG / Å@åy"; }
+                // string.Format("{0,6}","0.5G") + " / Å@åy"; //"èdóÕèÍÅF0.5G / åy";
                 break;
             case 2: // x2.0
                 gravityScale = G_SCALE * 2.0f;
                 moveSpeed = M_SPEED * 1.5f;
-                gravityText.text = "ÇQ.ÇOG / Å@èd"; // string.Format("{ 0,6}", "2.0G") + " / Å@èd";//"èdóÕèÍÅF2.0G / èd";
+            if (!inEmergency || inEmergency) { gravityText.text = "ÇQ.ÇOG / Å@èd"; } // string.Format("{ 0,6}", "2.0G") + " / Å@èd";//"èdóÕèÍÅF2.0G / èd";
                 break;
             default:
                 Debug.Log("ChangeGravityÇ≈ÉGÉâÅ[");
