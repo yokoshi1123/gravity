@@ -35,6 +35,7 @@ public class GravityFieldTexture : MonoBehaviour
         if (isFixed)
         {
             GetComponent<BoxCollider2D>().size = new Vector2 (transform.localScale.x, 1) * GetComponent<SpriteRenderer>().size;
+            GetComponent<BoxCollider2D>().enabled = true;
         }
     }
 

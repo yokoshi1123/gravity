@@ -108,7 +108,7 @@ public class LaserController : MonoBehaviour
                     transform.position = new Vector2(basePos.x, (basePos.y + hitPos.y) * 0.5f);
                     //transform.localScale = new Vector2(Mathf.Abs(basePos.y - hitPos.y), transform.localScale.y);
                     beamRenderer.size = new Vector2(Mathf.Abs(basePos.y - hitPos.y), beamRenderer.size.y);
-                    beamEffect.transform.position = hitPos;
+                    beamEffect.transform.position = new Vector2(basePos.x, hitPos.y);
                     if (hit.collider.gameObject.CompareTag("Player"))
                     {
                         //Debug.Log(":(");
@@ -128,7 +128,7 @@ public class LaserController : MonoBehaviour
                     transform.position = new Vector2((basePos.x + hitPos.x) * 0.5f, basePos.y);
                     //transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitPos.x), transform.localScale.y);
                     beamRenderer.size = new Vector2(Mathf.Abs(basePos.x - hitPos.x), beamRenderer.size.y);
-                    beamEffect.transform.position = hitPos;
+                    beamEffect.transform.position = new Vector2(hitPos.x, basePos.y);
                     if (hit.collider.gameObject.CompareTag("Player"))
                     {
                         StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());

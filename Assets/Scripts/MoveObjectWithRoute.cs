@@ -6,11 +6,12 @@ using UnityEngine;
 
 public class MoveObjectWithRoute : MonoBehaviour
 {
-    [Header ("移動経路")] public GameObject[] movePoint;
-    [Header("速さ")] public float speed = 1.0f;
+    /*[Header ("移動経路")]*/ [SerializeField] private GameObject[] movePoint;
+    /*[Header("速さ")]*/ [SerializeField] private float speed = 1.0f;
+    [SerializeField] private bool loop = false;
 
     private Rigidbody2D rb;
-    private int nowPoint = 0;
+    /*[SerializeField]*/ private int nowPoint = 0;
     private int nextPoint = 0;
     private bool returnPoint = false;
 
@@ -18,8 +19,8 @@ public class MoveObjectWithRoute : MonoBehaviour
     private Vector2 mFloorVelocity = Vector2.zero;
     private Vector2 oldPosition = Vector2.zero;
 
-    private int delay = 0;
-    private const int DELAY = 8;
+    [SerializeField] private int delay = 0;
+    private const int DELAY = 6;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,8 @@ public class MoveObjectWithRoute : MonoBehaviour
         {
             transform.position = movePoint[0].transform.position;
         }
+
+        delay *= -60;
     }
 
     // Update is called once per frame
@@ -56,7 +59,6 @@ public class MoveObjectWithRoute : MonoBehaviour
                     toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
                     rb.MovePosition(toVector);
                 }
-
                 else
                 {
                     rb.MovePosition(movePoint[nextPoint].transform.position);
@@ -71,25 +73,33 @@ public class MoveObjectWithRoute : MonoBehaviour
             }
             else if (delay >= DELAY)
             {
-                // 折り返し進行
-                nextPoint = nowPoint - 1;
-
-                // 目標ポイントとの誤差がわずかになるまで移動
-                if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
+                if (loop)
                 {
-                    toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
-                    rb.MovePosition(toVector);
+                    nowPoint = 0;
+                    transform.position = movePoint[0].transform.position;
+                    returnPoint = false;
                 }
-
-                else
+                else // 折り返し進行
                 {
-                    rb.MovePosition(movePoint[nextPoint].transform.position);
-                    nowPoint--;
-                    delay = 0;
+                    nextPoint = nowPoint - 1;
 
-                    if (nowPoint <= 0)
+                    // 目標ポイントとの誤差がわずかになるまで移動
+                    if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
                     {
-                        returnPoint = false;
+                        toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
+                        rb.MovePosition(toVector);
+                    }
+
+                    else
+                    {
+                        rb.MovePosition(movePoint[nextPoint].transform.position);
+                        nowPoint--;
+                        delay = 0;
+
+                        if (nowPoint <= 0)
+                        {
+                            returnPoint = false;
+                        }
                     }
                 }
             }
