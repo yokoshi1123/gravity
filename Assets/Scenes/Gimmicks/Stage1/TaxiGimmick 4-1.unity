@@ -14122,6 +14122,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1309321465 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3961857049149262663, guid: 45b1b5e8eb6e93c4fad08c4d2fe927e4, type: 3}
+  m_PrefabInstance: {fileID: 95312753}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f92ed9d524dceb04ab38149c20ee0bf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1546061825
 GameObject:
   m_ObjectHideFlags: 0
@@ -14412,17 +14423,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 9044455982428746121, guid: 193929a11c1650f45a898eeec81e8b2c, type: 3}
   m_PrefabInstance: {fileID: 1631457072}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1631457075 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5776068127345944170, guid: 193929a11c1650f45a898eeec81e8b2c, type: 3}
-  m_PrefabInstance: {fileID: 1631457072}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1685160368
 GameObject:
   m_ObjectHideFlags: 0
@@ -14928,7 +14928,7 @@ PrefabInstance:
     - target: {fileID: 1909611621873545433, guid: 87f020c775b9914488fce4490cf4044c, type: 3}
       propertyPath: gravityText
       value: 
-      objectReference: {fileID: 1631457075}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87f020c775b9914488fce4490cf4044c, type: 3}
 --- !u!1001 &1846458681
@@ -15077,7 +15077,7 @@ PrefabInstance:
     - target: {fileID: 4395500877926776120, guid: e44196c7f9c278f4babaa16de253ea4b, type: 3}
       propertyPath: to
       value: 
-      objectReference: {fileID: 1046189277}
+      objectReference: {fileID: 1309321465}
     - target: {fileID: 4395500877926776120, guid: e44196c7f9c278f4babaa16de253ea4b, type: 3}
       propertyPath: onValue
       value: 4

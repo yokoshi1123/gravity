@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     private float magnification;
     private int gravityDirection;
     private float oldMag = 1f;
-    private bool inEmergency;
+    private bool isAvailable;
 
     private const float JUMPFORCE = 20.5f;
     [SerializeField] private float OBJ_MASS = 1f;
@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
         
         (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
         gravityDirection = (int)Mathf.Sign(magnification);
-        inEmergency = gravityManager.GetInEmergency();
+        isAvailable = gravityManager.GetIsAvailable();
 
         rb.mass = OBJ_MASS;
         respawnPoint = transform.position;
@@ -251,7 +251,7 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1;
         pauseButton.SetActive(true);
         GameObject destroyGF = GameObject.FindWithTag("GravityField");
-        if (destroyGF != null && !inEmergency)
+        if (destroyGF != null && !isAvailable)
         {
             Destroy(destroyGF);
         }
@@ -366,7 +366,7 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("GravityField") && (isPlayer /*!isGCollider*/ || gravityManager.GetMagnification() == -1f)) // èdóÕèÍíÜÇ…Ç†ÇÈÇ∆Ç´ÅAgravityManagerÇ≈ÇÃïœçXÇì«Ç›çûÇﬁ
         {
             //Debug.Log("Stay");
-            if (inEmergency)
+            if (isAvailable)
             {
                 gravityManager.SetGScale(collision.GetComponent<GravityFieldTexture>().GetGPattern());
                 gravityManager.ChangeGravity();
