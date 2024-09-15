@@ -45,10 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 994a86054473e914b9b71b68428f5532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAccessible: 1
   gravityScale: 0
   moveSpeed: 10
   gravityText: {fileID: 0}
-  emergency: 0
+  gravityValueText: {fileID: 0}
 --- !u!82 &1909611621873545435
 AudioSource:
   m_ObjectHideFlags: 0

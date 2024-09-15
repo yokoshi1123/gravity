@@ -9,7 +9,7 @@ public class GravityObserver : MonoBehaviour
     private Rigidbody2D rb;
 
     private GravityManager gravityManager;
-    private bool inEmergency;
+    private bool isAvailable;
 
     [SerializeField] private float OBJ_MASS;
 
@@ -19,7 +19,7 @@ public class GravityObserver : MonoBehaviour
     void Awake()
     {
         gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
-        inEmergency = gravityManager.GetInEmergency();
+        isAvailable = gravityManager.GetIsAvailable();
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityManager.GetDeFaultGravityScale(); //G_SCALE;
         rb.mass = OBJ_MASS;
@@ -45,7 +45,7 @@ public class GravityObserver : MonoBehaviour
     {
         if (collision.CompareTag("GravityField")) // d—Íê’†‚É‚ ‚é‚Æ‚«AgravityManager‚Å‚Ì•ÏX‚ğ“Ç‚İ‚Ş
         {
-            if (inEmergency)
+            if (isAvailable)
             {
                 gravityManager.SetGScale(collision.GetComponent<GravityFieldTexture>().GetGPattern());
                 gravityManager.ChangeGravity();
