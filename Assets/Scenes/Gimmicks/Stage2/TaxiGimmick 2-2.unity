@@ -521,6 +521,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3074067418382941405, guid: d1cf8ff8ef31b7744bde0c395ba8c09a, type: 3}
+      propertyPath: OBJ_MASS
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1cf8ff8ef31b7744bde0c395ba8c09a, type: 3}
 --- !u!114 &133479737 stripped
@@ -544,6 +548,10 @@ PrefabInstance:
     - target: {fileID: 3134356638971858822, guid: c485b2c0b1e6ef548a1113b6ce5f49ae, type: 3}
       propertyPath: m_Name
       value: "BOX_1\xD71"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3134356638971858824, guid: c485b2c0b1e6ef548a1113b6ce5f49ae, type: 3}
+      propertyPath: OBJ_MASS
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3134356638971858831, guid: c485b2c0b1e6ef548a1113b6ce5f49ae, type: 3}
       propertyPath: m_RootOrder
@@ -13362,6 +13370,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: "BOX_1\xD71 (1)"
       objectReference: {fileID: 0}
+    - target: {fileID: 3134356638971858824, guid: c485b2c0b1e6ef548a1113b6ce5f49ae, type: 3}
+      propertyPath: OBJ_MASS
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3134356638971858831, guid: c485b2c0b1e6ef548a1113b6ce5f49ae, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -13776,6 +13788,10 @@ PrefabInstance:
     - target: {fileID: 3134356638971858822, guid: c485b2c0b1e6ef548a1113b6ce5f49ae, type: 3}
       propertyPath: m_Name
       value: "BOX_1\xD71 (2)"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3134356638971858824, guid: c485b2c0b1e6ef548a1113b6ce5f49ae, type: 3}
+      propertyPath: OBJ_MASS
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3134356638971858831, guid: c485b2c0b1e6ef548a1113b6ce5f49ae, type: 3}
       propertyPath: m_RootOrder
