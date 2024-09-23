@@ -259,7 +259,7 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1;
         pauseButton.SetActive(true);
         GameObject destroyGF = GameObject.FindWithTag("GravityField");
-        if (destroyGF != null && !isAvailable)
+        if (destroyGF != null && isAvailable)
         {
             Destroy(destroyGF);
         }
@@ -375,7 +375,7 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("GravityField") && (isPlayer /*!isGCollider*/ || gravityManager.GetMagnification() == -1f)) // d—Íê’†‚É‚ ‚é‚Æ‚«AgravityManager‚Å‚Ì•ÏX‚ğ“Ç‚İ‚Ş
         {
             //Debug.Log("Stay");
-            if (isAvailable)
+            if (!isAvailable)
             {
                 gravityManager.SetGScale(collision.GetComponent<GravityFieldTexture>().GetGPattern());
                 gravityManager.ChangeGravity();
