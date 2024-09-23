@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
     private bool isWalking = false;
     private bool isJumping = false;
     private bool isGrabbing = false;
+    private bool isJumpActive = false;
+    private bool Grabfront = false;
     private bool canMove;
 
     private Vector3 scale;
@@ -142,8 +144,13 @@ public class PlayerController : MonoBehaviour
                 Grab();
             }
 
+
+            Grabfront = horizontal * scale.x >= 0 ? true : false;
+
             animator.SetBool("isWalking", isWalking);
             animator.SetBool("isJumping", isJumping);
+            animator.SetBool("isJumpActive", isJumpActive);
+            animator.SetBool("Grabfront", Grabfront);
             pushBc.enabled = (!isJumping && !isGrabbing);
         }
 
@@ -156,6 +163,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Jump()
     {
+        isJumpActive = true;
         isJumping = true;
         rb.velocity = new(rb.velocity.x, 0f);
         rb.AddForce(JUMPFORCE * gravityDirection /* magnification*/ * Vector2.up, ForceMode2D.Impulse);
@@ -334,6 +342,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y);
             isJumping = false;
+            isJumpActive = false;
             movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
         }
 
@@ -388,6 +397,7 @@ public class PlayerController : MonoBehaviour
         else if (!collision.CompareTag("Platform"))
         {
             isJumping = false;
+            isJumpActive = false;
         }
 
         //if (collision.CompareTag("Platform"))

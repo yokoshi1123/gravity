@@ -22,7 +22,7 @@ public class TotalWeight : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        defaultPosition = transform.localPosition;
+        defaultPosition = transform.position;
         rb = GetComponent<Rigidbody2D>();
         oldWeight = rb.mass * rb.gravityScale;
         totalWeight = oldWeight;;
