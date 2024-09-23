@@ -394,10 +394,9 @@ public class PlayerController : MonoBehaviour
             scale.y = gravityDirection;
             gameObject.transform.localScale = scale;
         }
-        else if (!collision.CompareTag("Platform"))
+        else if (!collision.CompareTag("Platform") && !collision.CompareTag("Tutorial"))
         {
             isJumping = false;
-            isJumpActive = false;
         }
 
         //if (collision.CompareTag("Platform"))
@@ -431,7 +430,7 @@ public class PlayerController : MonoBehaviour
         //{
 
         //}
-        else
+        else if (!collision.CompareTag("Tutorial"))
         {
             isJumping = true;
             //Debug.Log("In the air : T");

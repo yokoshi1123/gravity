@@ -25,7 +25,7 @@ public class TotalWeight : MonoBehaviour
         defaultPosition = transform.position;
         rb = GetComponent<Rigidbody2D>();
         oldWeight = rb.mass * rb.gravityScale;
-        totalWeight = oldWeight;;
+        totalWeight = oldWeight;
     }
 
     // Update is called once per frame

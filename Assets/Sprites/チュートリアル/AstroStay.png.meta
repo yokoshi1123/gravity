@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ecb1aaf3f627cd44e80d674bfd9228f2
+guid: a4cb7871f93472242972590c18ceb5d2
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -45,10 +45,10 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 9
-  spritePivot: {x: 0.4861, y: 0.0555}
-  spritePixelsToUnits: 128
-  spriteBorder: {x: 150, y: 30, z: 165, w: 15}
+  alignment: 7
+  spritePivot: {x: 0.5, y: 0}
+  spritePixelsToUnits: 120
+  spriteBorder: {x: 120, y: 0, z: 135, w: 15}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -103,18 +103,40 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: AstroStay_0
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 225
+        height: 465
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2988c2a44c4c12748828dc87243a6167
+      internalID: 453311876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: a10c28c7eff78854da0d18e0d740521e
-    internalID: 1011302176
+    spriteID: 30837a9c25abf974487884cec4fc416a
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      AstroStay_0: 453311876
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

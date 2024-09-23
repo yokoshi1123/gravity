@@ -11,6 +11,7 @@ TagManager:
   - Goal
   - Abyss
   - Platform
+  - Tutorial
   layers:
   - Default
   - TransparentFX
