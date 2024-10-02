@@ -262,8 +262,8 @@ MonoBehaviour:
   pushBc: {fileID: 5732628145344009628}
   sceneName: 
   jumpSE: {fileID: 8300000, guid: b6cc898b0509e5e479bc938a6c1ca12f, type: 3}
-  spikeSE: {fileID: 8300000, guid: 0b615f7554139e0479b4e47860faae03, type: 3}
-  respawnSE: {fileID: 8300000, guid: a3b54ff5f8e5a9f4e936c9ec25c692bf, type: 3}
+  spikeSE: {fileID: 8300000, guid: fa0517c879319ea4d9038f842b915518, type: 3}
+  respawnSE: {fileID: 8300000, guid: 7cd8985662686554daf4e7e79e53cdf4, type: 3}
   warpSE: {fileID: 8300000, guid: 60ac62c496d79d04d92d46817b3b2ddc, type: 3}
 --- !u!82 &3447104703329768386
 AudioSource:

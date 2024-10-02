@@ -11,6 +11,7 @@ public class MoveObjectWithRoute : MonoBehaviour
     [SerializeField] private bool loop = false;
 
     private Rigidbody2D rb;
+    private TurnOn to;
     /*[SerializeField]*/ private int nowPoint = 0;
     private int nextPoint = 0;
     private bool returnPoint = false;
@@ -26,6 +27,7 @@ public class MoveObjectWithRoute : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        to = GetComponent<TurnOn>();
 
         if (movePoint != null && movePoint.Length > 0 && rb != null)
         {
@@ -48,40 +50,12 @@ public class MoveObjectWithRoute : MonoBehaviour
             //Debug.Log(mFloorVelocity);
             oldPosition = rb.position;
 
-            // 通常進行
-            if (!returnPoint && delay >= DELAY)
+            if (to.GetTurnOn())
             {
-                nextPoint = nowPoint + 1;
-
-                // 目標ポイントとの誤差がわずかになるまで移動
-                if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
+                // 通常進行
+                if (!returnPoint && delay >= DELAY)
                 {
-                    toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
-                    rb.MovePosition(toVector);
-                }
-                else
-                {
-                    rb.MovePosition(movePoint[nextPoint].transform.position);
-                    nowPoint++;
-                    delay = 0;
-
-                    if (nowPoint + 1 >= movePoint.Length)
-                    {
-                        returnPoint = true;
-                    }
-                }
-            }
-            else if (delay >= DELAY)
-            {
-                if (loop)
-                {
-                    nowPoint = 0;
-                    transform.position = movePoint[0].transform.position;
-                    returnPoint = false;
-                }
-                else // 折り返し進行
-                {
-                    nextPoint = nowPoint - 1;
+                    nextPoint = nowPoint + 1;
 
                     // 目標ポイントとの誤差がわずかになるまで移動
                     if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
@@ -89,23 +63,54 @@ public class MoveObjectWithRoute : MonoBehaviour
                         toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
                         rb.MovePosition(toVector);
                     }
-
                     else
                     {
                         rb.MovePosition(movePoint[nextPoint].transform.position);
-                        nowPoint--;
+                        nowPoint++;
                         delay = 0;
 
-                        if (nowPoint <= 0)
+                        if (nowPoint + 1 >= movePoint.Length)
                         {
-                            returnPoint = false;
+                            returnPoint = true;
                         }
                     }
                 }
-            }
-            else
-            {
-                delay++;
+                else if (delay >= DELAY)
+                {
+                    if (loop)
+                    {
+                        nowPoint = 0;
+                        transform.position = movePoint[0].transform.position;
+                        returnPoint = false;
+                    }
+                    else // 折り返し進行
+                    {
+                        nextPoint = nowPoint - 1;
+
+                        // 目標ポイントとの誤差がわずかになるまで移動
+                        if (Vector2.Distance(transform.position, movePoint[nextPoint].transform.position) > 0.1f)
+                        {
+                            toVector = Vector2.MoveTowards(transform.position, movePoint[nextPoint].transform.position, speed * Time.deltaTime);
+                            rb.MovePosition(toVector);
+                        }
+
+                        else
+                        {
+                            rb.MovePosition(movePoint[nextPoint].transform.position);
+                            nowPoint--;
+                            delay = 0;
+
+                            if (nowPoint <= 0)
+                            {
+                                returnPoint = false;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    delay++;
+                }
             }
 
             //Debug.Log("toVector : " + toVector);
@@ -115,5 +120,13 @@ public class MoveObjectWithRoute : MonoBehaviour
     public Vector2 GetMFloorVelocity()
     {
         return mFloorVelocity;
+    }
+
+    public void Respawn()
+    {
+        if (movePoint != null && movePoint.Length > 0 && rb != null)
+        {
+            transform.position = movePoint[0].transform.position;
+        }
     }
 }

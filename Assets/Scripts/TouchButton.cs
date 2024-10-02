@@ -54,4 +54,25 @@ public class TouchButton : MonoBehaviour
             to[i].SetTurnOn(false);
         }
     }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Movable"))
+        {
+            for (int i = 0; i < to.Count; i++)
+            {
+                to[i].SetTurnOn(true);
+                //Debug.Log("On");
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        for (int i = 0; i < to.Count; i++)
+        {
+            to[i].SetTurnOn(false);
+            //Debug.Log("Off");
+        }
+    }
 }

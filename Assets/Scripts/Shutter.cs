@@ -7,7 +7,7 @@ public class Shutter : MonoBehaviour
 {
 
     [SerializeField]
-    private GameObject shutterCollider;
+    //private GameObject shutterCollider;
     /*[SerializeField] */private Animator animator;
 
     //[SerializeField] private GameObject Switch;
@@ -22,7 +22,7 @@ public class Shutter : MonoBehaviour
 
     void Awake()
     {
-        shutterCollider = transform.GetChild(0).gameObject; // GameObject.Find("/" + this.name + "/Collider");
+        //shutterCollider = transform.GetChild(0).gameObject; // GameObject.Find("/" + this.name + "/Collider");
         animator = GetComponent<Animator>();
         
         to = GetComponent<TurnOn>();
@@ -36,6 +36,7 @@ public class Shutter : MonoBehaviour
         turnOn = to.GetTurnOn();
         animator.SetBool("turnOn", turnOn);
 
+
         //if(turnOn)
         //{
         //    ShutterCollider.SetActive(false);
@@ -47,18 +48,21 @@ public class Shutter : MonoBehaviour
 
         if (turnOn != oldTO)
         {
-            if (routine != null) { StopCoroutine(routine); }
-            routine = ChangeSprite(turnOn);
-            StartCoroutine(routine);
+            GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.15f);
+            //if (routine != null) { StopCoroutine(routine); }
+            //routine = ChangeSprite(/*turnOn*/);
+            //StartCoroutine(routine);
         }
         oldTO = turnOn;
     }
 
-    private IEnumerator ChangeSprite(bool value)
-    {
-        yield return (value ? new WaitForSeconds(0.35f) : null);
-        //Debug.Log((value ? "Op" : "Clo"));
-        shutterCollider.SetActive(!value);
-        //Debug.Log((value ? "en" : "se"));
-    }
+    //private IEnumerator ChangeSprite(/*bool value*/)
+    //{
+    //    GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.1f);
+    //    yield return null;
+    //    //yield return (value ? new WaitForSeconds(0.35f) : null);
+    //    //Debug.Log((value ? "Op" : "Clo"));
+    //    //shutterCollider.SetActive(!value);
+    //    //Debug.Log((value ? "en" : "se"));
+    //}
 }

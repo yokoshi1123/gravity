@@ -59,10 +59,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private string sceneName;
 
-    [SerializeField] private AudioClip jumpSE;
-    [SerializeField] private AudioClip spikeSE;
-    [SerializeField] private AudioClip respawnSE;
-    [SerializeField] private AudioClip warpSE;
+    [Header("ジャンプ")][SerializeField] private AudioClip jumpSE;
+    [Header("電気柵")][SerializeField] private AudioClip spikeSE;
+    [Header("リスポーン")][SerializeField] private AudioClip respawnSE;
+    [Header("ゴール")][SerializeField] private AudioClip warpSE;
 
     void Awake()
     {
@@ -145,7 +145,7 @@ public class PlayerController : MonoBehaviour
             }
 
 
-            Grabfront = horizontal * scale.x >= 0 ? true : false;
+            Grabfront = horizontal * scale.x >= 0;
 
             animator.SetBool("isWalking", isWalking);
             animator.SetBool("isJumping", isJumping);
@@ -176,7 +176,7 @@ public class PlayerController : MonoBehaviour
     {
         if (grabObj == null && !isJumping)
         {
-            int layerMask = ~(1 << 2 | 1 << 6);
+            int layerMask = ~(1 << 2 | 1 << 6 | 1 << 8);
             hit = Physics2D.Raycast(grabPoint.position, Vector2.right * scale.x, RAYDISTANCE, layerMask);
             Debug.DrawRay(grabPoint.position, RAYDISTANCE * scale.x * Vector2.right, Color.green, 0.015f);
             //if (hit.collider != null)
@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviour
                 //grabObj.transform.position = new Vector2(grabPos.x + 0.1f * scale.x, grabPos.y);
                 grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
                 transform.position += new Vector3(-0.1f * scale.x, 0f, 0f);
-                grabObj.transform.position += new Vector3(0, 0.02f * scale.y, 0);
+                grabObj.transform.position += new Vector3(0, 0.005f * scale.y, 0);
                 grabObj.transform.SetParent(transform);
                 //grabObj.transform.position = new Vector2(grabPos.x, grabPos.y + 0.08f * scale.y);
                 //Debug.Log(grabObj.name + grabObj.transform.localScale);
@@ -270,6 +270,7 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector2.zero;
         respawnManager.respawn = true;
         transform.position = respawnPoint;
+        transform.localScale += new Vector3(0f, -transform.localScale.y + 1f, 0f);
         respawnManager.resAnimation = true;
 
         //if(respawnManager.respawn)
@@ -340,7 +341,7 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Platform") && transform.position.y > collision.gameObject.transform.position.y)
         {
-            Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y);
+            //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y);
             isJumping = false;
             isJumpActive = false;
             movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
@@ -374,7 +375,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("GravityField") && (isPlayer /*!isGCollider*/ || gravityManager.GetMagnification() == -1f)) // 重力場中にあるとき、gravityManagerでの変更を読み込む
         {
-            //Debug.Log("Stay");
+            //Debug.Log("GField Stay");
             if (!isAvailable)
             {
                 gravityManager.SetGScale(collision.GetComponent<GravityFieldTexture>().GetGPattern());
@@ -418,9 +419,9 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("GravityField") && !isPlayer /*!isGCollider*/) // 重力場から出たとき、デフォルトに戻す
+        if (collision.CompareTag("GravityField"))// && !isPlayer /*!isGCollider*/) // 重力場から出たとき、デフォルトに戻す
         {
-            //Debug.Log("GField Exit");
+            //Debug.Log("GField Exit : " + collision.name);
             (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
             gravityDirection = 1;
             //rb.mass = OBJ_MASS;
@@ -430,7 +431,7 @@ public class PlayerController : MonoBehaviour
         //{
 
         //}
-        else if (!collision.CompareTag("Tutorial"))
+        else if (!collision.CompareTag("Tutorial") && Mathf.Abs(rb.velocity.y) > 3f)
         {
             isJumping = true;
             //Debug.Log("In the air : T");

@@ -82,7 +82,7 @@ public class GravityManager : MonoBehaviour
                 }
                 // GravityFieldのクローンを作成
                 GameObject gField = (GameObject)Instantiate(gravityField, (startMPosition2 + endMPosition2) / 2, Quaternion.identity);
-                gField.transform.position = gField.transform.position + new Vector3(0, 0, -gField.transform.position.z - 0.1f);
+                gField.transform.position = gField.transform.position + new Vector3(0, 0, -gField.transform.position.z - 2f);
                 // ドラッグしたサイズに拡大
                 //gField.transform.localScale = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
                 gField.GetComponent<SpriteRenderer>().size = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
@@ -203,7 +203,7 @@ public class GravityManager : MonoBehaviour
     private IEnumerator MouseWheelWait() // マウスホイールからの入力を0.2秒無視する
     {
         isChangeable = false;
-        yield return new WaitForSecondsRealtime(0.2f);
+        yield return new WaitForSecondsRealtime(0.17f);
         isChangeable = true;
     }
 }

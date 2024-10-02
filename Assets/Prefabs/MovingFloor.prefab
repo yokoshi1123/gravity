@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3133087746629865558}
   - component: {fileID: 5060034433701934156}
   - component: {fileID: 3133087746629865555}
+  - component: {fileID: 7001172064367542656}
   - component: {fileID: 3133087746629865513}
   m_Layer: 0
   m_Name: MovingFloor
@@ -154,6 +155,19 @@ PlatformEffector2D:
   m_UseSideFriction: 1
   m_UseSideBounce: 0
   m_SideArc: 1
+--- !u!114 &7001172064367542656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3133087746629865552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f92ed9d524dceb04ab38149c20ee0bf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnOn: 1
 --- !u!114 &3133087746629865513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,3 +186,5 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   speed: 5
+  loop: 0
+  delay: 0

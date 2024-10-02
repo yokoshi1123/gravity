@@ -5,6 +5,7 @@ using UnityEngine;
 public class TutorialWindow : MonoBehaviour
 {
     private Animator tutorialAnimator;
+    private AudioSource tutorialSource;
 
     [SerializeField] private int tutorialNum = 0;
     
@@ -13,12 +14,20 @@ public class TutorialWindow : MonoBehaviour
     {
         tutorialAnimator = transform.GetChild(0).GetComponent<Animator>();
         tutorialAnimator.SetInteger("tutorialNum", tutorialNum);
+        tutorialSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
-    void Update()
+    //void Update() { }
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.CompareTag("Player"))
+        {
+            tutorialAnimator.SetBool("open", true);
+            tutorialSource.PlayOneShot(tutorialSource.clip, 0.2f);
+            //Debug.Log("On");
+        }
+
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -26,7 +35,7 @@ public class TutorialWindow : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             tutorialAnimator.SetBool("open", true);
-            Debug.Log("On");
+            //Debug.Log("On");
         }
 
     }
@@ -36,7 +45,7 @@ public class TutorialWindow : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             tutorialAnimator.SetBool("open", false);
-            Debug.Log("Off");
+            //Debug.Log("Off");
         }
     }
 }
