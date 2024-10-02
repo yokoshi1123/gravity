@@ -397,6 +397,7 @@ public class PlayerController : MonoBehaviour
         else if (!collision.CompareTag("Platform") && !collision.CompareTag("Tutorial"))
         {
             isJumping = false;
+            isJumpActive = false;
         }
 
         //if (collision.CompareTag("Platform"))
