@@ -74,6 +74,8 @@ public class RespawnManager : MonoBehaviour
                 }
                 catch { }
             }
+
+            GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
         }
         
         if (respawning1 || (changePosi==0))
@@ -81,7 +83,7 @@ public class RespawnManager : MonoBehaviour
             //Debug.Log("OK");
             PlayerAvatar.SetActive(true);
             respawning1 = false;
-            GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
+            
         }
 
         if(respawning2 || (changePosiÅ@==0))
