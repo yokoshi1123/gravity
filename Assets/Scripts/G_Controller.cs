@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class G_Controller: MonoBehaviour
 {
-    
+    [SerializeField] private bool isAvailable = true;
+
     [SerializeField] private Sprite OffTexture;
     [SerializeField] private Sprite OnTexture;
     [SerializeField] private GameObject HologramText;
@@ -28,9 +29,9 @@ public class G_Controller: MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {
-        /*turnon = to[0].GetTurnOn();
+        turnon = to[0].GetTurnOn();
 
         if(turnon)
         {
@@ -39,17 +40,18 @@ public class G_Controller: MonoBehaviour
         else
         {
             Renderer.sprite = OffTexture;
-        }*/
-        
-    }
+        }
+
+    }*/
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && isAvailable)
         {
             Renderer.sprite = OnTexture;
             HologramText.SetActive(true);
             gravityManager.SetIsAvailable(true);
+            GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
         }
 
     }

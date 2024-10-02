@@ -45,7 +45,7 @@ public class GravityObserver : MonoBehaviour
     {
         if (collision.CompareTag("GravityField")) // d—Íê’†‚É‚ ‚é‚Æ‚«AgravityManager‚Å‚Ì•ÏX‚ğ“Ç‚İ‚Ş
         {
-            if (isAvailable)
+            if (!isAvailable)
             {
                 gravityManager.SetGScale(collision.GetComponent<GravityFieldTexture>().GetGPattern());
                 gravityManager.ChangeGravity();

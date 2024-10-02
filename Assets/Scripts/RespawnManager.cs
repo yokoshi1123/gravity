@@ -63,6 +63,17 @@ public class RespawnManager : MonoBehaviour
                 }
                 catch { }
             }
+
+            GameObject[] movingFloors = GameObject.FindGameObjectsWithTag("Platform");
+            foreach (GameObject obj in movingFloors)
+            {
+                //Debug.Log(obj.name);
+                try
+                {
+                    obj.GetComponent<MoveObjectWithRoute>().Respawn();
+                }
+                catch { }
+            }
         }
         
         if (respawning1 || (changePosi==0))
@@ -70,6 +81,7 @@ public class RespawnManager : MonoBehaviour
             //Debug.Log("OK");
             PlayerAvatar.SetActive(true);
             respawning1 = false;
+            GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
         }
 
         if(respawning2 || (changePosiÅ@==0))

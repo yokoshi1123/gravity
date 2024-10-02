@@ -94,9 +94,11 @@ public class LaserController : MonoBehaviour
         //beamCollider.enabled = false;
         //beamCollider2.enabled = false;
         if (beamRenderer.sprite != null)
-        {        
+        {
             if (isVertical)
             {
+                basePos = new(transform.position.x, basePos.y);
+
                 //Debug.DrawRay(basePos, Vector2.down * machine.transform.localScale.y * RAYDISTANCE, Color.green, 0.015f);
                 int layerMask = ~(1 << 2 | 1 << 7 | 1 << 8);
                 //Debug.Log(layerMask);
@@ -113,18 +115,21 @@ public class LaserController : MonoBehaviour
                     {
                         //Debug.Log(":(");
                         StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
+                        GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
                     }
                 }
             }
             else
             {
+                basePos = new(basePos.x, transform.position.y);
+
                 //Debug.DrawRay(basePos, Vector2.left * RAYDISTANCE, Color.green, 0.015f);
                 int layerMask = ~(1 << 2 | 1 << 6 | 1 << 8);
                 hit = Physics2D.Raycast(basePos, Vector2.left * machine.transform.localScale.x, RAYDISTANCE, layerMask);
                 if (hit.collider != null)
                 {
                     Vector2 hitPos = hit.collider.ClosestPoint(basePos);
-                    //Debug.Log(hit.collider.name + " : " + hitPos);
+                    //Debug.Log(basePos + " / " + hit.collider.gameObject.name + " : " + hitPos + " / " + hit.collider.transform.position);
                     transform.position = new Vector2((basePos.x + hitPos.x) * 0.5f, basePos.y);
                     //transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitPos.x), transform.localScale.y);
                     beamRenderer.size = new Vector2(Mathf.Abs(basePos.x - hitPos.x), beamRenderer.size.y);
@@ -132,6 +137,7 @@ public class LaserController : MonoBehaviour
                     if (hit.collider.gameObject.CompareTag("Player"))
                     {
                         StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
+                        GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
                     }
                 }
             }
