@@ -27,13 +27,15 @@ public class RespawnManager : MonoBehaviour
 
 
 
-    /*[SerializeField]*/ private GameObject PlayerAvatar;
+    /*[SerializeField]*/ private GameObject playerAvatar;
+    private PlayerController playerController;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        PlayerAvatar = GameObject.FindWithTag("Player").transform.GetChild(0).gameObject;
+        playerAvatar = GameObject.FindWithTag("Player").transform.GetChild(0).gameObject;
+        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
@@ -48,8 +50,8 @@ public class RespawnManager : MonoBehaviour
         if (respawn)
         {
             //Debug.Log("respawn");
-            PlayerAvatar.SetActive(false);
-            canMove = false;
+            playerAvatar.SetActive(false);
+            playerController.SetCanMove(false); //canMove = false;
             //Debug.Log("è¡Ç¶ÇÈ");
             respawn=false;
 
@@ -81,7 +83,7 @@ public class RespawnManager : MonoBehaviour
         if (respawning1 || (changePosi==0))
         {
             //Debug.Log("OK");
-            PlayerAvatar.SetActive(true);
+            playerAvatar.SetActive(true);
             respawning1 = false;
             
         }
@@ -89,7 +91,7 @@ public class RespawnManager : MonoBehaviour
         if(respawning2 || (changePosiÅ@==0))
         {
             //Debug.Log("OK2");
-            canMove = true;
+            playerController.SetCanMove(true); //canMove = true;
             respawning2 = false;
             resAnimation = false;
         }

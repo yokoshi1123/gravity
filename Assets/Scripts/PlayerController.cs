@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrabbing = false;
     private bool isJumpActive = false;
     private bool Grabfront = false;
-    private bool canMove;
+    [SerializeField] private bool canMove;
 
     private Vector3 scale;
 
@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        canMove = respawnManager.canMove;
+        //canMove = respawnManager.canMove;
 
         if (canMove)
         {
@@ -250,6 +250,11 @@ public class PlayerController : MonoBehaviour
     {
         isPlayer = value;
     }
+
+    public void SetCanMove(bool value)
+    {
+        canMove = value;
+    }
     public IEnumerator Respawn()
     {
         pauseButton.SetActive(false);
@@ -397,6 +402,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (!collision.CompareTag("Platform") && !collision.CompareTag("Tutorial"))
         {
+            Debug.Log("Can Jump");
             isJumping = false;
             isJumpActive = false;
         }
@@ -432,9 +438,10 @@ public class PlayerController : MonoBehaviour
         //{
 
         //}
-        else if (!collision.CompareTag("Tutorial") && Mathf.Abs(rb.velocity.y) > 3f)
+        if (!collision.CompareTag("Tutorial") && Mathf.Abs(rb.velocity.y) > 3f)
         {
             isJumping = true;
+            Debug.Log("Cannot Jump");
             //Debug.Log("In the air : T");
         }
 

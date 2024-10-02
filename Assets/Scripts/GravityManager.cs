@@ -193,10 +193,18 @@ public class GravityManager : MonoBehaviour
 
     private IEnumerator WaitAndDestroy()
     {
-        yield return new WaitForSecondsRealtime(5f); // 5•b’x‰„
+        yield return new WaitForSecondsRealtime(4.5f); // 5•b’x‰„
         destroyGF = GameObject.FindWithTag("GravityField");
         if (destroyGF != null)
         {
+            SpriteRenderer myRenderer = destroyGF.GetComponent<SpriteRenderer>();
+            for (int i = 0; i < 5; i++)
+            {
+                myRenderer.color += new Color(0, 0, 0, -myRenderer.color.a + 0.25f);
+                yield return new WaitForSeconds(0.1f);
+                myRenderer.color += new Color(0, 0, 0, -myRenderer.color.a + 0.5f);
+                yield return new WaitForSeconds(0.1f);
+            }
             Destroy(destroyGF);
         }
     }
