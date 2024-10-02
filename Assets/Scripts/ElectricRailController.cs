@@ -69,12 +69,14 @@ public class ElectricRailController : MonoBehaviour
             rail.tag = "Toxic";
             edge1Renderer.sprite = edgeonTexture;
             edge2Renderer.sprite = edgeonTexture;
+            rail.GetComponent<BoxCollider2D>().enabled = true;
         }
         else
         {
             rail.tag = "Untagged";
             edge1Renderer.sprite = edgeoffTexture;
             edge2Renderer.sprite = edgeoffTexture;
+            rail.GetComponent<BoxCollider2D>().enabled = false;
         }
 
         if (!isChanging)
