@@ -29,12 +29,12 @@ public class PauseWindowController : MonoBehaviour
         playerController.SetCanMove(false);
         pauseButton.SetActive(false);
         pauseWindow.SetActive(true);
-        Time.timeScale = 0;
+        Time.timeScale = 0f;
     }
 
     public void Resume()
     {
-        Time.timeScale = 1;
+        Time.timeScale = 1f;
         playerController.SetCanMove(true);
         pauseButton.SetActive(true);
         pauseWindow.SetActive(false);

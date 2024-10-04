@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEditor.UIElements;
 
 [RequireComponent(typeof(AudioSource))]
 
@@ -30,7 +29,7 @@ public class GravityManager : MonoBehaviour
     private bool isChangeable = true;
     private int mouseWheel = 1;
 
-    [SerializeField] private GameObject gravityText;
+    [SerializeField] private GameObject gFieldUI;
     [SerializeField] private TextMeshProUGUI gravityValueText;
 
     private IEnumerator routine;
@@ -40,15 +39,15 @@ public class GravityManager : MonoBehaviour
         moveSpeed = M_SPEED;
         gravityScale = G_SCALE;
         //gravityValueText.text = "èdóÕèÍÅF--";
-        gravityText = GameObject.Find("/Canvas/GravityText");
-        gravityValueText = GameObject.Find("/Canvas/GravityText/GravityValue").GetComponent<TextMeshProUGUI>();
-        gravityText.SetActive(isAvailable);
+        gFieldUI = GameObject.Find("/Canvas/GFieldUI");
+        gravityValueText = GameObject.Find("/Canvas/GFieldUI/GravityText/GravityValue").GetComponent<TextMeshProUGUI>();
+        gFieldUI.SetActive(isAvailable);
 
         ChangeGravity();
     }
     void Update()
     {
-        gravityText.SetActive(isAvailable);
+        gFieldUI.SetActive(isAvailable);
         if (isAvailable)
         {           
             GameObject gravityField = (GameObject)Resources.Load("GravityField"); //"Square");//
@@ -133,19 +132,19 @@ public class GravityManager : MonoBehaviour
             case 0: // x(-1.0)
                 gravityScale = G_SCALE * (-1.0f);
                 moveSpeed = M_SPEED;
-                if (isAvailable/* || isAvailable*/) { gravityValueText.text = "-ÇP.ÇOG / îΩì]"; } // string.Format("{ 0,6}","-1.0G") + " / îΩì]";//"èdóÕèÍÅF-1.0G / îΩì]";
+                if (isAvailable/* || isAvailable*/) { gravityValueText.text = "-ÇP.ÇOG / Reversal"; } // string.Format("{ 0,6}","-1.0G") + " / îΩì]";//"èdóÕèÍÅF-1.0G / îΩì]";
                 
                 break;
             case 1: // x0.5
                 gravityScale = G_SCALE * 0.5f;
                 moveSpeed = M_SPEED * 0.75f;
-                if (isAvailable/* || isAvailable*/) { gravityValueText.text = "ÇO.ÇTG / Å@åy"; }
+                if (isAvailable/* || isAvailable*/) { gravityValueText.text = "ÇO.ÇTG / Å@  Light"; }
                 // string.Format("{0,6}","0.5G") + " / Å@åy"; //"èdóÕèÍÅF0.5G / åy";
                 break;
             case 2: // x2.0
                 gravityScale = G_SCALE * 2.0f;
                 moveSpeed = M_SPEED * 1.5f;
-                if (isAvailable/* || isAvailable*/) { gravityValueText.text = "ÇQ.ÇOG / Å@èd"; } // string.Format("{ 0,6}", "2.0G") + " / Å@èd";//"èdóÕèÍÅF2.0G / èd";
+                if (isAvailable/* || isAvailable*/) { gravityValueText.text = "ÇQ.ÇOG /     Heavy"; } // string.Format("{ 0,6}", "2.0G") + " / Å@èd";//"èdóÕèÍÅF2.0G / èd";
                 break;
             default:
                 Debug.Log("ChangeGravityÇ≈ÉGÉâÅ[");
