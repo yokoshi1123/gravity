@@ -19,7 +19,7 @@ public class G_Controller: MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Renderer = GetComponent<SpriteRenderer>();
         Renderer.sprite = OffTexture;

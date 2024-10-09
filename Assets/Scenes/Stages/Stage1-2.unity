@@ -55395,7 +55395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xMin: 35
-  xMax: 265
+  xMax: 273
   yMin: 6
   yMax: 10
   player: {fileID: 0}

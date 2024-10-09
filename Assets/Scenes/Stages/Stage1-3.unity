@@ -52249,7 +52249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xMin: 35
-  xMax: 280
+  xMax: 289
   yMin: 0
   yMax: 10
   player: {fileID: 0}

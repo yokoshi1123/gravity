@@ -16,7 +16,7 @@ public class GravityManager : MonoBehaviour
     [SerializeField] private float moveSpeed;
     
     //public bool isReverse = false;
-    //private int gravityDirection = 1;
+    private int gravityDirection = 1;
 
     private Vector2 startMPosition = Vector2.zero;
     private Vector2 endMPosition = Vector2.zero;
@@ -24,7 +24,7 @@ public class GravityManager : MonoBehaviour
     private GameObject destroyGF;
 
     private int gScale = 1;
-    private float magnification = 0.5f;
+    //private float magnification = 0.5f;
 
     private bool isChangeable = true;
     private int mouseWheel = 1;
@@ -75,9 +75,9 @@ public class GravityManager : MonoBehaviour
                 destroyGF = GameObject.FindWithTag("GravityField");
                 if (destroyGF != null)
                 {
-                    Destroy(destroyGF);
                     StopCoroutine(routine);
                     routine = null;
+                    Destroy(destroyGF);
                 }
                 // GravityFieldÇÃÉNÉçÅ[ÉìÇçÏê¨
                 GameObject gField = (GameObject)Instantiate(gravityField, (startMPosition2 + endMPosition2) / 2, Quaternion.identity);
@@ -125,25 +125,28 @@ public class GravityManager : MonoBehaviour
         // Debug.Log("gscale: " + gScale);
 
         //isReverse = (gScale == 0) ? true : false;
-        magnification = 1.5f * gScale - 1.0f;
+        //magnification = 1.5f * gScale - 1.0f;
         //gravityDirection = (int)Mathf.Sign(magnification);
         switch (gScale)
         {
             case 0: // x(-1.0)
                 gravityScale = G_SCALE * (-1.0f);
                 moveSpeed = M_SPEED;
+                gravityDirection = -1;
                 if (isAvailable/* || isAvailable*/) { gravityValueText.text = "-ÇP.ÇOG / Reversal"; } // string.Format("{ 0,6}","-1.0G") + " / îΩì]";//"èdóÕèÍÅF-1.0G / îΩì]";
                 
                 break;
             case 1: // x0.5
                 gravityScale = G_SCALE * 0.5f;
                 moveSpeed = M_SPEED * 0.75f;
+                gravityDirection = 1;
                 if (isAvailable/* || isAvailable*/) { gravityValueText.text = "ÇO.ÇTG / Å@  Light"; }
                 // string.Format("{0,6}","0.5G") + " / Å@åy"; //"èdóÕèÍÅF0.5G / åy";
                 break;
             case 2: // x2.0
                 gravityScale = G_SCALE * 2.0f;
                 moveSpeed = M_SPEED * 1.5f;
+                gravityDirection = 1;
                 if (isAvailable/* || isAvailable*/) { gravityValueText.text = "ÇQ.ÇOG /     Heavy"; } // string.Format("{ 0,6}", "2.0G") + " / Å@èd";//"èdóÕèÍÅF2.0G / èd";
                 break;
             default:
@@ -159,13 +162,21 @@ public class GravityManager : MonoBehaviour
     {
         return G_SCALE;
     }
-    public (float, float, float) GetValue()
+    //public (float, float, float) GetValue()
+    //{
+    //    return (gravityScale, moveSpeed, magnification);
+    //}
+    //public (float, float, float) GetDefaultValue()
+    //{
+    //    return (G_SCALE, M_SPEED, 1f);
+    //}
+    public (float, float, int) GetValue()
     {
-        return (gravityScale, moveSpeed, magnification);
+        return (gravityScale, moveSpeed, gravityDirection);
     }
-    public (float, float, float) GetDefaultValue()
+    public (float, float, int) GetDefaultValue()
     {
-        return (G_SCALE, M_SPEED, 1f);
+        return (G_SCALE, M_SPEED, 1);
     }
     public int GetGScale()
     {
@@ -176,10 +187,10 @@ public class GravityManager : MonoBehaviour
     {
         gScale = value;
     }
-    public float GetMagnification()
-    {
-        return magnification;
-    }
+    //public float GetMagnification()
+    //{
+    //    return magnification;
+    //}
     public bool GetIsAvailable()
     {
         return isAvailable;
@@ -192,20 +203,21 @@ public class GravityManager : MonoBehaviour
 
     private IEnumerator WaitAndDestroy()
     {
-        yield return new WaitForSecondsRealtime(4.5f); // 5ïbíxâÑ
-        destroyGF = GameObject.FindWithTag("GravityField");
-        if (destroyGF != null)
+        yield return new WaitForSecondsRealtime(4f); // 5ïbíxâÑ          
+        for (int i = 0; i < 5; i++)
         {
-            SpriteRenderer myRenderer = destroyGF.GetComponent<SpriteRenderer>();
-            for (int i = 0; i < 5; i++)
+            destroyGF = GameObject.FindWithTag("GravityField");
+            Debug.Log(destroyGF.name);
+            if (destroyGF != null)
             {
+                SpriteRenderer myRenderer = destroyGF.GetComponent<SpriteRenderer>();
                 myRenderer.color += new Color(0, 0, 0, -myRenderer.color.a + 0.25f);
                 yield return new WaitForSeconds(0.1f);
                 myRenderer.color += new Color(0, 0, 0, -myRenderer.color.a + 0.5f);
                 yield return new WaitForSeconds(0.1f);
             }
-            Destroy(destroyGF);
         }
+        Destroy(destroyGF);
     }
     private IEnumerator MouseWheelWait() // É}ÉEÉXÉzÉCÅ[ÉãÇ©ÇÁÇÃì¸óÕÇ0.2ïbñ≥éãÇ∑ÇÈ
     {

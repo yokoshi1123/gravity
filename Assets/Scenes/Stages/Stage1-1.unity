@@ -48988,7 +48988,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2352183228809053359, guid: 394cc6ba61469ba4eb57b812b5bedf5c, type: 3}
       propertyPath: xMax
-      value: 232
+      value: 236
       objectReference: {fileID: 0}
     - target: {fileID: 2352183228809053359, guid: 394cc6ba61469ba4eb57b812b5bedf5c, type: 3}
       propertyPath: xMin

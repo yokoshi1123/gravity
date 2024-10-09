@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private BoxCollider2D grabCollider;
 
-    private GravityManager gravityManager;
+    //private GravityManager gravityManager;
     public RespawnManager respawnManager;
 
     public Vector2 respawnPoint = new(0, 2);
@@ -26,13 +26,13 @@ public class PlayerController : MonoBehaviour
     private TotalWeight totalWeight;
 
     private float moveSpeed;
-    private float magnification;
+    //private float magnification;
     private int gravityDirection;
-    private float oldMag = 1f;
-    private bool isAvailable;
+    //private float oldMag = 1f;
+    //private bool isAvailable;
 
     private const float JUMPFORCE = 20.5f;
-    [SerializeField] private float OBJ_MASS = 1f;
+    //[SerializeField] private float OBJ_MASS = 1f;
 
     [SerializeField] private Transform grabPoint;
 
@@ -58,27 +58,27 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private BoxCollider2D pushBc;
     //[SerializeField] private BoxCollider2D footBc;
 
-    [SerializeField] private string sceneName; 
+    [SerializeField] private string sceneName;
 
-    [Header("�W�����v")][SerializeField] private AudioClip jumpSE;
-    [Header("�d�C��")][SerializeField] private AudioClip spikeSE;
-    [Header("���X�|�[��")][SerializeField] private AudioClip respawnSE;
-    [Header("�S�[��")][SerializeField] private AudioClip warpSE;
+    [Header("ジャンプ")][SerializeField] private AudioClip jumpSE;
+    [Header("電気柵")][SerializeField] private AudioClip spikeSE;
+    [Header("リスポーン")][SerializeField] private AudioClip respawnSE;
+    [Header("ゴール")][SerializeField] private AudioClip warpSE;
 
     void Awake()
     {
-        gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
+        //gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
         respawnManager = GameObject.Find("RespawnManager").GetComponent<RespawnManager>();
         pauseButton = GameObject.Find("/Canvas/PauseButton");
         rb = GetComponent<Rigidbody2D>();
         //totalMass = GetComponent<TotalMass>();
         totalWeight = GetComponent<TotalWeight>();
         
-        (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
-        gravityDirection = (int)Mathf.Sign(magnification);
-        isAvailable = gravityManager.GetIsAvailable();
+        //(rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
+        //gravityDirection = (int)Mathf.Sign(magnification);
+        //isAvailable = gravityManager.GetIsAvailable();
 
-        rb.mass = OBJ_MASS;
+        //rb.mass = OBJ_MASS;
         respawnPoint = transform.position;
 
         //リスポーンバグ解消用
@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
             scale.y = gravityDirection;
             gameObject.transform.localScale = scale;
 
-            //�W�����v
+            //ジャンプ
             if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && !isJumping && !isGrabbing)
             {
                 GetComponent<AudioSource>().PlayOneShot(jumpSE, 0.3f);
@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
             //    grabMass = grabObj.GetComponent<TotalMass>().GetMass();
             //}
 
-            //�v���C���[�̈ړ�
+            //プレイヤーの移動
             if (!isGrabbing || !isJumping)
             {
                 //Debug.Log(totalMass.GetMass() + ", " + Mathf.Max(1.0f, moveSpeed / totalMass.GetMass()));
@@ -161,8 +161,8 @@ public class PlayerController : MonoBehaviour
             pushBc.enabled = (!isJumping && !isGrabbing);
         }
 
-        //canMove = false�̂Ƃ��A���x0�ɂ�������
-        if(!canMove)
+        //canMove = falseのとき、速度0にし続ける
+        if (!canMove)
         {
             rb.velocity = Vector2.zero;
         }
@@ -272,15 +272,15 @@ public class PlayerController : MonoBehaviour
     {
         pauseButton.SetActive(false);
         Time.timeScale = 0;
-        yield return new WaitForSecondsRealtime(1); // 1�b�x��
+        yield return new WaitForSecondsRealtime(1); // 1秒遅延
         //Debug.Log("Died");
         Time.timeScale = 1;
         pauseButton.SetActive(true);
-        GameObject destroyGF = GameObject.FindWithTag("GravityField");
-        if (destroyGF != null && isAvailable)
-        {
-            Destroy(destroyGF);
-        }
+        //GameObject destroyGF = GameObject.FindWithTag("GravityField");
+        //if (destroyGF != null && isAvailable)
+        //{
+        //    Destroy(destroyGF);
+        //}
         if (isGrabbing)
         {
             Grab();
@@ -389,74 +389,74 @@ public class PlayerController : MonoBehaviour
             //StartCoroutine(Test());
         }
     }
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.CompareTag("GravityField") && (isPlayer /*!isGCollider*/ || gravityManager.GetMagnification() == -1f)) // �d�͏ꒆ�ɂ���Ƃ��AgravityManager�ł̕ύX��ǂݍ���
-        {
-            //Debug.Log("GField Stay");
-            if (!isAvailable)
-            {
-                gravityManager.SetGScale(collision.GetComponent<GravityFieldTexture>().GetGPattern());
-                gravityManager.ChangeGravity();
-            }
-            (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetValue();
-            gravityDirection = (int)Mathf.Sign(magnification);
-            if (magnification != oldMag)
-            {
-                //totalMass.SetMass(-rb.mass, true);
-                //rb.mass = OBJ_MASS * Mathf.Abs(magnification);
-                //totalMass.SetMass(rb.mass, true);
-                //Debug.Log(magnification + ": " + totalMass.GetMass());
-                oldMag = magnification;
-            }
-            scale = gameObject.transform.localScale;
-            scale.y = gravityDirection;
-            gameObject.transform.localScale = scale;
-        }
-        else if (!collision.CompareTag("Platform") && !collision.CompareTag("Tutorial"))
-        {
-            Debug.Log("Can Jump");
-            isJumping = false;
-            isJumpActive = false;
-        }
+    //private void OnTriggerStay2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("GravityField") && (isPlayer /*!isGCollider*/ || gravityManager.GetMagnification() == -1f)) // �d�͏ꒆ�ɂ���Ƃ��AgravityManager�ł̕ύX��ǂݍ���
+    //    {
+    //        //Debug.Log("GField Stay");
+    //        if (!isAvailable)
+    //        {
+    //            gravityManager.SetGScale(collision.GetComponent<GravityFieldTexture>().GetGPattern());
+    //            gravityManager.ChangeGravity();
+    //        }
+    //        (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetValue();
+    //        gravityDirection = (int)Mathf.Sign(magnification);
+    //        if (magnification != oldMag)
+    //        {
+    //            //totalMass.SetMass(-rb.mass, true);
+    //            //rb.mass = OBJ_MASS * Mathf.Abs(magnification);
+    //            //totalMass.SetMass(rb.mass, true);
+    //            //Debug.Log(magnification + ": " + totalMass.GetMass());
+    //            oldMag = magnification;
+    //        }
+    //        scale = gameObject.transform.localScale;
+    //        scale.y = gravityDirection;
+    //        gameObject.transform.localScale = scale;
+    //    }
+    //    else if (!collision.CompareTag("Platform") && !collision.CompareTag("Tutorial"))
+    //    {
+    //        Debug.Log("Can Jump");
+    //        isJumping = false;
+    //        isJumpActive = false;
+    //    }
 
-        //if (collision.CompareTag("Platform"))
-        //{
-        //    if (transform.position.y > collision.gameObject.transform.position.y)
-        //    {
-        //        isJumping = false;
-        //        movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
-        //    }
-        //    //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
-        //}
+    //    //if (collision.CompareTag("Platform"))
+    //    //{
+    //    //    if (transform.position.y > collision.gameObject.transform.position.y)
+    //    //    {
+    //    //        isJumping = false;
+    //    //        movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
+    //    //    }
+    //    //    //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
+    //    //}
 
-        //if (collision.CompareTag("Platform") && transform.position.y > collision.gameObject.transform.position.y + 2f)
-        //{
-        //    isJumping = false;
-        //    movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
-        //    //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
-        //}
-    }
+    //    //if (collision.CompareTag("Platform") && transform.position.y > collision.gameObject.transform.position.y + 2f)
+    //    //{
+    //    //    isJumping = false;
+    //    //    movingFloor = collision.gameObject.GetComponent<MoveObjectWithRoute>();
+    //    //    //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y + ": higher");
+    //    //}
+    //}
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("GravityField"))// && !isPlayer /*!isGCollider*/) // �d�͏ꂩ��o���Ƃ��A�f�t�H���g�ɖ߂�
-        {
-            //Debug.Log("GField Exit : " + collision.name);
-            (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
-            gravityDirection = 1;
-            //rb.mass = OBJ_MASS;
-            oldMag = 1f;
-        }
+        //if (collision.CompareTag("GravityField"))// && !isPlayer /*!isGCollider*/) // �d�͏ꂩ��o���Ƃ��A�f�t�H���g�ɖ߂�
+        //{
+        //    //Debug.Log("GField Exit : " + collision.name);
+        //    (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
+        //    gravityDirection = 1;
+        //    //rb.mass = OBJ_MASS;
+        //    oldMag = 1f;
+        //}
         //else if (collision.CompareTag("GravityField") && !isPlayer)
         //{
 
         //}
-        if (!collision.CompareTag("Tutorial") && Mathf.Abs(rb.velocity.y) > 3f)
-        {
-            isJumping = true;
-            Debug.Log("Cannot Jump");
-            //Debug.Log("In the air : T");
-        }
+        //if (!collision.CompareTag("Tutorial") && Mathf.Abs(rb.velocity.y) > 3f)
+        //{
+        //    isJumping = true;
+        //    Debug.Log("Cannot Jump");
+        //    //Debug.Log("In the air : T");
+        //}
 
         if (collision.CompareTag("Platform"))
         {
