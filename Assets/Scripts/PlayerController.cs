@@ -255,6 +255,12 @@ public class PlayerController : MonoBehaviour
     {
         canMove = value;
     }
+
+    public bool SetCanMove()
+    {
+        return canMove;
+    }
+
     public IEnumerator Respawn()
     {
         pauseButton.SetActive(false);
