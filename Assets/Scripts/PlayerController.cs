@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
 
     /*[SerializeField] */
     private GameObject pauseButton;
+    private GameObject Avatar;
 
     //private TotalMass totalMass;
     private TotalWeight totalWeight;
@@ -57,12 +58,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private BoxCollider2D pushBc;
     //[SerializeField] private BoxCollider2D footBc;
 
-    [SerializeField] private string sceneName;
+    [SerializeField] private string sceneName; 
 
-    [Header("ƒWƒƒƒ“ƒv")][SerializeField] private AudioClip jumpSE;
-    [Header("“d‹Cò")][SerializeField] private AudioClip spikeSE;
-    [Header("ƒŠƒXƒ|[ƒ“")][SerializeField] private AudioClip respawnSE;
-    [Header("ƒS[ƒ‹")][SerializeField] private AudioClip warpSE;
+    [Header("ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½v")][SerializeField] private AudioClip jumpSE;
+    [Header("ï¿½dï¿½Cï¿½ï¿½")][SerializeField] private AudioClip spikeSE;
+    [Header("ï¿½ï¿½ï¿½Xï¿½|ï¿½[ï¿½ï¿½")][SerializeField] private AudioClip respawnSE;
+    [Header("ï¿½Sï¿½[ï¿½ï¿½")][SerializeField] private AudioClip warpSE;
 
     void Awake()
     {
@@ -79,6 +80,9 @@ public class PlayerController : MonoBehaviour
 
         rb.mass = OBJ_MASS;
         respawnPoint = transform.position;
+
+        //ãƒªã‚¹ãƒãƒ¼ãƒ³ãƒã‚°è§£æ¶ˆç”¨
+        Avatar = transform.Find("Avatar").gameObject;
     }
     void Update()
     {
@@ -86,6 +90,9 @@ public class PlayerController : MonoBehaviour
 
         if (canMove)
         {
+            //ãƒªã‚¹ãƒãƒ¼ãƒ³ãƒã‚°è§£æ¶ˆç”¨
+            Avatar.SetActive(true);
+
             float horizontal = Input.GetAxisRaw("Horizontal");
             isWalking = horizontal != 0;
 
@@ -102,7 +109,7 @@ public class PlayerController : MonoBehaviour
             scale.y = gravityDirection;
             gameObject.transform.localScale = scale;
 
-            //ƒWƒƒƒ“ƒv
+            //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½v
             if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && !isJumping && !isGrabbing)
             {
                 GetComponent<AudioSource>().PlayOneShot(jumpSE, 0.3f);
@@ -117,7 +124,7 @@ public class PlayerController : MonoBehaviour
             //    grabMass = grabObj.GetComponent<TotalMass>().GetMass();
             //}
 
-            //ƒvƒŒƒCƒ„[‚ÌˆÚ“®
+            //ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌˆÚ“ï¿½
             if (!isGrabbing || !isJumping)
             {
                 //Debug.Log(totalMass.GetMass() + ", " + Mathf.Max(1.0f, moveSpeed / totalMass.GetMass()));
@@ -154,7 +161,7 @@ public class PlayerController : MonoBehaviour
             pushBc.enabled = (!isJumping && !isGrabbing);
         }
 
-        //canMove = false‚Ì‚Æ‚«A‘¬“x0‚É‚µ‘±‚¯‚é
+        //canMove = falseï¿½Ì‚Æ‚ï¿½ï¿½Aï¿½ï¿½ï¿½x0ï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if(!canMove)
         {
             rb.velocity = Vector2.zero;
@@ -265,7 +272,7 @@ public class PlayerController : MonoBehaviour
     {
         pauseButton.SetActive(false);
         Time.timeScale = 0;
-        yield return new WaitForSecondsRealtime(1); // 1•b’x‰„
+        yield return new WaitForSecondsRealtime(1); // 1ï¿½bï¿½xï¿½ï¿½
         //Debug.Log("Died");
         Time.timeScale = 1;
         pauseButton.SetActive(true);
@@ -384,7 +391,7 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("GravityField") && (isPlayer /*!isGCollider*/ || gravityManager.GetMagnification() == -1f)) // d—Íê’†‚É‚ ‚é‚Æ‚«AgravityManager‚Å‚Ì•ÏX‚ğ“Ç‚İ‚Ş
+        if (collision.CompareTag("GravityField") && (isPlayer /*!isGCollider*/ || gravityManager.GetMagnification() == -1f)) // ï¿½dï¿½Íê’†ï¿½É‚ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½AgravityManagerï¿½Å‚Ì•ÏXï¿½ï¿½Ç‚İï¿½ï¿½ï¿½
         {
             //Debug.Log("GField Stay");
             if (!isAvailable)
@@ -432,7 +439,7 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("GravityField"))// && !isPlayer /*!isGCollider*/) // d—Íê‚©‚ço‚½‚Æ‚«AƒfƒtƒHƒ‹ƒg‚É–ß‚·
+        if (collision.CompareTag("GravityField"))// && !isPlayer /*!isGCollider*/) // ï¿½dï¿½Íê‚©ï¿½ï¿½oï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Aï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½É–ß‚ï¿½
         {
             //Debug.Log("GField Exit : " + collision.name);
             (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
@@ -459,7 +466,7 @@ public class PlayerController : MonoBehaviour
 
     //private void OnCollisionExit2D(Collision2D collision)
     //{
-    //    if (collision.gameObject.CompareTag("GravityField") && !isPlayer /*!isGCollider*/) // d—Íê‚©‚ço‚½‚Æ‚«AƒfƒtƒHƒ‹ƒg‚É–ß‚·
+    //    if (collision.gameObject.CompareTag("GravityField") && !isPlayer /*!isGCollider*/) // ï¿½dï¿½Íê‚©ï¿½ï¿½oï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Aï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½É–ß‚ï¿½
     //    {
     //        (rb.gravityScale, moveSpeed, magnification) = gravityManager.GetDefaultValue();
     //        gravityDirection = 1;
