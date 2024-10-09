@@ -249,10 +249,29 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("isGrabbing", isGrabbing);
     }
+
     public bool GetIsGrabbing()
     {
         return isGrabbing;
     }
+
+    public void SetGState(float speed, int dir)
+    {
+        (moveSpeed, gravityDirection) = (speed, dir);
+    }
+
+    public void SetIsJumping(bool value1, bool value2)
+    {
+        //Debug.Log("1");
+        (isJumping, isJumpActive) = (value1, value2);
+    }
+
+    public void SetIsJumping(bool value1)
+    {
+        //Debug.Log("2");
+        isJumping = value1;
+    }
+
     public void SetIsPlayer(bool value)
     {
         isPlayer = value;

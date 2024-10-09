@@ -154,14 +154,17 @@ public class GravityManager : MonoBehaviour
                 break;
         }
     }
+
     public float GetGravityScale()
     {
         return gravityScale;
     }
+
     public float GetDeFaultGravityScale()
     {
         return G_SCALE;
     }
+
     //public (float, float, float) GetValue()
     //{
     //    return (gravityScale, moveSpeed, magnification);
@@ -174,10 +177,12 @@ public class GravityManager : MonoBehaviour
     {
         return (gravityScale, moveSpeed, gravityDirection);
     }
+
     public (float, float, int) GetDefaultValue()
     {
         return (G_SCALE, M_SPEED, 1);
     }
+
     public int GetGScale()
     {
         return gScale;
@@ -187,6 +192,7 @@ public class GravityManager : MonoBehaviour
     {
         gScale = value;
     }
+
     //public float GetMagnification()
     //{
     //    return magnification;

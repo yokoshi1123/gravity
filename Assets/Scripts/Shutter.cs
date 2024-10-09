@@ -18,7 +18,7 @@ public class Shutter : MonoBehaviour
 
     private TurnOn to;
 
-    private IEnumerator routine = null;
+    //private IEnumerator routine = null;
 
     void Awake()
     {
