@@ -111,10 +111,10 @@ public class LaserController : MonoBehaviour
                     //transform.localScale = new Vector2(Mathf.Abs(basePos.y - hitPos.y), transform.localScale.y);
                     beamRenderer.size = new Vector2(Mathf.Abs(basePos.y - hitPos.y), beamRenderer.size.y);
                     beamEffect.transform.position = new Vector2(basePos.x, hitPos.y);
-                    if (hit.collider.gameObject.CompareTag("Player"))
+                    if (hit.collider.transform.parent.gameObject.CompareTag("Player"))
                     {
-                        //Debug.Log(":(");
-                        StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
+                        Debug.Log("Hit");
+                        StartCoroutine(hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().Respawn());
                         GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
                     }
                 }
@@ -134,9 +134,10 @@ public class LaserController : MonoBehaviour
                     //transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitPos.x), transform.localScale.y);
                     beamRenderer.size = new Vector2(Mathf.Abs(basePos.x - hitPos.x), beamRenderer.size.y);
                     beamEffect.transform.position = new Vector2(hitPos.x, basePos.y);
-                    if (hit.collider.gameObject.CompareTag("Player"))
+                    if (hit.collider.transform.parent.gameObject.CompareTag("Player"))
                     {
-                        StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
+                        Debug.Log("Hit");
+                        StartCoroutine(hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().Respawn());
                         GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
                     }
                 }

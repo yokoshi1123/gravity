@@ -83,28 +83,61 @@ public class WeightButton : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        otherTW = other.gameObject.GetComponent<TotalWeight>();
-
-        if (otherTW != null && !otherObjs.Contains(other.gameObject))
+        if (other.transform.parent.gameObject.CompareTag("Player"))
         {
-            otherObjs.Add(other.gameObject);
+            Debug.Log(other.transform.parent.name);
+            otherTW = other.transform.parent.gameObject.GetComponent<TotalWeight>();
+            if (otherTW != null && !otherObjs.Contains(other.transform.parent.gameObject))
+            {
+                Debug.Log("Added");
+                otherObjs.Add(other.transform.parent.gameObject);
+            }
         }
+        else
+        {
+            Debug.Log(other.name);
+            otherTW = other.gameObject.GetComponent<TotalWeight>();
+            if (otherTW != null && !otherObjs.Contains(other.gameObject))
+            {
+                otherObjs.Add(other.gameObject);
+            }
+        }
+        
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (otherObjs.Contains(other.gameObject))
+        if (other.transform.parent.gameObject.CompareTag("Player"))
         {
-            if (addedObjs.ContainsKey(other.gameObject.name))
+            if (otherObjs.Contains(other.transform.parent.gameObject))
             {
-                otherTW = other.gameObject.GetComponent<TotalWeight>();
-                totalWeight -= otherTW.GetTWeight();
-                addedObjs.Remove(other.gameObject.name);
-                otherTW.SetIsAdded(false);
-                //Debug.Log(other.gameObject.name + " is removed");
-            }
-            otherObjs.Remove(other.gameObject);
+                if (addedObjs.ContainsKey(other.transform.parent.gameObject.name))
+                {
+                    otherTW = other.transform.parent.gameObject.GetComponent<TotalWeight>();
+                    totalWeight -= otherTW.GetTWeight();
+                    addedObjs.Remove(other.transform.parent.gameObject.name);
+                    otherTW.SetIsAdded(false);
+                    //Debug.Log(other.gameObject.name + " is removed");
+                }
+                otherObjs.Remove(other.transform.parent.gameObject);
 
+            }
+        }
+        else
+        {
+            if (otherObjs.Contains(other.gameObject))
+            {
+                if (addedObjs.ContainsKey(other.gameObject.name))
+                {
+                    otherTW = other.gameObject.GetComponent<TotalWeight>();
+                    totalWeight -= otherTW.GetTWeight();
+                    addedObjs.Remove(other.gameObject.name);
+                    otherTW.SetIsAdded(false);
+                    //Debug.Log(other.gameObject.name + " is removed");
+                }
+                otherObjs.Remove(other.gameObject);
+
+            }
         }
     }
 }

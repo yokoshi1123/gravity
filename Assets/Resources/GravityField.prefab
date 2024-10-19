@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7532597012395382254}
   - component: {fileID: 1824369420449528926}
   - component: {fileID: -139838206251211877}
-  - component: {fileID: 4303547899731605841}
   - component: {fileID: 2592625654869674556}
   m_Layer: 2
   m_Name: GravityField
@@ -113,18 +112,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &4303547899731605841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6260287198611083169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a2537da3674a9a41b0706793b47c2b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2592625654869674556
 MonoBehaviour:
   m_ObjectHideFlags: 0

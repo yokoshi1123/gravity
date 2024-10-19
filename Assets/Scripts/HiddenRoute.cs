@@ -14,7 +14,7 @@ public class HiddenRoute : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.transform.parent.CompareTag("Player"))
         {
             hiddenRoute.color = new Color(0.5f, 0.5f, 0.5f, 1f);
             transform.position += new Vector3(0, 0, -transform.position.z + 0.2f);
@@ -23,7 +23,7 @@ public class HiddenRoute : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.transform.parent.CompareTag("Player"))
         {
             hiddenRoute.color = Color.white;
             transform.position += new Vector3(0, 0, -transform.position.z);

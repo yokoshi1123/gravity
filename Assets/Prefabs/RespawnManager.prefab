@@ -51,7 +51,6 @@ MonoBehaviour:
   respawning1: 0
   respawning2: 0
   changePosi: 0
-  respawnchanged: 0
 --- !u!82 &3785925943821684992
 AudioSource:
   m_ObjectHideFlags: 0
@@ -62,7 +61,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: e80320a221b84bb4fb57330c239cd1bb, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

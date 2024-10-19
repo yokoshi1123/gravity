@@ -11,8 +11,8 @@ public class MoveObjectWithRoute : MonoBehaviour
 
     private Rigidbody2D rb;
     private TurnOn to;
-    /*[SerializeField]*/ private int nowPoint = 0;
-    private int nextPoint = 0;
+    [SerializeField] private int nowPoint = 0;
+    [SerializeField] private int nextPoint = 0;
     private bool returnPoint = false;
 
     private Vector2 toVector;
@@ -126,6 +126,9 @@ public class MoveObjectWithRoute : MonoBehaviour
         if (movePoint != null && movePoint.Length > 0 && rb != null)
         {
             transform.position = movePoint[0].transform.position;
+            nowPoint = 0;
+            nextPoint = 1;
+            returnPoint = false;
         }
     }
 }

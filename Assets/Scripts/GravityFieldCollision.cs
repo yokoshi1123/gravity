@@ -10,7 +10,7 @@ public class GravityFieldCollision : MonoBehaviour
         if (collision.CompareTag("Player")/*gameObject.name.Contains("Player")*/) // || collision.name == "GrabPoint")
         {
             //Debug.Log(collision.name + " : Stay");
-            collision.gameObject.GetComponent<PlayerController>().SetIsPlayer(true);
+            //collision.gameObject.GetComponent<PlayerController>().SetIsPlayer(true);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -18,7 +18,7 @@ public class GravityFieldCollision : MonoBehaviour
         if (collision.CompareTag("Player")/*.gameObject.name.Contains("Player")*/) // || collision.name == "GrabPoint")
         {
             //Debug.Log(collision.name + " : Exit");
-            collision.gameObject.GetComponent<PlayerController>().SetIsPlayer(false);
+            //collision.gameObject.GetComponent<PlayerController>().SetIsPlayer(false);
         }
     }
 }

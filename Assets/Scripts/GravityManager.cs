@@ -213,7 +213,7 @@ public class GravityManager : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             destroyGF = GameObject.FindWithTag("GravityField");
-            Debug.Log(destroyGF.name);
+            //Debug.Log(destroyGF.name);
             if (destroyGF != null)
             {
                 SpriteRenderer myRenderer = destroyGF.GetComponent<SpriteRenderer>();

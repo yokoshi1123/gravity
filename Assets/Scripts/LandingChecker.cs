@@ -13,9 +13,12 @@ public class LandingChecker : MonoBehaviour
     {
         playerController = transform.parent.GetComponent<PlayerController>();
     }
-    //void Update()
-    //{
-    //}
+
+    void Update()
+    {
+        
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (!collision.CompareTag("GravityField") && !collision.CompareTag("Toxic") && !collision.CompareTag("Platform") && !collision.CompareTag("Tutorial"))
@@ -25,6 +28,15 @@ public class LandingChecker : MonoBehaviour
             isJumpActive = false;
             playerController.SetIsJumping(isJumping, isJumpActive);
         }
+
+        if (collision.gameObject.CompareTag("Platform") && transform.position.y + 0.1f> collision.gameObject.transform.position.y)
+        {
+            //Debug.Log(transform.position.y + ", " + collision.gameObject.transform.position.y);
+            isJumping = false;
+            isJumpActive = false;
+            playerController.SetIsJumping(isJumping, isJumpActive);
+            playerController.SetMovingFloor(collision.gameObject.GetComponent<MoveObjectWithRoute>());
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -33,6 +45,13 @@ public class LandingChecker : MonoBehaviour
             //Debug.Log("Can Jump");
             isJumping = true;
             playerController.SetIsJumping(isJumping);
+        }
+
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            isJumping = true;
+            playerController.SetIsJumping(isJumping);
+            playerController.SetMovingFloor(null);
         }
     }
 }

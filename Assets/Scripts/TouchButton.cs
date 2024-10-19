@@ -36,16 +36,17 @@ public class TouchButton : MonoBehaviour
         
     }
 
-    private void OnCollisionStay2D(Collision2D other)
-    {
-        if(other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Movable"))
-        {
-            for(int i = 0; i < to.Count; i++)
-            {
-                to[i].SetTurnOn(true);
-            }
-        }
-    }
+    //private void OnCollisionStay2D(Collision2D other)
+    //{
+    //    Debug.Log(other.transform.gameObject.name + ": C");
+    //    if(other.transform.parent.gameObject != null && other.transform.parent.gameObject.CompareTag("Player") || other.transform.parent.gameObject.CompareTag("Movable"))
+    //    {
+    //        for(int i = 0; i < to.Count; i++)
+    //        {
+    //            to[i].SetTurnOn(true);
+    //        }
+    //    }
+    //}
 
     private void OnCollisionExit2D(Collision2D other)
     {
@@ -57,7 +58,13 @@ public class TouchButton : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Movable"))
+        //try
+        //{
+        //Debug.Log(other.gameObject.name + ", " + other.transform.parent.gameObject.name + " : T");
+        bool b1 = other.transform.parent.gameObject.CompareTag("Player");
+        bool b2 = other.transform.parent.gameObject.CompareTag("Movable");
+
+        if (other.transform.parent.gameObject != null && (b1 || b2)) //(other.transform.parent.gameObject.CompareTag("Player") || other.transform.parent.gameObject.CompareTag("Movable")))
         {
             for (int i = 0; i < to.Count; i++)
             {
@@ -65,6 +72,11 @@ public class TouchButton : MonoBehaviour
                 //Debug.Log("On");
             }
         }
+        //}
+        //catch
+        //{
+        //    Debug.Log(other.gameObject.name + " : T");
+        //}
     }
 
     private void OnTriggerExit2D(Collider2D other)
