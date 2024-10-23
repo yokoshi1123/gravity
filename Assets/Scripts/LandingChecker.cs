@@ -14,11 +14,6 @@ public class LandingChecker : MonoBehaviour
         playerController = transform.parent.GetComponent<PlayerController>();
     }
 
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (!collision.CompareTag("GravityField") && !collision.CompareTag("Toxic") && !collision.CompareTag("Platform") && !collision.CompareTag("Tutorial"))

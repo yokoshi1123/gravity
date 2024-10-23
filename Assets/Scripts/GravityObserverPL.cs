@@ -33,6 +33,7 @@ public class GravityObserverPL : MonoBehaviour
     void Update()
     {
         isAvailable = gravityManager.GetIsAvailable();
+        playerController.SetIsAvailable(isAvailable);
     }
 
     private void OnTriggerStay2D(Collider2D collision)

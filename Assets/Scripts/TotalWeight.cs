@@ -17,7 +17,7 @@ public class TotalWeight : MonoBehaviour
 
     [SerializeField] private bool isAdded = false;
 
-    private Vector2 defaultPosition;
+    private Vector3 defaultPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +50,12 @@ public class TotalWeight : MonoBehaviour
                 }
                 else if (!addedObjs.ContainsKey(otherObj.name) && otherTW.GetIsAdded())
                 {
-                    addedObjs.Remove(otherObj.name);
+                    //addedObjs.Remove(otherObj.name);
+                    otherObjs.Remove(otherObj);
+                    if (otherObjs.Count == 0)
+                    {
+                        break;
+                    }
                 }
                 else if (addedObjs.ContainsKey(otherObj.name) && otherTW.GetTWeight() != addedObjs[otherObj.name])
                 {

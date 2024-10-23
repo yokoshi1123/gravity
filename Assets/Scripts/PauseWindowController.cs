@@ -11,8 +11,10 @@ public class PauseWindowController : MonoBehaviour
     private PlayerController playerController;
 
     //private bool isPaused = false;
-    void Awake()
+    void Start()
     {
+        //pauseButton = GameObject.Find("/Canvas/PauseButton");
+        //pauseWindow = GameObject.Find("/Canvas/PauseWindow");
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
     }
 
@@ -38,7 +40,15 @@ public class PauseWindowController : MonoBehaviour
         playerController.SetCanMove(true);
         pauseButton.SetActive(true);
         pauseWindow.SetActive(false);
-
     }
-    
+
+    public void Restart()
+    {
+        Time.timeScale = 1f;
+        pauseButton.SetActive(true);
+        pauseWindow.SetActive(false);
+        playerController.SetIsDead(true);
+        playerController.SetCanMove(true);
+    }
+
 }

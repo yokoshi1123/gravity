@@ -17,8 +17,6 @@ public class WeightButton : MonoBehaviour
 
     private const float DEFAULTWEIGHT = 0f;
 
-    //private BoxCollider2D bc2D;
-
     [SerializeField] private TurnOn to;
 
     //[SerializeField] private float weight = 0f;
@@ -85,24 +83,23 @@ public class WeightButton : MonoBehaviour
     {
         if (other.transform.parent.gameObject.CompareTag("Player"))
         {
-            Debug.Log(other.transform.parent.name);
+            //Debug.Log(other.transform.parent.name);
             otherTW = other.transform.parent.gameObject.GetComponent<TotalWeight>();
             if (otherTW != null && !otherObjs.Contains(other.transform.parent.gameObject))
             {
-                Debug.Log("Added");
+                //Debug.Log("Added");
                 otherObjs.Add(other.transform.parent.gameObject);
             }
         }
         else
         {
-            Debug.Log(other.name);
+            //Debug.Log(other.name);
             otherTW = other.gameObject.GetComponent<TotalWeight>();
             if (otherTW != null && !otherObjs.Contains(other.gameObject))
             {
                 otherObjs.Add(other.gameObject);
             }
         }
-        
     }
 
     private void OnTriggerExit2D(Collider2D other)

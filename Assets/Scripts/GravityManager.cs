@@ -72,13 +72,7 @@ public class GravityManager : MonoBehaviour
                 Vector2 endMPosition2 = endMPosition;
 
                 // 既にGravityFieldのクローンがあれば削除
-                destroyGF = GameObject.FindWithTag("GravityField");
-                if (destroyGF != null)
-                {
-                    StopCoroutine(routine);
-                    routine = null;
-                    Destroy(destroyGF);
-                }
+                DestroyGF();
                 // GravityFieldのクローンを作成
                 GameObject gField = (GameObject)Instantiate(gravityField, (startMPosition2 + endMPosition2) / 2, Quaternion.identity);
                 gField.transform.position = gField.transform.position + new Vector3(0, 0, -gField.transform.position.z - 2f);
@@ -154,6 +148,16 @@ public class GravityManager : MonoBehaviour
                 break;
         }
     }
+    public void DestroyGF()
+    {
+        destroyGF = GameObject.FindWithTag("GravityField");
+        if (destroyGF != null)
+        {
+            StopCoroutine(routine);
+            routine = null;
+            Destroy(destroyGF);
+        }
+    }
 
     public float GetGravityScale()
     {
@@ -213,17 +217,21 @@ public class GravityManager : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             destroyGF = GameObject.FindWithTag("GravityField");
-            //Debug.Log(destroyGF.name);
             if (destroyGF != null)
             {
                 SpriteRenderer myRenderer = destroyGF.GetComponent<SpriteRenderer>();
                 myRenderer.color += new Color(0, 0, 0, -myRenderer.color.a + 0.25f);
                 yield return new WaitForSeconds(0.1f);
+            }
+            destroyGF = GameObject.FindWithTag("GravityField");
+            if (destroyGF != null)
+            {
+                SpriteRenderer myRenderer = destroyGF.GetComponent<SpriteRenderer>();
                 myRenderer.color += new Color(0, 0, 0, -myRenderer.color.a + 0.5f);
                 yield return new WaitForSeconds(0.1f);
             }
         }
-        Destroy(destroyGF);
+        DestroyGF();
     }
     private IEnumerator MouseWheelWait() // マウスホイールからの入力を0.2秒無視する
     {

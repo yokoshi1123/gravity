@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     //private float magnification;
     private int gravityDirection;
     //private float oldMag = 1f;
-    //private bool isAvailable;
+    [SerializeField]  private bool isAvailable;
 
     private const float JUMPFORCE = 20.5f;
     //[SerializeField] private float OBJ_MASS = 1f;
@@ -43,6 +43,8 @@ public class PlayerController : MonoBehaviour
     private bool isJumpActive = false;
     private bool grabFront = false;
     [SerializeField] private bool canMove;
+
+    private bool isDead = false;
 
     private Vector3 scale;
 
@@ -88,6 +90,8 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //canMove = respawnManager.canMove;
+
+        if (isDead) StartCoroutine(Respawn());
 
         if (canMove)
         {
@@ -312,14 +316,26 @@ public class PlayerController : MonoBehaviour
         movingFloor = mowr;
     }
 
-    public IEnumerator Respawn()
+    public void SetIsAvailable(bool value)
     {
+        isAvailable = value;
+    }
+
+    public void SetIsDead(bool value)
+    {
+        isDead = value;
+    }
+
+    private IEnumerator Respawn()
+    {
+        isDead = false;
         pauseButton.SetActive(false);
         Time.timeScale = 0;
         yield return new WaitForSecondsRealtime(1); // 1秒遅延
         //Debug.Log("Died");
         Time.timeScale = 1;
         pauseButton.SetActive(true);
+
         //GameObject destroyGF = GameObject.FindWithTag("GravityField");
         //if (destroyGF != null && isAvailable)
         //{

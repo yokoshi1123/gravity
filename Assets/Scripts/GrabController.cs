@@ -58,15 +58,19 @@ public class GrabController : MonoBehaviour
                 //Debug.Log(hit.collider.gameObject.name);
                 grabObj = (hit.collider.name.Contains("BOX")) ? hit.collider.gameObject : hit.collider.transform.parent.gameObject;
                 grabObj.GetComponent<Rigidbody2D>().isKinematic = true;
+                grabObj.GetComponent<BoxCollider2D>().enabled = false;
                 formerParent = grabObj.transform.parent;
                 grabObj.transform.SetParent(transform.parent);
-                transform.position = grabObj.transform.position;
-                Debug.Log(grabObj.transform.localScale.x * grabObj.GetComponent<BoxCollider2D>().size.x);
-                grabCollider.size = new Vector2(Mathf.Abs(grabObj.transform.localScale.x) * grabObj.GetComponent<BoxCollider2D>().size.x, Mathf.Abs(grabObj.transform.localScale.y) * grabObj.GetComponent<BoxCollider2D>().size.y);
-                grabCollider.enabled = true;
                 grabObj.transform.position += new Vector3(0, 0.005f * scale.y, 0);
+                //Debug.Log(transform.position + ", " + grabObj.transform.position);
+                transform.position = grabObj.transform.position;
+                //Debug.Log(grabObj.transform.localScale.x * grabObj.GetComponent<BoxCollider2D>().size.x);
+                //grabCollider.size = new Vector2(Mathf.Abs(grabObj.transform.localScale.x) * grabObj.GetComponent<BoxCollider2D>().size.x, Mathf.Abs(grabObj.transform.localScale.y) * grabObj.GetComponent<BoxCollider2D>().size.y);
+                grabCollider.size = new Vector2(Mathf.Abs(grabObj.transform.GetChild(0).lossyScale.x), Mathf.Abs(grabObj.transform.GetChild(0).lossyScale.y));
+                grabCollider.enabled = true;
                 grabObj.GetComponent<BoxCollider2D>().size = new Vector2(grabObj.GetComponent<BoxCollider2D>().size.x, 0.95f);
                 grabObj.transform.GetChild(0).gameObject.SetActive(false);
+                grabObj.GetComponent<BoxCollider2D>().enabled = true;
                 playerController.SetIsGrabbing(true);
             }
         }

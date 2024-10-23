@@ -48,19 +48,24 @@ public class TouchButton : MonoBehaviour
     //    }
     //}
 
-    private void OnCollisionExit2D(Collision2D other)
-    {
-        for (int i = 0; i < to.Count; i++)
-        {
-            to[i].SetTurnOn(false);
-        }
-    }
+    //private void OnCollisionExit2D(Collision2D other)
+    //{
+    //    for (int i = 0; i < to.Count; i++)
+    //    {
+    //        to[i].SetTurnOn(false);
+    //    }
+    //}
 
     private void OnTriggerStay2D(Collider2D other)
     {
         //try
         //{
-        //Debug.Log(other.gameObject.name + ", " + other.transform.parent.gameObject.name + " : T");
+        //Debug.Log(other.gameObject.name); // + ", " + other.transform.parent.gameObject.name + " : T");
+        if (other.CompareTag("GravityField"))
+        {
+            return;
+        }
+
         bool b1 = other.transform.parent.gameObject.CompareTag("Player");
         bool b2 = other.transform.parent.gameObject.CompareTag("Movable");
 

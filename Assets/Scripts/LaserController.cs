@@ -63,7 +63,8 @@ public class LaserController : MonoBehaviour
                 beamRenderer.size = new Vector2(Mathf.Abs(basePos.y - hitPos.y), beamRenderer.size.y);
                 if (hit.collider.gameObject.CompareTag("Player"))
                 {
-                    StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
+                    //StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
+                    hit.collider.gameObject.GetComponent<PlayerController>().SetIsDead(true);
                 }
             }
         }
@@ -78,7 +79,8 @@ public class LaserController : MonoBehaviour
                 beamRenderer.size = new Vector2(Mathf.Abs(basePos.x - hitPos.x), beamRenderer.size.y);
                 if (hit.collider.gameObject.CompareTag("Player"))
                 {
-                    StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
+                    //StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
+                    hit.collider.gameObject.GetComponent<PlayerController>().SetIsDead(true);
                 }
             }
         }
@@ -114,7 +116,8 @@ public class LaserController : MonoBehaviour
                     if (hit.collider.transform.parent.gameObject.CompareTag("Player"))
                     {
                         Debug.Log("Hit");
-                        StartCoroutine(hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().Respawn());
+                        //StartCoroutine(hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().Respawn());
+                        hit.collider.gameObject.GetComponent<PlayerController>().SetIsDead(true);
                         GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
                     }
                 }
@@ -137,7 +140,8 @@ public class LaserController : MonoBehaviour
                     if (hit.collider.transform.parent.gameObject.CompareTag("Player"))
                     {
                         Debug.Log("Hit");
-                        StartCoroutine(hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().Respawn());
+                        //StartCoroutine(hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().Respawn());
+                        hit.collider.gameObject.GetComponent<PlayerController>().SetIsDead(true);
                         GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
                     }
                 }

@@ -26,7 +26,7 @@ public class HiddenRoute : MonoBehaviour
         if (collision.transform.parent.CompareTag("Player"))
         {
             hiddenRoute.color = Color.white;
-            transform.position += new Vector3(0, 0, -transform.position.z);
+            transform.position += new Vector3(0, 0, -transform.position.z + 0.1f);
         }
     }
 

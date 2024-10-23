@@ -25,7 +25,7 @@ public class RespawnManager : MonoBehaviour
     //ˆÈ‰º‚Írespawn‚ÌˆÊ’u‚ª•ÏX‚³‚ê‚½‚Æ‚«‚Étrue‚ğ•Ô‚·
     //public bool respawnchanged = false;
 
-
+    private GravityManager gravityManager;
 
     ///*[SerializeField]*/ private GameObject playerAvatar;
     private SpriteRenderer playerAvatar;
@@ -35,6 +35,7 @@ public class RespawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
         playerAvatar = GameObject.FindWithTag("Player").transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
     }
@@ -50,6 +51,7 @@ public class RespawnManager : MonoBehaviour
         
         if (respawn)
         {
+            gravityManager.DestroyGF();
             //Debug.Log("respawn");
             playerAvatar.enabled = false; // SetActive(false);
             playerController.SetCanMove(false); //canMove = false;
