@@ -21,7 +21,7 @@ public class TutorialWindow : MonoBehaviour
     //void Update() { }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.transform.parent.CompareTag("Player"))
         {
             tutorialAnimator.SetBool("open", true);
             tutorialSource.PlayOneShot(tutorialSource.clip, 0.2f);
@@ -32,7 +32,7 @@ public class TutorialWindow : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.transform.parent.CompareTag("Player"))
         {
             tutorialAnimator.SetBool("open", true);
             //Debug.Log("On");
@@ -42,7 +42,7 @@ public class TutorialWindow : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.transform.parent.CompareTag("Player"))
         {
             tutorialAnimator.SetBool("open", false);
             //Debug.Log("Off");

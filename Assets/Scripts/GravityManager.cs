@@ -151,7 +151,7 @@ public class GravityManager : MonoBehaviour
     public void DestroyGF()
     {
         destroyGF = GameObject.FindWithTag("GravityField");
-        if (destroyGF != null)
+        if (destroyGF != null && isAvailable)
         {
             StopCoroutine(routine);
             routine = null;

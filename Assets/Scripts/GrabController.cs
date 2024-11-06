@@ -21,15 +21,27 @@ public class GrabController : MonoBehaviour
     private RaycastHit2D hit;
     private Transform formerParent;
 
-    //private MoveObjectWithRoute movingFloor;
-    //private Vector2 mFloorVelocity;
+    private Rigidbody2D rb;
+    private GravityManager gravityManager;
 
+    private bool isAvailable = false;
+
+    private float moveSpeed;
+    private int gravityDirection = 1;
+
+    [SerializeField] private float OBJ_MASS = 1;
 
     // Start is called before the first frame update
     void Awake()
     {
         playerController = transform.parent.GetComponent<PlayerController>();
         grabCollider = GetComponent<BoxCollider2D>();
+
+        rb = transform.parent.GetComponent<Rigidbody2D>();
+        gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
+        (rb.gravityScale, moveSpeed, gravityDirection) = gravityManager.GetDefaultValue();
+        rb.mass = OBJ_MASS;
+        playerController.SetGState(moveSpeed, gravityDirection);
     }
 
     // Update is called once per frame
@@ -88,6 +100,30 @@ public class GrabController : MonoBehaviour
             transform.position = transform.parent.transform.position + Vector3.Scale(OFFSET, scale);
             //Debug.Log(Vector3.Scale(OFFSET, scale));
             playerController.SetIsGrabbing(false);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("GravityField") && grabCollider.enabled) // 重力場中にあるとき、gravityManagerでの変更を読み込む
+        {
+            //Debug.Log("GField Stay");
+            if (!isAvailable)
+            {
+                gravityManager.SetGScale(collision.GetComponent<GravityFieldTexture>().GetGPattern());
+                gravityManager.ChangeGravity();
+            }
+            (rb.gravityScale, moveSpeed, gravityDirection) = gravityManager.GetValue();
+            playerController.SetGState(moveSpeed, gravityDirection);
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("GravityField") && grabCollider.enabled) // 重力場から出たとき、デフォルトに戻す
+        {
+            //Debug.Log("GField Exit : " + collision.name);
+            (rb.gravityScale, moveSpeed, gravityDirection) = gravityManager.GetDefaultValue();
+            playerController.SetGState(moveSpeed, gravityDirection);
         }
     }
 }

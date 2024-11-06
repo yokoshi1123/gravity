@@ -115,9 +115,9 @@ public class LaserController : MonoBehaviour
                     beamEffect.transform.position = new Vector2(basePos.x, hitPos.y);
                     if (hit.collider.transform.parent.gameObject.CompareTag("Player"))
                     {
-                        Debug.Log("Hit");
+                        //Debug.Log("Hit");
                         //StartCoroutine(hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().Respawn());
-                        hit.collider.gameObject.GetComponent<PlayerController>().SetIsDead(true);
+                        hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().SetIsDead(true);
                         GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
                     }
                 }
@@ -139,9 +139,9 @@ public class LaserController : MonoBehaviour
                     beamEffect.transform.position = new Vector2(hitPos.x, basePos.y);
                     if (hit.collider.transform.parent.gameObject.CompareTag("Player"))
                     {
-                        Debug.Log("Hit");
+                        //Debug.Log("Hit");
                         //StartCoroutine(hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().Respawn());
-                        hit.collider.gameObject.GetComponent<PlayerController>().SetIsDead(true);
+                        hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().SetIsDead(true);
                         GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
                     }
                 }

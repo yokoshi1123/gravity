@@ -15,7 +15,6 @@ public class GravityObserverPL : MonoBehaviour
     private float moveSpeed;
     private int gravityDirection = 1;
 
-
     [SerializeField] private float OBJ_MASS = 1;
 
     // Start is called before the first frame update

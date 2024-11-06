@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
     //[SerializeField] private BoxCollider2D pushBc;
     //[SerializeField] private BoxCollider2D footBc;
 
-    [SerializeField] private string sceneName;
+    //[SerializeField] private string sceneName;
 
     [Header("ジャンプ")][SerializeField] private AudioClip jumpSE;
     //[Header("電気柵")][SerializeField] private AudioClip spikeSE;
