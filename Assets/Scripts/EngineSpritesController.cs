@@ -28,7 +28,7 @@ public class EngineSpritesController : MonoBehaviour
         {
             lightSprites[i] = lights[i].GetComponentsInChildren < SpriteRenderer > ();
 
-            Debug.Log($"light_{i} has {lightSprites[i].Length} SpriteRenderers.");
+            //Debug.Log($"light_{i} has {lightSprites[i].Length} SpriteRenderers.");
 
             if (lightSprites[i].Length == 0)
             {
@@ -79,7 +79,7 @@ public class EngineSpritesController : MonoBehaviour
             lightSprite.color = spriteColor;
             yield return null;
 
-            Debug.Log($"lightnum {lightnum}, Alpha: {spriteColor.a}");
+            //Debug.Log($"lightnum {lightnum}, Alpha: {spriteColor.a}");
         }
     }
 

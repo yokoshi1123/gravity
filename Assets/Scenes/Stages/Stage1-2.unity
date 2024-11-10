@@ -1619,7 +1619,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2021822813352477414, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: OFFDURATION
-      value: 1
+      value: 1.7
       objectReference: {fileID: 0}
     - target: {fileID: 3223119532254331743, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: OFFSET
@@ -3347,7 +3347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2021822813352477414, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: OFFSET
-      value: 2.8
+      value: 3.15
       objectReference: {fileID: 0}
     - target: {fileID: 2021822813352477414, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: ONDURATION
@@ -3355,7 +3355,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2021822813352477414, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: OFFDURATION
-      value: 1
+      value: 1.7
       objectReference: {fileID: 0}
     - target: {fileID: 3223119532254331743, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: OFFSET
@@ -3554,7 +3554,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2021822813352477414, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: OFFDURATION
-      value: 1
+      value: 1.7
       objectReference: {fileID: 0}
     - target: {fileID: 3223119532254331743, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: OFFSET
@@ -3839,7 +3839,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2021822813352477414, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: OFFDURATION
-      value: 1
+      value: 1.7
       objectReference: {fileID: 0}
     - target: {fileID: 3223119532254331743, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: OFFSET
@@ -56573,7 +56573,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2021822813352477414, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: OFFSET
-      value: 2.8
+      value: 3.15
       objectReference: {fileID: 0}
     - target: {fileID: 2021822813352477414, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: ONDURATION
@@ -56581,7 +56581,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2021822813352477414, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: OFFDURATION
-      value: 1
+      value: 1.7
       objectReference: {fileID: 0}
     - target: {fileID: 3223119532254331743, guid: 7b8aa886c24c290459b6a64b9de37cf7, type: 3}
       propertyPath: OFFSET

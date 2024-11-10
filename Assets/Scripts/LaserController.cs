@@ -61,7 +61,7 @@ public class LaserController : MonoBehaviour
                 Vector2 hitPos = hit.collider.ClosestPoint(basePos);
                 transform.position = new Vector2(basePos.x, (basePos.y + hitPos.y) * 0.5f);
                 beamRenderer.size = new Vector2(Mathf.Abs(basePos.y - hitPos.y), beamRenderer.size.y);
-                if (hit.collider.gameObject.CompareTag("Player"))
+                if (hit.collider.gameObject.name == "Avatar" || hit.collider.gameObject.name == "GFieldSensor" || hit.collider.gameObject.name == "FootSensor")
                 {
                     //StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
                     hit.collider.gameObject.GetComponent<PlayerController>().SetIsDead(true);
@@ -77,7 +77,7 @@ public class LaserController : MonoBehaviour
                 Vector2 hitPos = hit.collider.ClosestPoint(basePos);
                 transform.position = new Vector2((basePos.x + hitPos.x) * 0.5f, basePos.y);
                 beamRenderer.size = new Vector2(Mathf.Abs(basePos.x - hitPos.x), beamRenderer.size.y);
-                if (hit.collider.gameObject.CompareTag("Player"))
+                if (hit.collider.gameObject.name == "Avatar" || hit.collider.gameObject.name == "GFieldSensor" || hit.collider.gameObject.name == "FootSensor")
                 {
                     //StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
                     hit.collider.gameObject.GetComponent<PlayerController>().SetIsDead(true);
@@ -113,7 +113,7 @@ public class LaserController : MonoBehaviour
                     //transform.localScale = new Vector2(Mathf.Abs(basePos.y - hitPos.y), transform.localScale.y);
                     beamRenderer.size = new Vector2(Mathf.Abs(basePos.y - hitPos.y), beamRenderer.size.y);
                     beamEffect.transform.position = new Vector2(basePos.x, hitPos.y);
-                    if (hit.collider.transform.parent.gameObject.CompareTag("Player"))
+                    if (hit.collider.gameObject.name == "Avatar" || hit.collider.gameObject.name == "GFieldSensor" || hit.collider.gameObject.name == "FootSensor")
                     {
                         //Debug.Log("Hit");
                         //StartCoroutine(hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().Respawn());
@@ -137,7 +137,7 @@ public class LaserController : MonoBehaviour
                     //transform.localScale = new Vector2(Mathf.Abs(basePos.x - hitPos.x), transform.localScale.y);
                     beamRenderer.size = new Vector2(Mathf.Abs(basePos.x - hitPos.x), beamRenderer.size.y);
                     beamEffect.transform.position = new Vector2(hitPos.x, basePos.y);
-                    if (hit.collider.transform.parent.gameObject.CompareTag("Player"))
+                    if (hit.collider.gameObject.name == "Avatar" || hit.collider.gameObject.name == "GFieldSensor" || hit.collider.gameObject.name == "FootSensor")
                     {
                         //Debug.Log("Hit");
                         //StartCoroutine(hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().Respawn());
