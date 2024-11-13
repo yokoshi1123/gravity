@@ -159,7 +159,7 @@ GameObject:
   - component: {fileID: 139122394245537513}
   m_Layer: 2
   m_Name: RespawnPoint 1
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

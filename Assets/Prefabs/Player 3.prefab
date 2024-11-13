@@ -75,9 +75,9 @@ MonoBehaviour:
   animator: {fileID: 3790027784694293599}
   respawnManager: {fileID: 0}
   respawnPoint: {x: 0, y: 1.35}
-  canMove: 0
+  isAvailable: 0
+  canMove: 1
   movingFloor: {fileID: 0}
-  sceneName: ToBeContinued
   jumpSE: {fileID: 8300000, guid: b6cc898b0509e5e479bc938a6c1ca12f, type: 3}
   respawnSE: {fileID: 8300000, guid: 7cd8985662686554daf4e7e79e53cdf4, type: 3}
 --- !u!82 &6106902718582351862
@@ -454,6 +454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f6cefa8b3cef464aa467106ebd00922, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OBJ_MASS: 1
 --- !u!1 &8869418199028999187
 GameObject:
   m_ObjectHideFlags: 0

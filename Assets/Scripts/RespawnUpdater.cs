@@ -9,6 +9,8 @@ public class RespawnUpdater : MonoBehaviour
     private bool change = false;
     private bool resAnimation = false;
 
+    [SerializeField] private int respawn_index;
+
     //現在のリスポーン地点がここであることを示す。
     //private bool current = false;
 
@@ -16,7 +18,7 @@ public class RespawnUpdater : MonoBehaviour
     //private bool collisioning = false;
 
     //public bool respawned = false;
-    private GameObject resManager;
+    private RespawnManager respawnManager;
     //private Vector3 posi;
     //private Transform myTransform;
 
@@ -26,8 +28,8 @@ public class RespawnUpdater : MonoBehaviour
 
     void Awake()
     {
-        resManager = GameObject.Find("RespawnManager");
-        /*if(resManager == null)
+        respawnManager = GameObject.Find("RespawnManager").GetComponent<RespawnManager>();
+        /*if(respawnManager == null)
         {
             Debug.Log("NULL");
         }*/
@@ -36,7 +38,7 @@ public class RespawnUpdater : MonoBehaviour
     void Update()
     {
         
-        resAnimation = resManager.GetComponent<RespawnManager>().GetRespawnAnimation();
+        resAnimation = respawnManager.GetRespawnAnimation();
         if (resAnimation)
         {
             //Debug.Log("resAnimation is true");
@@ -48,7 +50,7 @@ public class RespawnUpdater : MonoBehaviour
             //animator.SetBool("resAnimation", resAnimation);
         }
 
-        /*if (resManager.GetComponent<RespawnManager>().respawnchanged)
+        /*if (respawnManager.respawnchanged)
         {
             if(!collisioning)
             {
@@ -57,11 +59,12 @@ public class RespawnUpdater : MonoBehaviour
         
         }*/
 
-        if (resposi == resManager.GetComponent<RespawnManager>().changePosi)
+        if (respawn_index == respawnManager.GetRespawnIndexCurrent())
         {
+            //Debug.Log("now="+respawn_index);
             animator.SetBool("resAnimation", resAnimation);
         }
-        //resManager.GetComponent<RespawnManager>().resAnimation = false;
+        //respawnManager.resAnimation = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -71,14 +74,16 @@ public class RespawnUpdater : MonoBehaviour
             change = true;
             //current = true;
             //collisioning = true;
-            //resManager.GetComponent<RespawnManager>().respawnchanged = true;
+            //respawnManager.respawnchanged = true;
 
             animator.SetBool("change", change);
-            collision.gameObject.GetComponent<PlayerController>().respawnPoint = transform.position + new Vector3(0, 0.99f, 0);
+            //collision.gameObject.GetComponent<PlayerController>().respawnPoint = transform.position + new Vector3(0, 0.99f, 0);
             SE.SetActive(true);
-            resManager.GetComponent<RespawnManager>().changePosi++;
 
-            resposi = resManager.GetComponent<RespawnManager>().changePosi;
+            respawnManager.SetRespawnIndexCurrent(respawn_index);
+            //respawnManager.changePosi++;
+
+            //resposi = respawnManager.changePosi;
             //change = true;
             //animator.SetBool("change", change);
         }
@@ -95,14 +100,23 @@ public class RespawnUpdater : MonoBehaviour
     public void RespawnAnimation1End()
     {
         Debug.Log("Animation1 End");
-        resManager.GetComponent<RespawnManager>().SetRespawning1(true);
+        respawnManager.SetRespawning1(true);
     }
 
     public void RespawnAnimation2End()
     {
         Debug.Log("Animation2 End");
         transform.position += new Vector3(0, 0, -transform.position.z + 1.0f);
-        resManager.GetComponent<RespawnManager>().SetRespawning2(true);
+        respawnManager.SetRespawning2(true);
     }
 
+    public void SetRespawnIndex(int index)
+    {
+        respawn_index = index;
+    }
+
+    public int GetRespawnIndex()
+    {
+        return respawn_index;
+    }
 }

@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrabbing = false;
     private bool isJumpActive = false;
     private bool grabFront = false;
-    [SerializeField] private bool canMove;
+    [SerializeField] private bool canMove = true;
 
     private bool isDead = false;
 
@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private MoveObjectWithRoute movingFloor;
     private Vector2 mFloorVelocity;
+
 
     //[SerializeField] private BoxCollider2D pushBc;
     //[SerializeField] private BoxCollider2D footBc;
@@ -86,17 +87,21 @@ public class PlayerController : MonoBehaviour
 
         //リスポーンバグ解消用
         Avatar = transform.GetChild(0).GetComponent<SpriteRenderer>(); //Find("Avatar").gameObject;
+
+        //canMove = true;
     }
     void Update()
     {
         //canMove = respawnManager.canMove;
+        //if (canMove) Debug.Log("camMove");
 
         if (isDead) StartCoroutine(Respawn());
 
         if (canMove)
         {
             //リスポーンバグ解消用
-            Avatar.enabled = true; // SetActive(true);
+            //Avatar.enabled = true; // SetActive(true);
+            
 
             float horizontal = Input.GetAxisRaw("Horizontal");
             isWalking = horizontal != 0;
@@ -329,6 +334,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator Respawn()
     {
         isDead = false;
+        canMove = false;
         pauseButton.SetActive(false);
         Time.timeScale = 0;
         yield return new WaitForSecondsRealtime(1); // 1秒遅延
@@ -347,13 +353,36 @@ public class PlayerController : MonoBehaviour
         }
         rb.velocity = Vector2.zero;
         respawnManager.respawn = true;
+
+        if (respawnManager.GetRespawnIndexCurrent() != 0)
+        {
+            respawnPoint = respawnManager.GetRespawnPoint(respawnManager.GetRespawnIndexCurrent()).transform.position + new Vector3(0, 1.99f, 0);
+        }
         transform.position = respawnPoint;
         transform.localScale += new Vector3(0f, -transform.localScale.y + 1f, 0f);
+        //すべての動作アニメーション停止
         isJumping = false;
         isJumpActive = false;
+        isWalking = false;
         animator.SetBool("isJumping", isJumping);
         animator.SetBool("isJumpActive", isJumpActive);
-        respawnManager.resAnimation = true;
+        animator.SetBool("isWalking", isWalking);
+        //Debug.Log("Through");
+        GetComponent<AudioSource>().PlayOneShot(respawnSE, 0.2f);
+        if (respawnManager.GetRespawnIndexCurrent() != 0)
+        {
+            AvatarSpriteSet(false);
+            respawnManager.SetRespawning1(false);
+            respawnManager.SetRespawning2(false);
+            respawnManager.resAnimation = true;
+
+            yield return new WaitUntil(() => respawnManager.GetRespawning1());
+            AvatarSpriteSet(true);
+            yield return new WaitUntil(() => respawnManager.GetRespawning2());
+
+            
+        }
+
 
         //if(respawnManager.respawn)
         //{
@@ -364,7 +393,7 @@ public class PlayerController : MonoBehaviour
         //    Debug.Log("resAnimation");
         //}
 
-        int i = 0;
+        /*int i = 0;
 
         //Debug.Log(respawnManager.changePosi);
         if (respawnManager.changePosi >= 1)
@@ -375,7 +404,7 @@ public class PlayerController : MonoBehaviour
                 yield return new WaitForSecondsRealtime(0.05f);
                 i++;
             }
-        }
+        }*/
 
         /*if (i >= 25)
         {
@@ -385,10 +414,18 @@ public class PlayerController : MonoBehaviour
         //respawnManager.resAnimation = false;
         
         //Debug.Log("before:" + isJumping);
-        GetComponent<AudioSource>().PlayOneShot(respawnSE, 0.2f);
+        
+        canMove = true;
+        //Debug.Log("canMove");
+        respawnManager.resAnimation = false;
         //Debug.Log("after:" + isJumping);
         //respawnManager.canActive = true;
         //Debug.Log("canActive");
+    }
+
+    private void AvatarSpriteSet(bool value)
+    {
+        Avatar.enabled = value;
     }
 
     /*private IEnumerator Test()

@@ -31,6 +31,10 @@ public class RespawnManager : MonoBehaviour
     private SpriteRenderer playerAvatar;
     private PlayerController playerController;
 
+    private int respawn_index_current = 0;
+    private int respawn_index_length = 0;
+    private GameObject[] RespawnPointsList;
+
 
     // Start is called before the first frame update
     void Start()
@@ -38,23 +42,44 @@ public class RespawnManager : MonoBehaviour
         gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
         playerAvatar = GameObject.FindWithTag("Player").transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+
+
+        //respawnpointÇÃîzóÒÇçÏê¨
+        GameObject[] Respawnpoints = GameObject.FindGameObjectsWithTag("Respawn");
+        foreach (GameObject obj in Respawnpoints)
+        {
+            respawn_index_length++;
+        }
+        Debug.Log(respawn_index_length);
+
+        RespawnPointsList = new GameObject[respawn_index_length + 1];
+        int i = 1;
+        foreach (GameObject obj in Respawnpoints)
+        {
+            RespawnPointsList[i] = obj;
+            RespawnUpdater respawnUpdater = obj.transform.GetChild(0).gameObject.GetComponent<RespawnUpdater>();
+            respawnUpdater.SetRespawnIndex(i);
+            i++;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
         /*if (respawning1)
         {
             Debug.Log("respawning1=true");
         }*/
+        //if (respawn_index_current == 0) Debug.Log("index=0");
         
         if (respawn)
         {
+            
             gravityManager.DestroyGF();
             //Debug.Log("respawn");
-            playerAvatar.enabled = false; // SetActive(false);
-            playerController.SetCanMove(false); //canMove = false;
+            //playerAvatar.enabled = false; // SetActive(false);
+            //playerController.SetCanMove(false); //canMove = false;
             //Debug.Log("è¡Ç¶ÇÈ");
             respawn=false;
 
@@ -81,12 +106,13 @@ public class RespawnManager : MonoBehaviour
                 catch { }
             }
 
+
             //SE
             GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
         }
         
 
-        if (respawning1 || (changePosi==0))
+        /*if (respawning1 || respawn_index_current==0)
         {
             //Debug.Log("OK");
             playerAvatar.enabled = true; // SetActive(true);
@@ -94,13 +120,13 @@ public class RespawnManager : MonoBehaviour
             
         }
 
-        if(respawning2 || (changePosiÅ@==0))
+        if(respawning2 || respawn_index_current == 0)
         {
             //Debug.Log("OK2");
             playerController.SetCanMove(true); //canMove = true;
             respawning2 = false;
             resAnimation = false;
-        }
+        }*/
 
         //canActive = false;
         
@@ -136,5 +162,18 @@ public class RespawnManager : MonoBehaviour
     }
 
 
+    public int GetRespawnIndexCurrent()
+    {
+        return respawn_index_current;
+    }
+    public void SetRespawnIndexCurrent(int index)
+    {
+        respawn_index_current = index;
+    }
+
+    public GameObject GetRespawnPoint(int index)
+    {
+        return RespawnPointsList[index];
+    }
     
 }
