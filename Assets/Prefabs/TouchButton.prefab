@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4415260195826527724}
   m_Layer: 0
   m_Name: TouchButton
-  m_TagString: Untagged
+  m_TagString: Sensor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

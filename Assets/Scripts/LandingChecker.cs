@@ -16,7 +16,7 @@ public class LandingChecker : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (!collision.CompareTag("GravityField") && !collision.CompareTag("Toxic") && !collision.CompareTag("Platform") && !collision.CompareTag("Tutorial"))
+        if (!collision.CompareTag("GravityField") && !collision.CompareTag("Toxic") && !collision.CompareTag("Platform") && !collision.CompareTag("Tutorial") && !collision.CompareTag("Sensor"))
         {
             //Debug.Log("Can Jump");
             isJumping = false;
@@ -35,7 +35,7 @@ public class LandingChecker : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (!collision.CompareTag("GravityField") && !collision.CompareTag("Toxic") && !collision.CompareTag("Platform") && !collision.CompareTag("Tutorial"))
+        if (!collision.CompareTag("GravityField") && !collision.CompareTag("Toxic") && !collision.CompareTag("Platform") && !collision.CompareTag("Tutorial") && !collision.CompareTag("Sensor"))
         {
             //Debug.Log("Can Jump");
             isJumping = true;

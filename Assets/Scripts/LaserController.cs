@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -95,8 +96,9 @@ public class LaserController : MonoBehaviour
     {
         //beamCollider.enabled = false;
         //beamCollider2.enabled = false;
-        if (beamRenderer.sprite != null)
+        if (beamRenderer.sprite != null && int.Parse(Regex.Replace(beamRenderer.sprite.name, @"[^0-9]", "")) > 14)
         {
+            //Debug.Log(beamRenderer.sprite.name);
             if (isVertical)
             {
                 basePos = new(transform.position.x, basePos.y);

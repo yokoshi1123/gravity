@@ -9,6 +9,7 @@ public class PauseWindowController : MonoBehaviour
     [SerializeField] private GameObject pauseWindow;
 
     private PlayerController playerController;
+    private SaveDataManager saveDataManager;
 
     //private bool isPaused = false;
     void Start()
@@ -16,6 +17,7 @@ public class PauseWindowController : MonoBehaviour
         //pauseButton = GameObject.Find("/Canvas/PauseButton");
         //pauseWindow = GameObject.Find("/Canvas/PauseWindow");
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        //saveDataManager = GameObject.Find("SaveDataManager").GetComponent<SaveDataManager>();
     }
 
     void Update()
@@ -50,5 +52,4 @@ public class PauseWindowController : MonoBehaviour
         playerController.SetIsDead(true);
         playerController.SetCanMove(true);
     }
-
 }

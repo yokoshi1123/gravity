@@ -48,6 +48,9 @@ public class RespawnManager : MonoBehaviour
     private GameObject fadeCanvas;
     private FadeManager fadeManager;
 
+    private SaveDataManager saveDataManager;     
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,12 +62,14 @@ public class RespawnManager : MonoBehaviour
         pauseButton = GameObject.Find("/Canvas/PauseButton");
         respawnPoint = player.transform.position;
 
-        fadeCanvas = GameObject.FindGameObjectWithTag("Fade");//Canvasをみつける
-        fadeManager = fadeCanvas.GetComponent<FadeManager>();
-        fadeManager.fadeIn();//フェードインフラグを立てる
+        //fadeCanvas = GameObject.FindGameObjectWithTag("Fade");//Canvasをみつける
+        //fadeManager = fadeCanvas.GetComponent<FadeManager>();
+        //fadeManager.fadeIn();//フェードインフラグを立てる
 
-        //respawnpointの配列を作成
-        GameObject[] RespawnObjects = GameObject.FindGameObjectsWithTag("Respawn");
+        saveDataManager = GameObject.Find("SaveDataManager").GetComponent<SaveDataManager>();
+
+    //respawnpointの配列を作成
+    GameObject[] RespawnObjects = GameObject.FindGameObjectsWithTag("Respawn");
         foreach (GameObject obj in RespawnObjects)
         {
             respawn_index_length++;
@@ -80,6 +85,12 @@ public class RespawnManager : MonoBehaviour
             respawnUpdater.SetRespawnIndex(i);
             i++;
         }
+
+        respawn_index_current = saveDataManager.gameData.respawnIndex;
+        Debug.Log(saveDataManager.gameData.stageName);
+        Debug.Log(respawn_index_current); // + ":" + RespawnPointsList[respawn_index_current].name);
+        //RespawnPointsList[respawn_index_current].GetComponentInChildren<Animator>().SetBool("change", true);
+        playerController.SetIsDead(true);
     }
 
     // Update is called once per frame
@@ -152,8 +163,8 @@ public class RespawnManager : MonoBehaviour
 
     public IEnumerator PlayerRespawn()
     {
-        fadeManager.fadeOut();//フェードアウトフラグを立てる
-        yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed); ;//暗転するまで待つ
+        //fadeManager.fadeOut();//フェードアウトフラグを立てる
+        //yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed); ;//暗転するまで待つ
         pauseButton.SetActive(false);
         respawn = true;
         if(respawn_index_current != 0)
@@ -166,8 +177,8 @@ public class RespawnManager : MonoBehaviour
         if(respawn_index_current != 0)
         {
             playerController.AvatarSpriteSet(false);
-            fadeManager.fadeIn();//フェードインフラグを立てる
-            yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
+            //fadeManager.fadeIn();//フェードインフラグを立てる
+            //yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
 
             GetComponent<AudioSource>().PlayOneShot(respawnSE1, 0.2f);//SE
             //yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
@@ -183,8 +194,8 @@ public class RespawnManager : MonoBehaviour
         }
         else
         {
-            fadeManager.fadeIn();//フェードインフラグを立てる
-            yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
+            //fadeManager.fadeIn();//フェードインフラグを立てる
+            //yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
 
         }
         yield return null;

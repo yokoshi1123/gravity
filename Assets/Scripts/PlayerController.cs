@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
         {
             //リスポーンバグ解消用
             //Avatar.enabled = true; // SetActive(true);
-            
+            rb.isKinematic = false;
 
             float horizontal = Input.GetAxisRaw("Horizontal");
             isWalking = horizontal != 0;
@@ -459,6 +459,7 @@ public class PlayerController : MonoBehaviour
         //速度、方向初期化
         rb.velocity = Vector2.zero;
         transform.localScale += new Vector3(-transform.localScale.x + 1f, -transform.localScale.y + 1f, 0f);
+        rb.isKinematic = true;
 
         isDead = false;
 

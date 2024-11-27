@@ -24,8 +24,6 @@ public class RespawnUpdater : MonoBehaviour
 
     private int resposi;
     
-
-
     void Awake()
     {
         respawnManager = GameObject.Find("RespawnManager").GetComponent<RespawnManager>();
