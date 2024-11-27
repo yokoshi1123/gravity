@@ -68,13 +68,13 @@ public class RespawnManager : MonoBehaviour
 
         saveDataManager = GameObject.Find("SaveDataManager").GetComponent<SaveDataManager>();
 
-    //respawnpoint‚Ì”z—ñ‚ğì¬
-    GameObject[] RespawnObjects = GameObject.FindGameObjectsWithTag("Respawn");
+        //respawnpoint‚Ì”z—ñ‚ğì¬
+        GameObject[] RespawnObjects = GameObject.FindGameObjectsWithTag("Respawn");
         foreach (GameObject obj in RespawnObjects)
         {
             respawn_index_length++;
         }
-        Debug.Log(respawn_index_length);
+        //Debug.Log(respawn_index_length);
 
         RespawnObjectsList = new GameObject[respawn_index_length + 1];
         int i = 1;
@@ -87,9 +87,9 @@ public class RespawnManager : MonoBehaviour
         }
 
         respawn_index_current = saveDataManager.gameData.respawnIndex;
-        Debug.Log(saveDataManager.gameData.stageName);
+        //Debug.Log(saveDataManager.gameData.stageName);
         Debug.Log(respawn_index_current); // + ":" + RespawnPointsList[respawn_index_current].name);
-        //RespawnPointsList[respawn_index_current].GetComponentInChildren<Animator>().SetBool("change", true);
+        RespawnObjectsList[respawn_index_current].GetComponentInChildren<Animator>().SetBool("change", true);
         playerController.SetIsDead(true);
     }
 

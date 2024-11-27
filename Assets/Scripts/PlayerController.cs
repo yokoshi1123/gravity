@@ -342,7 +342,7 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("Died");
         Time.timeScale = 1;
         yield return StartCoroutine(respawnManager.PlayerRespawn());
-        //pauseButton.SetActive(true);
+        pauseButton.SetActive(true);
 
         //GameObject destroyGF = GameObject.FindWithTag("GravityField");
         //if (destroyGF != null && isAvailable)

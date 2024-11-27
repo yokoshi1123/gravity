@@ -50,7 +50,8 @@ MonoBehaviour:
   resAnimation: 0
   respawning1: 0
   respawning2: 0
-  changePosi: 0
+  respawnSE1: {fileID: 8300000, guid: 7cd8985662686554daf4e7e79e53cdf4, type: 3}
+  respawnSE2: {fileID: 8300000, guid: b784c1912f26a3042827337873ad8819, type: 3}
 --- !u!82 &3785925943821684992
 AudioSource:
   m_ObjectHideFlags: 0

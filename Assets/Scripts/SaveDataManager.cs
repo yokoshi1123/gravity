@@ -5,12 +5,13 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static System.Net.WebRequestMethods;
 
 public class SaveDataManager : MonoBehaviour
 {
     private Animator loadError;
 
-    private const string gamePath = "C:/Users/koshi/source/repos/gravity";
+    private string gamePath; // = "C:/Users/koshi/source/repos/gravity";
 
     [SerializeField] private string sName = "Stage1-1";
     [SerializeField] private int resId = 2;
@@ -45,17 +46,19 @@ public class SaveDataManager : MonoBehaviour
     //[SerializeField] private 
     public GameData gameData;
     
-    private void Start()
+    private void Awake()
     {
+        gamePath = Application.persistentDataPath; //"https://unityroom.com/games/control_gravity/"
         loadError = GameObject.Find("/Canvas/LoadError").GetComponent<Animator>();
         gameData = new GameData();
+        DontDestroyOnLoad(this.gameObject);
     }
 
     private void Update()
     {      
         if (Input.GetKey(KeyCode.S))
         {
-            SaveGameData();
+            SaveGameData(resId);
         }
         if (Input.GetKey(KeyCode.L))
         {
@@ -63,11 +66,11 @@ public class SaveDataManager : MonoBehaviour
         }        
     }
 
-    public void SaveGameData()
+    public void SaveGameData(int respawnIndex)
     {
         gameData.stageName = (SceneManager.GetActiveScene().name == "TitleScene") ? "Stage1-1" : SceneManager.GetActiveScene().name; // sName;
-        gameData.respawnIndex = resId;
-        gameData.totalProgress = prog;
+        gameData.respawnIndex = respawnIndex; //resId;
+        gameData.totalProgress = int.Parse(gameData.stageName.Replace("Stage", "").Replace("-", "")) / 10; //prog;
         string jsonStr = JsonUtility.ToJson(gameData);
 
         StreamWriter writer = new (gamePath + "/savedata.json");
@@ -85,7 +88,7 @@ public class SaveDataManager : MonoBehaviour
             string dataStr = reader.ReadToEnd();
             reader.Close();
 
-            GameData gameData = JsonUtility.FromJson<GameData>(dataStr);
+            gameData = JsonUtility.FromJson<GameData>(dataStr);
             sName = gameData.stageName;
             resId = gameData.respawnIndex;
             prog = gameData.totalProgress;
@@ -101,7 +104,7 @@ public class SaveDataManager : MonoBehaviour
 
     public void NewGame()
     {
-        SaveGameData();
+        SaveGameData(0);
         LoadGameData();
     }
 
