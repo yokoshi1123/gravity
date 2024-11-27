@@ -12,6 +12,7 @@ TagManager:
   - Abyss
   - Platform
   - Tutorial
+  - Fade
   layers:
   - Default
   - TransparentFX

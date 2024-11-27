@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using System.Threading.Tasks;//追加
 
 public class RespawnManager : MonoBehaviour
 {
@@ -20,12 +21,15 @@ public class RespawnManager : MonoBehaviour
     public bool respawning2 = false;
 
     //以下は初期位置かどうかを判定するint
-    public int changePosi = 0;
+    //public int changePosi = 0;
 
     //以下はrespawnの位置が変更されたときにtrueを返す
     //public bool respawnchanged = false;
 
+    private GameObject player;
+
     private GravityManager gravityManager;
+    private GameObject pauseButton;
 
     ///*[SerializeField]*/ private GameObject playerAvatar;
     private SpriteRenderer playerAvatar;
@@ -33,30 +37,45 @@ public class RespawnManager : MonoBehaviour
 
     private int respawn_index_current = 0;
     private int respawn_index_length = 0;
-    private GameObject[] RespawnPointsList;
+    private GameObject[] RespawnObjectsList;
 
+    private Vector3 respawnPoint;
+
+    [Header("リスポーン1")][SerializeField] private AudioClip respawnSE1;
+    [Header("リスポーン2")][SerializeField] private AudioClip respawnSE2;
+
+
+    private GameObject fadeCanvas;
+    private FadeManager fadeManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
-        playerAvatar = GameObject.FindWithTag("Player").transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
-        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 
+        player = GameObject.FindWithTag("Player");
+        gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
+        playerAvatar = player.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
+        playerController = player.GetComponent<PlayerController>();
+        pauseButton = GameObject.Find("/Canvas/PauseButton");
+        respawnPoint = player.transform.position;
+
+        fadeCanvas = GameObject.FindGameObjectWithTag("Fade");//Canvasをみつける
+        fadeManager = fadeCanvas.GetComponent<FadeManager>();
+        fadeManager.fadeIn();//フェードインフラグを立てる
 
         //respawnpointの配列を作成
-        GameObject[] Respawnpoints = GameObject.FindGameObjectsWithTag("Respawn");
-        foreach (GameObject obj in Respawnpoints)
+        GameObject[] RespawnObjects = GameObject.FindGameObjectsWithTag("Respawn");
+        foreach (GameObject obj in RespawnObjects)
         {
             respawn_index_length++;
         }
         Debug.Log(respawn_index_length);
 
-        RespawnPointsList = new GameObject[respawn_index_length + 1];
+        RespawnObjectsList = new GameObject[respawn_index_length + 1];
         int i = 1;
-        foreach (GameObject obj in Respawnpoints)
+        foreach (GameObject obj in RespawnObjects)
         {
-            RespawnPointsList[i] = obj;
+            RespawnObjectsList[i] = obj;
             RespawnUpdater respawnUpdater = obj.transform.GetChild(0).gameObject.GetComponent<RespawnUpdater>();
             respawnUpdater.SetRespawnIndex(i);
             i++;
@@ -108,7 +127,6 @@ public class RespawnManager : MonoBehaviour
 
 
             //SE
-            GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
         }
         
 
@@ -130,6 +148,49 @@ public class RespawnManager : MonoBehaviour
 
         //canActive = false;
         
+    }
+
+    public IEnumerator PlayerRespawn()
+    {
+        fadeManager.fadeOut();//フェードアウトフラグを立てる
+        yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed); ;//暗転するまで待つ
+        pauseButton.SetActive(false);
+        respawn = true;
+        if(respawn_index_current != 0)
+        {
+            respawnPoint = RespawnObjectsList[respawn_index_current].transform.position + new Vector3(0, 1.99f, 0);
+        }
+        player.transform.position = respawnPoint;
+
+
+        if(respawn_index_current != 0)
+        {
+            playerController.AvatarSpriteSet(false);
+            fadeManager.fadeIn();//フェードインフラグを立てる
+            yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
+
+            GetComponent<AudioSource>().PlayOneShot(respawnSE1, 0.2f);//SE
+            //yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
+            yield return new WaitForSecondsRealtime(1); // 1秒遅延
+
+            resAnimation = true;
+
+
+            yield return new WaitUntil(() => respawning1);
+            GetComponent<AudioSource>().PlayOneShot(respawnSE2, 0.2f);
+            playerController.AvatarSpriteSet(true);
+            yield return new WaitUntil(() => respawning2);
+        }
+        else
+        {
+            fadeManager.fadeIn();//フェードインフラグを立てる
+            yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
+
+        }
+        yield return null;
+        resAnimation = false;
+        respawning1 = false;
+        respawning2 = false;
     }
 
     public bool GetRespawning1()
@@ -171,9 +232,9 @@ public class RespawnManager : MonoBehaviour
         respawn_index_current = index;
     }
 
-    public GameObject GetRespawnPoint(int index)
+    public GameObject GetRespawnObject(int index)
     {
-        return RespawnPointsList[index];
+        return RespawnObjectsList[index];
     }
     
 }

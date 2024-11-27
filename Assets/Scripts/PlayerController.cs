@@ -333,33 +333,28 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator Respawn()
     {
-        isDead = false;
+        //isDead = false;
         canMove = false;
+        StateInitialization();
         pauseButton.SetActive(false);
         Time.timeScale = 0;
         yield return new WaitForSecondsRealtime(1); // 1秒遅延
         //Debug.Log("Died");
         Time.timeScale = 1;
-        pauseButton.SetActive(true);
+        yield return StartCoroutine(respawnManager.PlayerRespawn());
+        //pauseButton.SetActive(true);
 
         //GameObject destroyGF = GameObject.FindWithTag("GravityField");
         //if (destroyGF != null && isAvailable)
         //{
         //    Destroy(destroyGF);
         //}
-        if (isGrabbing)
+        /*if (isGrabbing)
         {
             transform.GetChild(1).GetComponent<GrabController>().Grab();
         }
         rb.velocity = Vector2.zero;
-        respawnManager.respawn = true;
 
-        if (respawnManager.GetRespawnIndexCurrent() != 0)
-        {
-            respawnPoint = respawnManager.GetRespawnPoint(respawnManager.GetRespawnIndexCurrent()).transform.position + new Vector3(0, 1.99f, 0);
-        }
-        transform.position = respawnPoint;
-        transform.localScale += new Vector3(0f, -transform.localScale.y + 1f, 0f);
         //すべての動作アニメーション停止
         isJumping = false;
         isJumpActive = false;
@@ -367,9 +362,25 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isJumping", isJumping);
         animator.SetBool("isJumpActive", isJumpActive);
         animator.SetBool("isWalking", isWalking);
-        //Debug.Log("Through");
-        GetComponent<AudioSource>().PlayOneShot(respawnSE, 0.2f);
+        */
+
+        /*respawnManager.respawn = true;
         if (respawnManager.GetRespawnIndexCurrent() != 0)
+        {
+            respawnPoint = respawnManager.GetRespawnObject(respawnManager.GetRespawnIndexCurrent()).transform.position + new Vector3(0, 1.99f, 0);
+        }
+        transform.position = respawnPoint;
+        */
+
+        //transform.localScale += new Vector3(0f, -transform.localScale.y + 1f, 0f);
+
+        //Debug.Log("Through");
+
+
+        //GetComponent<AudioSource>().PlayOneShot(respawnSE, 0.2f);
+        
+        
+        /*if (respawnManager.GetRespawnIndexCurrent() != 0)
         {
             AvatarSpriteSet(false);
             respawnManager.SetRespawning1(false);
@@ -379,9 +390,7 @@ public class PlayerController : MonoBehaviour
             yield return new WaitUntil(() => respawnManager.GetRespawning1());
             AvatarSpriteSet(true);
             yield return new WaitUntil(() => respawnManager.GetRespawning2());
-
-            
-        }
+        }*/
 
 
         //if(respawnManager.respawn)
@@ -416,18 +425,44 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("before:" + isJumping);
         
         canMove = true;
+
+
         //Debug.Log("canMove");
-        respawnManager.resAnimation = false;
+        //respawnManager.resAnimation = false;
         //Debug.Log("after:" + isJumping);
         //respawnManager.canActive = true;
         //Debug.Log("canActive");
     }
 
-    private void AvatarSpriteSet(bool value)
+    public void AvatarSpriteSet(bool value)
     {
         Avatar.enabled = value;
     }
 
+    //状態の初期化
+    private void StateInitialization()
+    {
+        //すべての動作アニメーション停止
+        isJumping = false;
+        isJumpActive = false;
+        isWalking = false;
+        animator.SetBool("isJumping", isJumping);
+        animator.SetBool("isJumpActive", isJumpActive);
+        animator.SetBool("isWalking", isWalking);
+
+        //Grab終了
+        if (isGrabbing)
+        {
+            transform.GetChild(1).GetComponent<GrabController>().Grab();
+        }
+
+        //速度、方向初期化
+        rb.velocity = Vector2.zero;
+        transform.localScale += new Vector3(-transform.localScale.x + 1f, -transform.localScale.y + 1f, 0f);
+
+        isDead = false;
+
+    }
     /*private IEnumerator Test()
     {
         for (int i = 0; i < 20; i++)
@@ -473,7 +508,7 @@ public class PlayerController : MonoBehaviour
 
     //private void OnTriggerEnter2D(Collider2D collision)
     //{
-        
+
     //    if (collision.gameObject.CompareTag("Toxic"))
     //    {           
     //        //Vector2 hitPos = collision.ClosestPoint(grabPoint.position);
