@@ -6,7 +6,7 @@ using UnityEngine;
 public class SaveData
 {
     public string stageName;
-    public int respawnIndex;
-    public int totalProgress;
+    public int respawnIndex = 0;
+    public int totalProgress = 0;
     public bool isAvailable = false;
 }

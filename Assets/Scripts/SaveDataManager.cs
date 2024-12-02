@@ -61,7 +61,12 @@ public class SaveDataManager : MonoBehaviour
     {
         data.stageName = stageName; // (SceneManager.GetActiveScene().name == "TitleScene") ? "Stage1-1" : SceneManager.GetActiveScene().name; // sName;
         data.respawnIndex = respawnIndex; //resId;
-        data.totalProgress = int.Parse(data.stageName.Replace("Stage", "").Replace("-", "")) / 10; //prog; // StageO-X‚ÌO‚Ì•”•ª
+        try 
+        { 
+            data.totalProgress = int.Parse(data.stageName.Replace("Stage", "").Replace("-", "")) / 10;
+        }
+        catch {}
+         //prog; // StageO-X‚ÌO‚Ì•”•ª
         data.isAvailable = isAvailable;
         string jsonStr = JsonUtility.ToJson(data);
 
@@ -97,7 +102,8 @@ public class SaveDataManager : MonoBehaviour
 
     public void NewGame()
     {
-        SaveGameData("Stage1-1", 0, false);
+        //SaveGameData("Stage1-1", 0, false);
+        SaveGameData("NewsScene", 0, false);
         LoadGameData();
     }
 

@@ -31,12 +31,12 @@ public class Goal : MonoBehaviour
             {
                 GetComponent<AudioSource>().PlayOneShot(warpSE, 0.5f);
                 saveDataManager.SaveGameData(nextStage, 0, gravityManager.GetIsAvailable());
-                saveDataManager.LoadGameData();
+                //saveDataManager.LoadGameData();
             }
-            else
-            {
-                SceneManager.LoadScene(nextStage);
-            }  
+            //else
+            //{
+            SceneManager.LoadScene(nextStage);
+            //}  
         }
 }
 }

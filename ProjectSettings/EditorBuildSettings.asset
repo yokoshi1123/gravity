@@ -8,15 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TitleScene.unity
     guid: 92c0122ebbdb4104fb958702da68240a
+  - enabled: 1
+    path: Assets/Scenes/NewsScene.unity
+    guid: b3ae0a3232debe04aaf24d2f044b9a81
   - enabled: 0
     path: Assets/Scenes/Stage1Scene.unity
     guid: 3ca81e3868087a444a241d91d937ffbb
   - enabled: 0
     path: Assets/Scenes/Stage2Scene.unity
     guid: 1c5e4c4e608e415488c084830b0ddd7c
-  - enabled: 1
-    path: Assets/Scenes/ToBeContinued.unity
-    guid: 139fabd4b7d9baf42baaf4e9d9fa105b
   - enabled: 1
     path: Assets/Scenes/Stages/Stage1-1.unity
     guid: 68734933d68e6144197fb4ea8e0f3064
@@ -44,4 +44,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Stages/Stage2-4.unity
     guid: f45fcdb01d9952744a5823cf3ae7778b
+  - enabled: 0
+    path: Assets/Scenes/ToBeContinued.unity
+    guid: 139fabd4b7d9baf42baaf4e9d9fa105b
   m_configObjects: {}
