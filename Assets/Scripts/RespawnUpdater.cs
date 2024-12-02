@@ -19,6 +19,7 @@ public class RespawnUpdater : MonoBehaviour
 
     //public bool respawned = false;
     private RespawnManager respawnManager;
+    private SaveDataManager saveDataManager;
     //private Vector3 posi;
     //private Transform myTransform;
 
@@ -27,6 +28,7 @@ public class RespawnUpdater : MonoBehaviour
     void Awake()
     {
         respawnManager = GameObject.Find("RespawnManager").GetComponent<RespawnManager>();
+        saveDataManager = GameObject.Find("SaveDataManager").GetComponent <SaveDataManager>();
         /*if(respawnManager == null)
         {
             Debug.Log("NULL");
@@ -79,6 +81,7 @@ public class RespawnUpdater : MonoBehaviour
             SE.SetActive(true);
 
             respawnManager.SetRespawnIndexCurrent(respawn_index);
+            saveDataManager.SaveGameData(respawn_index);
             //respawnManager.changePosi++;
 
             //resposi = respawnManager.changePosi;
