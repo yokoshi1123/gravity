@@ -86,7 +86,7 @@ public class GrabController : MonoBehaviour
                 playerController.SetIsGrabbing(true);
             }
         }
-        else if (grabObj != null)
+        else if (grabObj != null && !isJumping)
         {
             grabObj.GetComponent<Rigidbody2D>().isKinematic = false;
             grabObj.transform.GetChild(0).gameObject.SetActive(true);

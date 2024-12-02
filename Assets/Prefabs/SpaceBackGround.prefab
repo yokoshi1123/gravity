@@ -103,6 +103,7 @@ MonoBehaviour:
   yMin: 6
   yMax: 10
   player: {fileID: 0}
+  emergency: 0
 --- !u!1 &2352183229751530888
 GameObject:
   m_ObjectHideFlags: 0
@@ -163,7 +164,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 16
+  orthographic size: 20
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

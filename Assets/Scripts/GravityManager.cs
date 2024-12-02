@@ -34,6 +34,9 @@ public class GravityManager : MonoBehaviour
 
     private IEnumerator routine;
 
+    private SaveDataManager saveDataManager;
+    [SerializeField] private bool build = false;
+
     void Awake()
     {
         moveSpeed = M_SPEED;
@@ -42,6 +45,12 @@ public class GravityManager : MonoBehaviour
         gFieldUI = GameObject.Find("/Canvas/GFieldUI");
         gravityValueText = GameObject.Find("/Canvas/GFieldUI/GravityText/GravityValue").GetComponent<TextMeshProUGUI>();
         gFieldUI.SetActive(isAvailable);
+
+        if (build) 
+        {
+            saveDataManager = GameObject.Find("SaveDataManager").GetComponent<SaveDataManager>();
+            isAvailable = saveDataManager.data.isAvailable;
+        }
 
         ChangeGravity();
     }
@@ -75,7 +84,7 @@ public class GravityManager : MonoBehaviour
                 DestroyGF();
                 // GravityFieldのクローンを作成
                 GameObject gField = (GameObject)Instantiate(gravityField, (startMPosition2 + endMPosition2) / 2, Quaternion.identity);
-                gField.transform.position = gField.transform.position + new Vector3(0, 0, -gField.transform.position.z - 2f);
+                gField.transform.position = gField.transform.position + new Vector3(0, 0, -gField.transform.position.z - 3f);
                 // ドラッグしたサイズに拡大
                 //gField.transform.localScale = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
                 gField.GetComponent<SpriteRenderer>().size = new Vector2(Mathf.Abs(endMPosition2.x - startMPosition2.x), Mathf.Abs(endMPosition2.y - startMPosition2.y));
@@ -151,7 +160,7 @@ public class GravityManager : MonoBehaviour
     public void DestroyGF()
     {
         destroyGF = GameObject.FindWithTag("GravityField");
-        if (destroyGF != null && isAvailable)
+        if (routine != null && isAvailable)
         {
             StopCoroutine(routine);
             routine = null;
@@ -209,6 +218,11 @@ public class GravityManager : MonoBehaviour
     public void SetIsAvailable(bool value)
     {
         isAvailable = value;
+    }
+
+    public bool GetBuild()
+    { 
+        return build;
     }
 
     private IEnumerator WaitAndDestroy()

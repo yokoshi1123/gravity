@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class CollisionController : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class CollisionController : MonoBehaviour
     //private Vector2 mFloorVelocity;
 
     [Header("電気柵")][SerializeField] private AudioClip spikeSE;
-    [Header("ゴール")][SerializeField] private AudioClip warpSE;
+    //[Header("ゴール")][SerializeField] private AudioClip warpSE;
 
     // Start is called before the first frame update
     void Start()
@@ -33,11 +32,11 @@ public class CollisionController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //Debug.Log(collision.gameObject.tag);
-        if (collision.gameObject.CompareTag("Goal"))
-        {
-            transform.parent.GetComponent<AudioSource>().PlayOneShot(warpSE, 0.5f);
-            SceneManager.LoadScene(sceneName);
-        }
+        //if (collision.gameObject.CompareTag("Goal"))
+        //{
+        //    transform.parent.GetComponent<AudioSource>().PlayOneShot(warpSE, 0.5f);
+        //    SceneManager.LoadScene(sceneName);
+        //}
 
         if (collision.gameObject.CompareTag("Toxic"))
         {

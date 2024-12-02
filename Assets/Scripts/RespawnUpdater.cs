@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RespawnUpdater : MonoBehaviour
 {
@@ -18,17 +19,22 @@ public class RespawnUpdater : MonoBehaviour
     //private bool collisioning = false;
 
     //public bool respawned = false;
+    private GravityManager gravityManager;
     private RespawnManager respawnManager;
     private SaveDataManager saveDataManager;
     //private Vector3 posi;
     //private Transform myTransform;
 
     private int resposi;
+
+    private bool build = false;
     
     void Awake()
     {
+        gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
         respawnManager = GameObject.Find("RespawnManager").GetComponent<RespawnManager>();
-        saveDataManager = GameObject.Find("SaveDataManager").GetComponent <SaveDataManager>();
+        build = gravityManager.GetBuild();
+        if(build) saveDataManager = GameObject.Find("SaveDataManager").GetComponent <SaveDataManager>();
         /*if(respawnManager == null)
         {
             Debug.Log("NULL");
@@ -81,7 +87,7 @@ public class RespawnUpdater : MonoBehaviour
             SE.SetActive(true);
 
             respawnManager.SetRespawnIndexCurrent(respawn_index);
-            saveDataManager.SaveGameData(respawn_index);
+            if (build) saveDataManager.SaveGameData(SceneManager.GetActiveScene().name, respawn_index, gravityManager.GetIsAvailable());
             //respawnManager.changePosi++;
 
             //resposi = respawnManager.changePosi;

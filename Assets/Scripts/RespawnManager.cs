@@ -35,8 +35,8 @@ public class RespawnManager : MonoBehaviour
     private SpriteRenderer playerAvatar;
     private PlayerController playerController;
 
-    private int respawn_index_current = 0;
-    private int respawn_index_length = 0;
+    private int respawnIndexCurrent = 0;
+    private int respawnIndexLength = 0;
     private GameObject[] RespawnObjectsList;
 
     private Vector3 respawnPoint;
@@ -48,15 +48,15 @@ public class RespawnManager : MonoBehaviour
     private GameObject fadeCanvas;
     private FadeManager fadeManager;
 
-    private SaveDataManager saveDataManager;     
-    
+    private SaveDataManager saveDataManager;
+    private bool build = false;
 
     // Start is called before the first frame update
     void Start()
     {
-
         player = GameObject.FindWithTag("Player");
         gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
+        build = gravityManager.GetBuild();
         playerAvatar = player.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
         playerController = player.GetComponent<PlayerController>();
         pauseButton = GameObject.Find("/Canvas/PauseButton");
@@ -66,17 +66,18 @@ public class RespawnManager : MonoBehaviour
         //fadeManager = fadeCanvas.GetComponent<FadeManager>();
         //fadeManager.fadeIn();//フェードインフラグを立てる
 
-        saveDataManager = GameObject.Find("SaveDataManager").GetComponent<SaveDataManager>();
+        if (build) saveDataManager = GameObject.Find("SaveDataManager").GetComponent<SaveDataManager>();
 
         //respawnpointの配列を作成
         GameObject[] RespawnObjects = GameObject.FindGameObjectsWithTag("Respawn");
         foreach (GameObject obj in RespawnObjects)
         {
-            respawn_index_length++;
+            respawnIndexLength++;
         }
-        //Debug.Log(respawn_index_length);
+        //Debug.Log(respawnIndexLength);
 
-        RespawnObjectsList = new GameObject[respawn_index_length + 1];
+        RespawnObjectsList = new GameObject[respawnIndexLength + 1];
+        RespawnObjectsList[0] = GameObject.Find("/DefaultRespawnPoint");
         int i = 1;
         foreach (GameObject obj in RespawnObjects)
         {
@@ -86,10 +87,14 @@ public class RespawnManager : MonoBehaviour
             i++;
         }
 
-        respawn_index_current = saveDataManager.gameData.respawnIndex;
+        if (build) respawnIndexCurrent = saveDataManager.data.respawnIndex;
         //Debug.Log(saveDataManager.gameData.stageName);
-        Debug.Log(respawn_index_current); // + ":" + RespawnPointsList[respawn_index_current].name);
-        RespawnObjectsList[respawn_index_current].GetComponentInChildren<Animator>().SetBool("change", true);
+        Debug.Log(respawnIndexCurrent); // + ":" + RespawnPointsList[respawnIndexCurrent].name);
+        if (respawnIndexCurrent > 0)
+        {
+            RespawnObjectsList[respawnIndexCurrent].GetComponentInChildren<Animator>().SetBool("change", true);
+        }
+        
         playerController.SetIsDead(true);
     }
 
@@ -101,7 +106,7 @@ public class RespawnManager : MonoBehaviour
         {
             Debug.Log("respawning1=true");
         }*/
-        //if (respawn_index_current == 0) Debug.Log("index=0");
+        //if (respawnIndexCurrent == 0) Debug.Log("index=0");
         
         if (respawn)
         {
@@ -141,7 +146,7 @@ public class RespawnManager : MonoBehaviour
         }
         
 
-        /*if (respawning1 || respawn_index_current==0)
+        /*if (respawning1 || respawnIndexCurrent==0)
         {
             //Debug.Log("OK");
             playerAvatar.enabled = true; // SetActive(true);
@@ -149,7 +154,7 @@ public class RespawnManager : MonoBehaviour
             
         }
 
-        if(respawning2 || respawn_index_current == 0)
+        if(respawning2 || respawnIndexCurrent == 0)
         {
             //Debug.Log("OK2");
             playerController.SetCanMove(true); //canMove = true;
@@ -167,14 +172,15 @@ public class RespawnManager : MonoBehaviour
         //yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed); ;//暗転するまで待つ
         pauseButton.SetActive(false);
         respawn = true;
-        if(respawn_index_current != 0)
-        {
-            respawnPoint = RespawnObjectsList[respawn_index_current].transform.position + new Vector3(0, 1.99f, 0);
-        }
-        player.transform.position = respawnPoint;
+        //if(respawnIndexCurrent != 0)
+        //{
+        //    respawnPoint = RespawnObjectsList[respawnIndexCurrent].transform.position + new Vector3(0, 1.99f, 0);
+        //}
+        //player.transform.position = respawnPoint;
+        player.transform.position = RespawnObjectsList[respawnIndexCurrent].transform.position + new Vector3(0, 1.99f, 0);
 
 
-        if(respawn_index_current != 0)
+        if(respawnIndexCurrent != 0)
         {
             playerController.AvatarSpriteSet(false);
             //fadeManager.fadeIn();//フェードインフラグを立てる
@@ -202,6 +208,7 @@ public class RespawnManager : MonoBehaviour
         resAnimation = false;
         respawning1 = false;
         respawning2 = false;
+        pauseButton.SetActive(true);
     }
 
     public bool GetRespawning1()
@@ -236,11 +243,11 @@ public class RespawnManager : MonoBehaviour
 
     public int GetRespawnIndexCurrent()
     {
-        return respawn_index_current;
+        return respawnIndexCurrent;
     }
     public void SetRespawnIndexCurrent(int index)
     {
-        respawn_index_current = index;
+        respawnIndexCurrent = index;
     }
 
     public GameObject GetRespawnObject(int index)

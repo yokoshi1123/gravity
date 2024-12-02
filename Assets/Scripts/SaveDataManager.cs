@@ -11,69 +11,61 @@ public class SaveDataManager : MonoBehaviour
 {
     private Animator loadError;
 
-    private string gamePath; // = "C:/Users/koshi/source/repos/gravity";
+    [HideInInspector] public SaveData data;
 
-    [SerializeField] private string sName = "Stage1-1";
-    [SerializeField] private int resId = 2;
-    [SerializeField] private int prog = 0;
+    private string filePath = "C:/Users/koshi/source/repos/gravity/";
+    private string fileName = "SaveData.json";
 
-    [System.Serializable]
-    public class GameData
+    [SerializeField] private bool build = false;
+
+    //[SerializeField] private string sName = "Stage1-1";
+    //[SerializeField] private int resId = 2;
+    //[SerializeField] private int prog = 0;
+
+    //[System.Serializable]
+    //public class GameData
+    //{
+    //    public string stageName;
+    //    public int respawnIndex;
+    //    public int totalProgress;
+    //    public bool isAvailable;
+
+        
+    //}
+
+    ////[SerializeField] private 
+    //public GameData gameData;
+
+    void Awake()
     {
-        public string stageName;
-        public int respawnIndex;
-        public int totalProgress;
-
-        //public string StageName
-        //{
-        //    get => stageName;
-        //    set => stageName = value;
-        //}
-
-        //public int RespawnIndex
-        //{
-        //    get => respawnIndex;
-        //    set => respawnIndex = value;
-        //}
-
-        //public int TotalProgress
-        //{
-        //    get => totalProgress;
-        //    set => totalProgress = value;
-        //}
-    }
-
-    //[SerializeField] private 
-    public GameData gameData;
-    
-    private void Awake()
-    {
-        gamePath = Application.persistentDataPath; //"https://unityroom.com/games/control_gravity/"
+        if (build) filePath = Application.persistentDataPath;
         loadError = GameObject.Find("/Canvas/LoadError").GetComponent<Animator>();
-        gameData = new GameData();
+        //gameData = new GameData();
+        data = new SaveData();
         DontDestroyOnLoad(this.gameObject);
     }
 
-    private void Update()
-    {      
-        if (Input.GetKey(KeyCode.S))
-        {
-            SaveGameData(resId);
-        }
-        if (Input.GetKey(KeyCode.L))
-        {
-            LoadGameData();
-        }        
-    }
+    //void Update()
+    //{
+    //    if (Input.GetKey(KeyCode.S))
+    //    {
+    //        SaveGameData(resId);
+    //    }
+    //    if (Input.GetKey(KeyCode.L))
+    //    {
+    //        LoadGameData();
+    //    }
+    //}
 
-    public void SaveGameData(int respawnIndex)
+    public void SaveGameData(string stageName, int respawnIndex, bool isAvailable)
     {
-        gameData.stageName = (SceneManager.GetActiveScene().name == "TitleScene") ? "Stage1-1" : SceneManager.GetActiveScene().name; // sName;
-        gameData.respawnIndex = respawnIndex; //resId;
-        gameData.totalProgress = int.Parse(gameData.stageName.Replace("Stage", "").Replace("-", "")) / 10; //prog;
-        string jsonStr = JsonUtility.ToJson(gameData);
+        data.stageName = stageName; // (SceneManager.GetActiveScene().name == "TitleScene") ? "Stage1-1" : SceneManager.GetActiveScene().name; // sName;
+        data.respawnIndex = respawnIndex; //resId;
+        data.totalProgress = int.Parse(data.stageName.Replace("Stage", "").Replace("-", "")) / 10; //prog; // StageO-X‚ÌO‚Ì•”•ª
+        data.isAvailable = isAvailable;
+        string jsonStr = JsonUtility.ToJson(data);
 
-        StreamWriter writer = new (gamePath + "/savedata.json");
+        StreamWriter writer = new (filePath + fileName);
         writer.Write(jsonStr);
         writer.Flush();
         writer.Close();
@@ -83,17 +75,18 @@ public class SaveDataManager : MonoBehaviour
     {
         try
         {
-            StreamReader reader = new (gamePath + "/savedata.json");
+            StreamReader reader = new (filePath + fileName);
 
             string dataStr = reader.ReadToEnd();
             reader.Close();
 
-            gameData = JsonUtility.FromJson<GameData>(dataStr);
-            sName = gameData.stageName;
-            resId = gameData.respawnIndex;
-            prog = gameData.totalProgress;
+            data = JsonUtility.FromJson<SaveData>(dataStr);
+            Debug.Log(data.stageName + ":" + data.respawnIndex + ":" + data.totalProgress + ":" + data.isAvailable);
+            //sName = gameData.stageName;
+            //resId = gameData.respawnIndex;
+            //prog = gameData.totalProgress;
 
-            SceneManager.LoadScene(sName);
+            SceneManager.LoadScene(data.stageName);
             //return JsonUtility.FromJson<GameData>(dataStr);
         }
         catch
@@ -104,8 +97,13 @@ public class SaveDataManager : MonoBehaviour
 
     public void NewGame()
     {
-        SaveGameData(0);
+        SaveGameData("Stage1-1", 0, false);
         LoadGameData();
+    }
+
+    public bool GetBuild()
+    {
+        return build;
     }
 
     private IEnumerator ShowLoadError()
