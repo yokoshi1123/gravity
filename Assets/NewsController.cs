@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class NewsController : MonoBehaviour
 {
@@ -8,14 +10,21 @@ public class NewsController : MonoBehaviour
     private NewsMonitor monitor;
     private GameObject[] Text = new GameObject[4];
     private GameObject[] Clocks = new GameObject[3];
+    private SaveDataManager saveDataManager;
 
-    [SerializeField] private int animIndex = 0;
+    [SerializeField] private int animIndex;
 
     // Start is called before the first frame update
     void Start()
     {
         belt = transform.Find("belt").gameObject.GetComponent<NewsBelt>();
         monitor = transform.Find("monitor").gameObject.GetComponent<NewsMonitor>();
+        saveDataManager = GameObject.Find("SaveDataManager").GetComponent<SaveDataManager>();
+
+        animIndex = saveDataManager.data.totalProgress;
+
+
+
         Text[0] = transform.Find("Text0-1").gameObject;
         Text[1] = transform.Find("Text0-2").gameObject;
         Text[2] = transform.Find("Text1").gameObject;
@@ -41,12 +50,18 @@ public class NewsController : MonoBehaviour
         {
             case 0:
                 StartCoroutine(News0());
+                saveDataManager.SaveGameData("Stage1-1", 0, false);
+                SceneManager.LoadScene("Stage1-1");
                 break;
             case 1:
                 StartCoroutine(News1());
+                saveDataManager.SaveGameData("Stage2-1", 0, false);
+                SceneManager.LoadScene("Stage2-1");
                 break;
             case 2:
                 StartCoroutine(News2());
+                saveDataManager.SaveGameData("Stage1-1", 0, false);
+                SceneManager.LoadScene("TitleScene");
                 break;
         }
     }
