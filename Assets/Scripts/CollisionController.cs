@@ -43,6 +43,7 @@ public class CollisionController : MonoBehaviour
             //Debug.Log(collision.gameObject.name);
             transform.parent.GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.4f);
             //StartCoroutine(playerController.Respawn());
+            //StartCoroutine(playerController.DelayAndRespawn(1f));
             playerController.SetIsDead(true);
             //StartCoroutine(Test());
         }
@@ -50,6 +51,7 @@ public class CollisionController : MonoBehaviour
         if (collision.gameObject.CompareTag("Abyss"))
         {
             //StartCoroutine(playerController.Respawn());
+            //StartCoroutine(playerController.DelayAndRespawn(1f));
             playerController.SetIsDead(true);
         }
     }
@@ -61,6 +63,7 @@ public class CollisionController : MonoBehaviour
             //Debug.Log(collision.gameObject.name);
             transform.parent.GetComponent<AudioSource>().PlayOneShot(spikeSE, 0.4f);
             //StartCoroutine(playerController.Respawn());
+            //StartCoroutine(playerController.DelayAndRespawn(1f));
             playerController.SetIsDead(true);
             //StartCoroutine(Test());
         }

@@ -64,8 +64,10 @@ public class LaserController : MonoBehaviour
                 beamRenderer.size = new Vector2(Mathf.Abs(basePos.y - hitPos.y), beamRenderer.size.y);
                 if (hit.collider.gameObject.name == "Avatar" || hit.collider.gameObject.name == "GFieldSensor" || hit.collider.gameObject.name == "FootSensor")
                 {
+                    PlayerController playerController = hit.collider.transform.parent.gameObject.GetComponent<PlayerController>();
                     //StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
-                    hit.collider.gameObject.GetComponent<PlayerController>().SetIsDead(true);
+                    //StartCoroutine(playerController.DelayAndRespawn(1f));
+                    playerController.SetIsDead(true);
                 }
             }
         }
@@ -80,8 +82,10 @@ public class LaserController : MonoBehaviour
                 beamRenderer.size = new Vector2(Mathf.Abs(basePos.x - hitPos.x), beamRenderer.size.y);
                 if (hit.collider.gameObject.name == "Avatar" || hit.collider.gameObject.name == "GFieldSensor" || hit.collider.gameObject.name == "FootSensor")
                 {
+                    PlayerController playerController = hit.collider.transform.parent.gameObject.GetComponent<PlayerController>();
                     //StartCoroutine(hit.collider.gameObject.GetComponent<PlayerController>().Respawn());
-                    hit.collider.gameObject.GetComponent<PlayerController>().SetIsDead(true);
+                    //StartCoroutine(playerController.DelayAndRespawn(1f));
+                    playerController.SetIsDead(true);
                 }
             }
         }
@@ -119,7 +123,9 @@ public class LaserController : MonoBehaviour
                     {
                         //Debug.Log("Hit");
                         //StartCoroutine(hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().Respawn());
-                        hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().SetIsDead(true);
+                        PlayerController playerController = hit.collider.transform.parent.gameObject.GetComponent<PlayerController>();
+                        //StartCoroutine(playerController.DelayAndRespawn(1f));
+                        playerController.SetIsDead(true);
                         GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
                     }
                 }
@@ -143,7 +149,9 @@ public class LaserController : MonoBehaviour
                     {
                         //Debug.Log("Hit");
                         //StartCoroutine(hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().Respawn());
-                        hit.collider.transform.parent.gameObject.GetComponent<PlayerController>().SetIsDead(true);
+                        PlayerController playerController = hit.collider.transform.parent.gameObject.GetComponent<PlayerController>();
+                        //StartCoroutine(playerController.DelayAndRespawn(1f));
+                        playerController.SetIsDead(true);
                         GetComponent<AudioSource>().PlayOneShot(GetComponent<AudioSource>().clip, 0.2f);
                     }
                 }

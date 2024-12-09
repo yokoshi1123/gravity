@@ -23,8 +23,6 @@ public class NewsController : MonoBehaviour
 
         animIndex = saveDataManager.data.totalProgress;
 
-
-
         Text[0] = transform.Find("Text0-1").gameObject;
         Text[1] = transform.Find("Text0-2").gameObject;
         Text[2] = transform.Find("Text1").gameObject;
@@ -50,18 +48,12 @@ public class NewsController : MonoBehaviour
         {
             case 0:
                 StartCoroutine(News0());
-                saveDataManager.SaveGameData("Stage1-1", 0, false);
-                SceneManager.LoadScene("Stage1-1");
                 break;
             case 1:
                 StartCoroutine(News1());
-                saveDataManager.SaveGameData("Stage2-1", 0, false);
-                SceneManager.LoadScene("Stage2-1");
                 break;
             case 2:
                 StartCoroutine(News2());
-                saveDataManager.SaveGameData("Stage1-1", 0, false);
-                SceneManager.LoadScene("TitleScene");
                 break;
         }
     }
@@ -89,6 +81,9 @@ public class NewsController : MonoBehaviour
         Text[1].SetActive(true);
 
         yield return new WaitForSeconds(4);
+
+        saveDataManager.SaveGameData("Stage1-1", 0, false);
+        SceneManager.LoadScene("Stage1-1");
     }
 
     private IEnumerator News1()
@@ -101,6 +96,9 @@ public class NewsController : MonoBehaviour
         monitor.SetOpen(true);
         yield return new WaitUntil(() => monitor.GetAnimEnd());//monitorが開き終わるまで
         monitor.SetAnimEnd(false);
+
+        saveDataManager.SaveGameData("Stage2-1", 0, false);
+        SceneManager.LoadScene("Stage2-1");
     }
 
     private IEnumerator News2()
@@ -113,5 +111,9 @@ public class NewsController : MonoBehaviour
         monitor.SetOpen(true);
         yield return new WaitUntil(() => monitor.GetAnimEnd());//monitorが開き終わるまで
         monitor.SetAnimEnd(false);
+
+        //saveDataManager.SaveGameData("Stage1-1", 0, false);
+        //SceneManager.LoadScene("TitleScene");
+        SceneManager.LoadScene("ClearScene");
     }
 }

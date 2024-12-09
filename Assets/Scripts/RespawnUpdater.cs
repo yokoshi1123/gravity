@@ -106,13 +106,13 @@ public class RespawnUpdater : MonoBehaviour
 
     public void RespawnAnimation1End()
     {
-        Debug.Log("Animation1 End");
+        //Debug.Log("Animation1 End");
         respawnManager.SetRespawning1(true);
     }
 
     public void RespawnAnimation2End()
     {
-        Debug.Log("Animation2 End");
+        //Debug.Log("Animation2 End");
         transform.position += new Vector3(0, 0, -transform.position.z + 1.0f);
         respawnManager.SetRespawning2(true);
     }

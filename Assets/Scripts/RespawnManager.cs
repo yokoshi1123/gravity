@@ -62,8 +62,8 @@ public class RespawnManager : MonoBehaviour
         pauseButton = GameObject.Find("/Canvas/PauseButton");
         respawnPoint = player.transform.position;
 
-        //fadeCanvas = GameObject.FindGameObjectWithTag("Fade");//Canvasをみつける
-        //fadeManager = fadeCanvas.GetComponent<FadeManager>();
+        fadeCanvas = GameObject.FindGameObjectWithTag("Fade");//Canvasをみつける
+        fadeManager = fadeCanvas.GetComponent<FadeManager>();
         //fadeManager.fadeIn();//フェードインフラグを立てる
 
         if (build) saveDataManager = GameObject.Find("SaveDataManager").GetComponent<SaveDataManager>();
@@ -89,13 +89,15 @@ public class RespawnManager : MonoBehaviour
 
         if (build) respawnIndexCurrent = saveDataManager.data.respawnIndex;
         //Debug.Log(saveDataManager.gameData.stageName);
-        Debug.Log(respawnIndexCurrent); // + ":" + RespawnPointsList[respawnIndexCurrent].name);
+        //Debug.Log(respawnIndexCurrent); // + ":" + RespawnPointsList[respawnIndexCurrent].name);
         if (respawnIndexCurrent > 0)
         {
             RespawnObjectsList[respawnIndexCurrent].GetComponentInChildren<Animator>().SetBool("change", true);
         }
-        
-        playerController.SetIsDead(true);
+
+        //playerController.SetIsDead(true);
+        playerController.SetCanMove(false);
+        StartCoroutine(PlayerRespawn());
     }
 
     // Update is called once per frame
@@ -168,8 +170,9 @@ public class RespawnManager : MonoBehaviour
 
     public IEnumerator PlayerRespawn()
     {
-        //fadeManager.fadeOut();//フェードアウトフラグを立てる
-        //yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed); ;//暗転するまで待つ
+        fadeManager.fadeOut();//フェードアウトフラグを立てる
+        yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed); ;//暗転するまで待つ
+        Time.timeScale = 1;
         pauseButton.SetActive(false);
         respawn = true;
         //if(respawnIndexCurrent != 0)
@@ -177,32 +180,32 @@ public class RespawnManager : MonoBehaviour
         //    respawnPoint = RespawnObjectsList[respawnIndexCurrent].transform.position + new Vector3(0, 1.99f, 0);
         //}
         //player.transform.position = respawnPoint;
-        player.transform.position = RespawnObjectsList[respawnIndexCurrent].transform.position + new Vector3(0, 1.99f, 0);
+        player.transform.position = RespawnObjectsList[respawnIndexCurrent].transform.position + new Vector3(0, 1.99f, -1);
 
 
         if(respawnIndexCurrent != 0)
         {
             playerController.AvatarSpriteSet(false);
-            //fadeManager.fadeIn();//フェードインフラグを立てる
-            //yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
+            fadeManager.fadeIn();//フェードインフラグを立てる
+            yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
 
             GetComponent<AudioSource>().PlayOneShot(respawnSE1, 0.2f);//SE
-            //yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
+            yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
             yield return new WaitForSecondsRealtime(1); // 1秒遅延
 
             resAnimation = true;
-
 
             yield return new WaitUntil(() => respawning1);
             GetComponent<AudioSource>().PlayOneShot(respawnSE2, 0.2f);
             playerController.AvatarSpriteSet(true);
             yield return new WaitUntil(() => respawning2);
+            playerController.SetCanMove(true);
         }
         else
         {
-            //fadeManager.fadeIn();//フェードインフラグを立てる
-            //yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
-
+            fadeManager.fadeIn();//フェードインフラグを立てる
+            yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
+            playerController.SetCanMove(true);
         }
         yield return null;
         resAnimation = false;

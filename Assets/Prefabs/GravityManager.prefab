@@ -48,8 +48,6 @@ MonoBehaviour:
   isAvailable: 0
   gravityScale: 0
   moveSpeed: 10
-  gFieldUI: {fileID: 0}
-  gravityValueText: {fileID: 0}
   build: 1
 --- !u!82 &1909611621873545435
 AudioSource:

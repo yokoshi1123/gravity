@@ -22,17 +22,6 @@ public class SaveDataManager : MonoBehaviour
     //[SerializeField] private int resId = 2;
     //[SerializeField] private int prog = 0;
 
-    //[System.Serializable]
-    //public class GameData
-    //{
-    //    public string stageName;
-    //    public int respawnIndex;
-    //    public int totalProgress;
-    //    public bool isAvailable;
-
-        
-    //}
-
     ////[SerializeField] private 
     //public GameData gameData;
 
@@ -61,11 +50,10 @@ public class SaveDataManager : MonoBehaviour
     {
         data.stageName = stageName; // (SceneManager.GetActiveScene().name == "TitleScene") ? "Stage1-1" : SceneManager.GetActiveScene().name; // sName;
         data.respawnIndex = respawnIndex; //resId;
-        try 
-        { 
+        if (stageName.Contains("Stage"))
+        {
             data.totalProgress = int.Parse(data.stageName.Replace("Stage", "").Replace("-", "")) / 10;
         }
-        catch {}
          //prog; // StageO-X‚ÌO‚Ì•”•ª
         data.isAvailable = isAvailable;
         string jsonStr = JsonUtility.ToJson(data);
@@ -86,7 +74,7 @@ public class SaveDataManager : MonoBehaviour
             reader.Close();
 
             data = JsonUtility.FromJson<SaveData>(dataStr);
-            Debug.Log(data.stageName + ":" + data.respawnIndex + ":" + data.totalProgress + ":" + data.isAvailable);
+            //Debug.Log(data.stageName + ":" + data.respawnIndex + ":" + data.totalProgress + ":" + data.isAvailable);
             //sName = gameData.stageName;
             //resId = gameData.respawnIndex;
             //prog = gameData.totalProgress;
@@ -103,6 +91,7 @@ public class SaveDataManager : MonoBehaviour
     public void NewGame()
     {
         //SaveGameData("Stage1-1", 0, false);
+        data.totalProgress = 0;
         SaveGameData("NewsScene", 0, false);
         LoadGameData();
     }

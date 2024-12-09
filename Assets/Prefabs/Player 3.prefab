@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3790027784564875709}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10, y: 2, z: 0}
+  m_LocalPosition: {x: 10, y: 2, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -329,7 +329,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: ToBeContinued
   spikeSE: {fileID: 8300000, guid: 21d6af15712df194e861a2510322d411, type: 3}
-  warpSE: {fileID: 8300000, guid: 60ac62c496d79d04d92d46817b3b2ddc, type: 3}
 --- !u!1 &3790027785023040666
 GameObject:
   m_ObjectHideFlags: 0

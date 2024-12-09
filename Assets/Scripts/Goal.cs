@@ -13,7 +13,6 @@ public class Goal : MonoBehaviour
 
     [Header("ÉSÅ[Éã")][SerializeField] private AudioClip warpSE;
 
-
     // Start is called before the first frame update
     void Awake()
     {
@@ -36,7 +35,7 @@ public class Goal : MonoBehaviour
             //else
             //{
             SceneManager.LoadScene(nextStage);
-            //}  
+            //}
         }
 }
 }

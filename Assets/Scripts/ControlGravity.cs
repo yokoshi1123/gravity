@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-[RequireComponent(typeof(AudioSource))]
-
-public class GravityManager : MonoBehaviour
+public class ControlGravity : MonoBehaviour
 {
     [SerializeField] private bool isAvailable = false;
 
@@ -14,7 +12,7 @@ public class GravityManager : MonoBehaviour
 
     [SerializeField] private float gravityScale;
     [SerializeField] private float moveSpeed;
-    
+
     //public bool isReverse = false;
     private int gravityDirection = 1;
 
@@ -29,8 +27,8 @@ public class GravityManager : MonoBehaviour
     private bool isChangeable = true;
     private int mouseWheel = 1;
 
-    private GameObject gFieldUI;
-    private TextMeshProUGUI gravityValueText;
+    [SerializeField] private GameObject gFieldUI;
+    [SerializeField] private TextMeshProUGUI gravityValueText;
 
     private IEnumerator routine;
 
@@ -46,7 +44,7 @@ public class GravityManager : MonoBehaviour
         gravityValueText = GameObject.Find("/Canvas/GFieldUI/GravityText/GravityValue").GetComponent<TextMeshProUGUI>();
         gFieldUI.SetActive(isAvailable);
 
-        if (build) 
+        if (build)
         {
             saveDataManager = GameObject.Find("SaveDataManager").GetComponent<SaveDataManager>();
             isAvailable = saveDataManager.data.isAvailable;
@@ -58,14 +56,14 @@ public class GravityManager : MonoBehaviour
     {
         gFieldUI.SetActive(isAvailable);
         if (isAvailable)
-        {           
+        {
             GameObject gravityField = (GameObject)Resources.Load("GravityField"); //"Square");//
 
             if (Input.GetMouseButtonDown(0)) // マウスの左ボタンを押した時の座標を取得
-            { 
+            {
                 startMPosition = Input.mousePosition;
                 // スクリーン座標からワールド座標に変換
-                startMPosition = Camera.main.ScreenToWorldPoint(new Vector3(startMPosition.x, startMPosition.y, CAMERAZPOSITION)); 
+                startMPosition = Camera.main.ScreenToWorldPoint(new Vector3(startMPosition.x, startMPosition.y, CAMERAZPOSITION));
                 // Debug.Log("Start:(" + startMPosition.x + ", " + startMPosition.y + ")");
 
             }
@@ -118,10 +116,10 @@ public class GravityManager : MonoBehaviour
                 StartCoroutine(MouseWheelWait());
                 //Debug.Log(Input.GetAxis("Mouse ScrollWheel"));
                 mouseWheel -= (int)Input.GetAxis("Mouse ScrollWheel");
-                gScale = ((int)mouseWheel + 30000) % 3;      
+                gScale = ((int)mouseWheel + 30000) % 3;
                 ChangeGravity();
             }
-        }   
+        }
     }
     public void ChangeGravity()
     {
@@ -137,7 +135,7 @@ public class GravityManager : MonoBehaviour
                 moveSpeed = M_SPEED;
                 gravityDirection = -1;
                 if (isAvailable/* || isAvailable*/) { gravityValueText.text = "-１.０G / Reversal"; } // string.Format("{ 0,6}","-1.0G") + " / 反転";//"重力場：-1.0G / 反転";
-                
+
                 break;
             case 1: // x0.5
                 gravityScale = G_SCALE * 0.5f;
@@ -221,7 +219,7 @@ public class GravityManager : MonoBehaviour
     }
 
     public bool GetBuild()
-    { 
+    {
         return build;
     }
 

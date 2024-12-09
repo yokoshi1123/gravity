@@ -330,6 +330,17 @@ public class PlayerController : MonoBehaviour
     {
         isDead = value;
     }
+    //public IEnumerator DelayAndRespawn(float seconds)
+    //{
+    //    pauseButton.SetActive(false);
+    //    canMove = false;
+    //    Time.timeScale = 0;
+    //    yield return new WaitForSecondsRealtime(seconds); // 1秒遅延
+    //    //Debug.Log("Died");
+    //    Time.timeScale = 1;
+    //    StartCoroutine(Respawn());
+    //}
+
 
     private IEnumerator Respawn()
     {
@@ -340,8 +351,9 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 0;
         yield return new WaitForSecondsRealtime(1); // 1秒遅延
         //Debug.Log("Died");
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
         yield return StartCoroutine(respawnManager.PlayerRespawn());
+
         //pauseButton.SetActive(true);
 
         //GameObject destroyGF = GameObject.FindWithTag("GravityField");
@@ -378,8 +390,8 @@ public class PlayerController : MonoBehaviour
 
 
         //GetComponent<AudioSource>().PlayOneShot(respawnSE, 0.2f);
-        
-        
+
+
         /*if (respawnManager.GetRespawnIndexCurrent() != 0)
         {
             AvatarSpriteSet(false);
@@ -421,10 +433,10 @@ public class PlayerController : MonoBehaviour
         }*/
 
         //respawnManager.resAnimation = false;
-        
+
         //Debug.Log("before:" + isJumping);
-        
-        canMove = true;
+
+        //canMove = true;
 
 
         //Debug.Log("canMove");
@@ -464,6 +476,7 @@ public class PlayerController : MonoBehaviour
         isDead = false;
 
     }
+
     /*private IEnumerator Test()
     {
         for (int i = 0; i < 20; i++)

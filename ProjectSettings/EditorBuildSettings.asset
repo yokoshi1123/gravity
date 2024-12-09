@@ -47,4 +47,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/ToBeContinued.unity
     guid: 139fabd4b7d9baf42baaf4e9d9fa105b
+  - enabled: 1
+    path: Assets/Scenes/LastScene.unity
+    guid: 4a71bfb5ca8fb5d428f830cb56699e8c
+  - enabled: 1
+    path: Assets/Scenes/ClearScene.unity
+    guid: 489135fcf5dad5a46ad757d6615e4ab6
   m_configObjects: {}
