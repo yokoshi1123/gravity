@@ -28,8 +28,12 @@ public class GravityFieldTexture : MonoBehaviour
     void Awake()
     {
         //gravityManager = GetComponent<GravityManager>();
-        gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
-        isFixed = !gravityManager.GetIsAvailable();
+        try
+        { 
+            gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
+            isFixed = !gravityManager.GetIsAvailable();
+        }
+        catch { }
         gFieldTexture = GetComponent<SpriteRenderer>();
         StartCoroutine(ChangeTexture());
 

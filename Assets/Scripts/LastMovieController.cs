@@ -30,10 +30,10 @@ public class LastMovieController : MonoBehaviour
 
     private GameObject gravityField;
     private List<GameObject> gFields = new();
-    private const int gFieldNum = 64;
+    private const int gFieldNum = 32;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         animator = GameObject.Find("LastMovie").GetComponent<Animator>();
         fadeManager = GameObject.FindWithTag("Fade").GetComponent<FadeManager>();
@@ -79,6 +79,7 @@ public class LastMovieController : MonoBehaviour
         //if (mouseWheel > 3072) StartCoroutine(Movie3());
         if (mouseWheel > 3072)
         {
+            for (int i = 0; i < gFieldNum; i++) Destroy(gFields[i]);
             StartCoroutine(Movie3());
             animator.SetInteger("phase", 7);             
         }
@@ -126,19 +127,20 @@ public class LastMovieController : MonoBehaviour
 
     private IEnumerator Movie1()
     {
-        yield return new WaitForSecondsRealtime(8f);
+        yield return new WaitForSecondsRealtime(7.3f);
         fadeManager.FadeOut();
-        yield return new WaitForSecondsRealtime(2 * fadeManager.fadeSpeed);
+        yield return new WaitForSecondsRealtime(3 * fadeManager.fadeSpeed);
         fadeManager.FadeIn();
         yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);
         for (int i = 0; i < gFieldNum; i++)
         {
-            Vector3 pos = new(9 * Mathf.Cos(2 * Mathf.PI * i / gFieldNum), 10 + 9.5 * Mathf.Sin(2 * Mathf.PI * i / gFieldNum), -1f);
+            Vector3 pos = new(9f * Mathf.Cos(2 * Mathf.PI * i / gFieldNum), 10f + 9f * Mathf.Sin(2 * Mathf.PI * i / gFieldNum), -1f);
             GameObject gFieldClone = Instantiate(gravityField, pos, Quaternion.Euler(0, 0, -90 + 360 * i / gFieldNum));
             gFields.Add(gFieldClone);
-            gFieldClone.transform.localScale = new(0.5f, 5f, 1f);
+            gFieldClone.transform.localScale = new(0.5f, 4f, 1f);
             gFieldClone.GetComponent<GravityFieldTexture>().SetIsFixed(true);
             gFieldClone.GetComponent<GravityFieldTexture>().SetGPattern(2);
+            gFieldClone.GetComponent<SpriteRenderer>().color = new(1f, 1f, 1f, 0.3f);
             //gFieldClone.transform.rotation = Quaternion.Euler(0, 0, -90 + 360 * i / 32);
         }
         UIanime.SetInteger("Effect_id", 1);
@@ -147,7 +149,7 @@ public class LastMovieController : MonoBehaviour
 
     private IEnumerator Movie2() 
     {
-        while (true) //mouseWheel < 999)
+        while (mouseWheel <= 3072) //mouseWheel < 999)
         {
             yield return new WaitForSeconds(2f / mouseWheel);
             mouseWheel++;
