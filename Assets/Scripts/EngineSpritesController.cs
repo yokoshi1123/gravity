@@ -50,21 +50,21 @@ public class EngineSpritesController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        //無限ループでフリーズします!!危険!!
-        /*int count = 0;
-        while(true)
-        {
-            int lightnum = count % 3;
+    //void Update()
+    //{
+    //    //無限ループでフリーズします!!危険!!
+    //    /*int count = 0;
+    //    while(true)
+    //    {
+    //        int lightnum = count % 3;
 
-            StartCoroutine(FadeInAndOut(lightnum));
+    //        StartCoroutine(FadeInAndOut(lightnum));
 
-            count++;
-        }*/
+    //        count++;
+    //    }*/
 
 
-    }
+    //}
 
     IEnumerator Fade(int lightnum, float targetAlpha)
     {

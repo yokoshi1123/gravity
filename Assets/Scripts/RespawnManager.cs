@@ -170,7 +170,7 @@ public class RespawnManager : MonoBehaviour
 
     public IEnumerator PlayerRespawn()
     {
-        fadeManager.fadeOut();//フェードアウトフラグを立てる
+        fadeManager.FadeOut();//フェードアウトフラグを立てる
         yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed); ;//暗転するまで待つ
         Time.timeScale = 1;
         pauseButton.SetActive(false);
@@ -186,7 +186,7 @@ public class RespawnManager : MonoBehaviour
         if(respawnIndexCurrent != 0)
         {
             playerController.AvatarSpriteSet(false);
-            fadeManager.fadeIn();//フェードインフラグを立てる
+            fadeManager.FadeIn();//フェードインフラグを立てる
             yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
 
             GetComponent<AudioSource>().PlayOneShot(respawnSE1, 0.2f);//SE
@@ -203,7 +203,7 @@ public class RespawnManager : MonoBehaviour
         }
         else
         {
-            fadeManager.fadeIn();//フェードインフラグを立てる
+            fadeManager.FadeIn();//フェードインフラグを立てる
             yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);//明転するまで待つ
             playerController.SetCanMove(true);
         }

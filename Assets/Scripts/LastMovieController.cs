@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class LastMovieController : MonoBehaviour
 {
@@ -27,12 +28,16 @@ public class LastMovieController : MonoBehaviour
     [SerializeField] private bool build = false;
     private SaveDataManager saveDataManager;
 
+    private GameObject gravityField;
+    private List<GameObject> gFields = new();
+    private const int gFieldNum = 64;
+
     // Start is called before the first frame update
     void Start()
     {
         animator = GameObject.Find("LastMovie").GetComponent<Animator>();
         fadeManager = GameObject.FindWithTag("Fade").GetComponent<FadeManager>();
-        fadeManager.fadeIn();
+        fadeManager.FadeIn();
 
         if (build)
         {
@@ -44,6 +49,8 @@ public class LastMovieController : MonoBehaviour
         UIanime = gFieldUI.GetComponent<Animator>();
         gravityValueText = GameObject.Find("/Canvas/GFieldUI/GravityText/GravityValue").GetComponent<TextMeshProUGUI>();
         gFieldUI.SetActive(true);
+
+        gravityField = (GameObject)Resources.Load("GravityField");
         StartCoroutine(Movie1());
     }
 
@@ -67,27 +74,36 @@ public class LastMovieController : MonoBehaviour
                 isChangeable = false;
                 StartCoroutine(Movie2());
             }
-        } 
-
-        if (mouseWheel >= 1000)
-        {
-            gFieldUI.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 290);
         }
 
-        if (mouseWheel > 4096 && build)
+        //if (mouseWheel > 3072) StartCoroutine(Movie3());
+        if (mouseWheel > 3072)
         {
-            SceneManager.LoadScene("NewsScene");
+            StartCoroutine(Movie3());
+            animator.SetInteger("phase", 7);             
         }
+        else if (mouseWheel > 2048) animator.SetInteger("phase", 6);
+        else if (mouseWheel > 1024) animator.SetInteger("phase", 5);
+        else if (mouseWheel > 768) animator.SetInteger("phase", 4);
+        else if (mouseWheel > 512) animator.SetInteger("phase", 3);
+        else if (mouseWheel > 256) animator.SetInteger("phase", 2);
+        else if (mouseWheel > 64) animator.SetInteger("phase", 1);
+
+        if (mouseWheel >= 1000) gFieldUI.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 290);
+
+        //if (mouseWheel > 4096 && build) SceneManager.LoadScene("NewsScene");
     }
 
     public void ChangeGravity()
     {
         if (mouseWheel == 1)
         {
+            for (int i = 0; i < gFieldNum; i++) gFields[i].GetComponent<GravityFieldTexture>().SetGPattern(1);
             gravityValueText.text = "０.５G / 　  Light";
         }
         else if (mouseWheel >= 2)
         {
+            for (int i = 0; i < gFieldNum; i++) gFields[i].GetComponent<GravityFieldTexture>().SetGPattern(2);
             gravityValueText.text = "";
             for (int i = 0; i < mouseWheel.ToString().Length; i++)
             {
@@ -104,17 +120,27 @@ public class LastMovieController : MonoBehaviour
     private IEnumerator MouseWheelWait() // マウスホイールからの入力を0.2秒無視する
     {
         isChangeable = false;
-        yield return new WaitForSecondsRealtime(0.12f); // 0.17f);
+        yield return new WaitForSecondsRealtime(0.07f); // 0.17f);
         isChangeable = true;
     }
 
     private IEnumerator Movie1()
     {
         yield return new WaitForSecondsRealtime(8f);
-        fadeManager.fadeOut();
-        yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed * 3);
-        fadeManager.fadeIn();
+        fadeManager.FadeOut();
+        yield return new WaitForSecondsRealtime(2 * fadeManager.fadeSpeed);
+        fadeManager.FadeIn();
         yield return new WaitForSecondsRealtime(fadeManager.fadeSpeed);
+        for (int i = 0; i < gFieldNum; i++)
+        {
+            Vector3 pos = new(9 * Mathf.Cos(2 * Mathf.PI * i / gFieldNum), 10 + 9.5 * Mathf.Sin(2 * Mathf.PI * i / gFieldNum), -1f);
+            GameObject gFieldClone = Instantiate(gravityField, pos, Quaternion.Euler(0, 0, -90 + 360 * i / gFieldNum));
+            gFields.Add(gFieldClone);
+            gFieldClone.transform.localScale = new(0.5f, 5f, 1f);
+            gFieldClone.GetComponent<GravityFieldTexture>().SetIsFixed(true);
+            gFieldClone.GetComponent<GravityFieldTexture>().SetGPattern(2);
+            //gFieldClone.transform.rotation = Quaternion.Euler(0, 0, -90 + 360 * i / 32);
+        }
         UIanime.SetInteger("Effect_id", 1);
         isChangeable = true;
     }
@@ -123,9 +149,19 @@ public class LastMovieController : MonoBehaviour
     {
         while (true) //mouseWheel < 999)
         {
-            yield return new WaitForSeconds(1f / mouseWheel);
+            yield return new WaitForSeconds(2f / mouseWheel);
             mouseWheel++;
             ChangeGravity();
         }
+    }
+
+    private IEnumerator Movie3()
+    {
+        yield return new WaitForSecondsRealtime(0.125f);
+        gFieldUI.SetActive(false);
+        yield return new WaitForSecondsRealtime(1.95f);
+        fadeManager.FadeOut();
+        yield return new WaitForSecondsRealtime(5*fadeManager.fadeSpeed);
+        SceneManager.LoadScene("NewsScene");
     }
 }

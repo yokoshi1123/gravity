@@ -26,12 +26,12 @@ public class SceneController : MonoBehaviour
     void findFadeObject()
     {
         fadeCanvas = GameObject.FindGameObjectWithTag("Fade");//Canvasをみつける
-        fadeCanvas.GetComponent<FadeManager>().fadeIn();//フェードインフラグを立てる
+        fadeCanvas.GetComponent<FadeManager>().FadeIn();//フェードインフラグを立てる
     }
 
     public async void SceneChange(string sceneName)//ボタン操作などで呼び出す
     {
-        fadeCanvas.GetComponent<FadeManager>().fadeOut();//フェードアウトフラグを立てる
+        fadeCanvas.GetComponent<FadeManager>().FadeOut();//フェードアウトフラグを立てる
         await Task.Delay(200);//暗転するまで待つ
         SceneManager.LoadScene(sceneName);//シーンチェンジ
     }

@@ -81,4 +81,14 @@ public class GravityFieldTexture : MonoBehaviour
         }
 
     }
+
+    public void SetIsFixed(bool value)
+    {
+        isFixed = value;
+    }
+
+    public void SetGPattern(int pattern)
+    {
+        if (pattern >= 0 && pattern <= 3) gPattern = pattern;
+    }
 }

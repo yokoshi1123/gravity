@@ -16,8 +16,8 @@ public class FadeManager : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
-    {
+    //void Start()
+    //{
         /*if (!isFadeInstance)//‹N“®Žž
         {
             DontDestroyOnLoad(this);
@@ -28,7 +28,7 @@ public class FadeManager : MonoBehaviour
             Destroy(this);
         }*/
 
-    }
+    //}
 
     // Update is called once per frame
     void Update()
@@ -55,13 +55,13 @@ public class FadeManager : MonoBehaviour
         }
     }
 
-    public void fadeIn()
+    public void FadeIn()
     {
         isFadeIn = true;
         isFadeOut = false;
     }
 
-    public void fadeOut()
+    public void FadeOut()
     {
         isFadeOut = true;
         isFadeIn = false;
