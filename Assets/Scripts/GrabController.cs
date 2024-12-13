@@ -88,6 +88,7 @@ public class GrabController : MonoBehaviour
         }
         else if (grabObj != null && !isJumping)
         {
+            //Debug.Log("Release");
             grabObj.GetComponent<Rigidbody2D>().isKinematic = false;
             grabObj.transform.GetChild(0).gameObject.SetActive(true);
             grabObj.GetComponent<BoxCollider2D>().size = new Vector2(grabObj.GetComponent<BoxCollider2D>().size.x, 1f);

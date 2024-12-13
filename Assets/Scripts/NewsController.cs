@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,7 +13,7 @@ public class NewsController : MonoBehaviour
     private GameObject[] Clocks = new GameObject[3];
     private SaveDataManager saveDataManager;
 
-    [SerializeField] private int animIndex;
+    [SerializeField] private int animIndex = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,7 @@ public class NewsController : MonoBehaviour
         saveDataManager = GameObject.Find("SaveDataManager").GetComponent<SaveDataManager>();
 
         animIndex = saveDataManager.data.totalProgress;
+        //UnityEngine.Debug.Log(saveDataManager.data.stageName + ":" + saveDataManager.data.respawnIndex + ":" + saveDataManager.data.totalProgress + ":" + saveDataManager.data.isAvailable);
 
         Text[0] = transform.Find("Text0-1").gameObject;
         Text[1] = transform.Find("Text0-2").gameObject;
@@ -54,6 +56,9 @@ public class NewsController : MonoBehaviour
                 break;
             case 2:
                 StartCoroutine(News2());
+                break;
+            default:
+                UnityEngine.Debug.Log("Error");
                 break;
         }
     }

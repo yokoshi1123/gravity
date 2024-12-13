@@ -2617,6 +2617,10 @@ PrefabInstance:
       propertyPath: to.Array.data[0]
       value: 
       objectReference: {fileID: 494324521}
+    - target: {fileID: 2537730144840126853, guid: acc92a97e2ea7c249b6f5fd9a3140023, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e920ffe16a35e2d46b0114151c203962, type: 3}
     - target: {fileID: 2537730144840126854, guid: acc92a97e2ea7c249b6f5fd9a3140023, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -3807,7 +3811,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6325145566695404759, guid: 9a00c171132c9474eaed3fea71f75fdf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6325145566695404762, guid: 9a00c171132c9474eaed3fea71f75fdf, type: 3}
       propertyPath: m_Pivot.x

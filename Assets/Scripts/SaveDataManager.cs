@@ -2,16 +2,17 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq.Expressions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static System.Net.WebRequestMethods;
 
-public class SaveDataManager : MonoBehaviour
+public class SaveDataManager : Singleton<SaveDataManager>
 {
     private Animator loadError;
 
-    [HideInInspector] public SaveData data;
+    [HideInInspector] public SaveData data = new();
 
     private string filePath = "C:/Users/koshi/source/repos/gravity/";
     private string fileName = "SaveData.json";
@@ -25,12 +26,11 @@ public class SaveDataManager : MonoBehaviour
     ////[SerializeField] private 
     //public GameData gameData;
 
-    void Awake()
+    void Start()
     {
         if (build) filePath = Application.persistentDataPath;
         loadError = GameObject.Find("/Canvas/LoadError").GetComponent<Animator>();
         //gameData = new GameData();
-        data = new SaveData();
         DontDestroyOnLoad(this.gameObject);
     }
 
@@ -50,10 +50,11 @@ public class SaveDataManager : MonoBehaviour
     {
         data.stageName = stageName; // (SceneManager.GetActiveScene().name == "TitleScene") ? "Stage1-1" : SceneManager.GetActiveScene().name; // sName;
         data.respawnIndex = respawnIndex; //resId;
-        if (stageName.Contains("Stage"))
+        try//if (stageName.Contains("Stage"))
         {
             data.totalProgress = int.Parse(data.stageName.Replace("Stage", "").Replace("-", "")) / 10;
         }
+        catch{ }
          //prog; // StageO-X‚ÌO‚Ì•”•ª
         data.isAvailable = isAvailable;
         string jsonStr = JsonUtility.ToJson(data);
@@ -74,7 +75,7 @@ public class SaveDataManager : MonoBehaviour
             reader.Close();
 
             data = JsonUtility.FromJson<SaveData>(dataStr);
-            //Debug.Log(data.stageName + ":" + data.respawnIndex + ":" + data.totalProgress + ":" + data.isAvailable);
+            //Debug.Log("SaveDataManage/"+data.stageName + ":" + data.respawnIndex + ":" + data.totalProgress + ":" + data.isAvailable);
             //sName = gameData.stageName;
             //resId = gameData.respawnIndex;
             //prog = gameData.totalProgress;

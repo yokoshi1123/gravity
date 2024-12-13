@@ -8,16 +8,21 @@ public class PauseWindowController : MonoBehaviour
     [SerializeField] private GameObject pauseButton;
     [SerializeField] private GameObject pauseWindow;
 
+    private GravityManager gravityManager;
     private PlayerController playerController;
     private SaveDataManager saveDataManager;
+
+    private bool build = false;
 
     //private bool isPaused = false;
     void Start()
     {
         //pauseButton = GameObject.Find("/Canvas/PauseButton");
         //pauseWindow = GameObject.Find("/Canvas/PauseWindow");
+        gravityManager = GameObject.Find("GravityManager").GetComponent<GravityManager>();
+        build = gravityManager.GetBuild();
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
-        //saveDataManager = GameObject.Find("SaveDataManager").GetComponent<SaveDataManager>();
+        if (build) saveDataManager = GameObject.Find("SaveDataManager").GetComponent<SaveDataManager>();
     }
 
     void Update()

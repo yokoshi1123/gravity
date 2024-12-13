@@ -1,3 +1,4 @@
+using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -353,6 +354,10 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("Died");
         //Time.timeScale = 1;
         yield return StartCoroutine(respawnManager.PlayerRespawn());
+        if (isGrabbing)
+        {
+            transform.GetChild(1).GetComponent<GrabController>().Grab();
+        }
 
         //pauseButton.SetActive(true);
 

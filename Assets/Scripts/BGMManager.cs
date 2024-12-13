@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BGMManager : MonoBehaviour
+public class BGMManager : Singleton<BGMManager>
 {
     public bool DontDestroyEnabled = true;
 
