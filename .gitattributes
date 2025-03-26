@@ -1,1 +1,2 @@
-Assets/Fonts/* filter=lfs diff=lfs merge=lfs -text
+Kaisotai-Next-UP-B SDF.asset filter=lfs diff=lfs merge=lfs -text
+Kaisotai-Next-UP-B.ttf filter=lfs diff=lfs merge=lfs -text
